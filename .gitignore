@@ -1,0 +1,75 @@
+# -----------------------------
+# 1. 공통 무시 대상 (Common)
+# -----------------------------
+.DS_Store
+*.log
+*.tmp
+*.bak
+*~
+*.swp
+*.pyc
+/log/
+/temp/
+logs/
+temp/
+.idea/
+desktop.ini
+/build/
+**/build/
+
+### Gradle ###
+/build/
+/.gradle/
+# Gradle Wrapper JAR 파일은 무시하되, Wrapper 설정 파일은 포함 (Git 추적 유지)
+!/gradle/wrapper/gradle-wrapper.properties
+/gradle/wrapper/gradle-wrapper.jar
+
+# 소스 내부의 build 폴더는 무시
+!/src/main/**/build/
+!/src/test/**/build/
+
+
+### STS/Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+/bin
+# 소스 내부의 bin 폴더는 무시
+!/**/src/main/**/bin/
+!/**/src/test/**/bin/
+
+
+### IntelliJ IDEA ###
+/.idea
+/*.iws
+/*.iml
+/*.ipr
+/out/
+# 소스 내부의 out 폴더는 무시
+!/**/src/main/**/out/
+!/**/src/test/**/out/
+
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+
+### VS Code ###
+/.vscode/
+
+# 환경 설정 파일 (민감 정보 포함 가능성)
+/src/main/resources/application*.yaml
+/src/main/resources/application*.properties
+/src/main/resources/application*.yml
+/src/main/resources/imhereFirebaseKey.json
+
+# 도커 컴포즈 파일
+docker-compose.yml
