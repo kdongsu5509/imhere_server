@@ -21,9 +21,6 @@ import java.time.Duration
 @Configuration
 class RedisConfig {
 
-    // (기존 redisObjectMapper 빈 제거)
-    // HTTP 메시지 컨버터에 영향을 주지 않기 위해 Redis 전용 ObjectMapper는 여기서 직접 생성
-
     // Redis 캐시용 Serializer를 Bean으로 정의
     @Bean
     fun redisJackson2JsonRedisSerializer(): GenericJackson2JsonRedisSerializer {
@@ -84,7 +81,7 @@ class RedisConfig {
                 .serializeValuesWith(
                     RedisSerializationContext.SerializationPair.fromSerializer(jsonRedisSerializer) // 커스텀 Serializer 사용
                 )
-                .entryTtl(Duration.ofDays(7L))
+                .entryTtl(Duration.ofDays(8L))
 
         return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(cf)
             .cacheDefaults(redisCacheConfiguration)

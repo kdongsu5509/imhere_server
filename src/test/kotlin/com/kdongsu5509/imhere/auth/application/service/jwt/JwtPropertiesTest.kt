@@ -4,9 +4,11 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest(
+    classes = [JwtProperties::class],
     properties = [
         "jwt.secret=testsecretkey",
         "jwt.accessExpirationMinutes=1",
@@ -14,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest
         "jwt.accessHeaderName=Authorization",
     ]
 )
+@EnableConfigurationProperties(JwtProperties::class)
 class JwtPropertiesTest {
     @Autowired
     private lateinit var jwtProperties: JwtProperties
