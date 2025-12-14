@@ -4,4 +4,5 @@ import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
 
 interface OauthClientPort {
     fun getPublicKeyFromProvider(): OIDCPublicKeyResponse?
+    fun refreshPublicKeyFromProvider(): OIDCPublicKeyResponse?
 }
