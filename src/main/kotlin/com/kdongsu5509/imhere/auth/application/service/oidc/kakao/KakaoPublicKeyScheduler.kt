@@ -27,6 +27,6 @@ class KakaoPublicKeyScheduler(
 
     @Scheduled(fixedRate = DURATION)
     fun updatePublicKey() {
-        oauthClientPort.getPublicKeyFromProvider()
+        oauthClientPort.refreshPublicKeyFromProvider()
     }
 }
