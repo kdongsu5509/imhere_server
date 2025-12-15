@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 @RestControllerAdvice
 class ImhereExceptionHandler(
     private val messageSendPort: MessageSendPort,
-    sendPort: MessageSendPort
 ) {
 
     //BaseException 처리
