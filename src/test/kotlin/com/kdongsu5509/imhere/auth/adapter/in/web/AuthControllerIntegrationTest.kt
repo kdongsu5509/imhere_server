@@ -9,6 +9,7 @@ import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.imhere.auth.adapter.out.kakao.KakaoOauthClient
 import com.kdongsu5509.imhere.auth.application.port.`in`.HandleOIDCUseCase
 import com.kdongsu5509.imhere.auth.application.port.`in`.ReissueJWTPort
+import com.kdongsu5509.imhere.common.alert.port.out.MessageSendPort
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.mockito.Mockito.`when`
@@ -53,6 +54,9 @@ class AuthControllerIntegrationTest : TestRedisContainer() {
     @MockitoBean
     lateinit var kakaoOauthClient: KakaoOauthClient
 
+    @MockitoBean
+    private lateinit var messageSendPort: MessageSendPort
+
     @Value("\${oidc.kakao.cache-key}")
     lateinit var kakaoCacheKey: String
 
@@ -92,6 +96,7 @@ class AuthControllerIntegrationTest : TestRedisContainer() {
                 "idToken" to mockToken
             )
         )
+
 
         mockMvc.perform(
             post("/api/v1/auth/login")

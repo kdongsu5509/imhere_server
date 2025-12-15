@@ -1,10 +1,11 @@
 package com.kdongsu5509.imhere.auth.adapter.out.jjwt
 
 import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
-import com.kdongsu5509.imhere.common.exception.implementation.auth.*
-import io.jsonwebtoken.ExpiredJwtException
+import com.kdongsu5509.imhere.common.exception.domain.auth.InvalidEncodingException
+import com.kdongsu5509.imhere.common.exception.domain.auth.InvalidKeyException
+import com.kdongsu5509.imhere.common.exception.domain.auth.OIDCExpiredException
+import com.kdongsu5509.imhere.common.exception.domain.auth.OIDCInvalidException
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.security.Keys
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

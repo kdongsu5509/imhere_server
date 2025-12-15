@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhere.notification.application.service
 
-import com.kdongsu5509.imhere.common.exception.implementation.notification.FcmTokenNotFoundException
+import com.kdongsu5509.imhere.common.exception.domain.notification.FcmTokenNotFoundException
 import com.kdongsu5509.imhere.notification.application.domain.FcmToken
 import com.kdongsu5509.imhere.notification.application.port.`in`.SelfNotificationUserCasePort
 import com.kdongsu5509.imhere.notification.application.port.out.FindTokenPort

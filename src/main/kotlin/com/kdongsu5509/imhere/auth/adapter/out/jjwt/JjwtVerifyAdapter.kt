@@ -2,7 +2,7 @@ package com.kdongsu5509.imhere.auth.adapter.out.jjwt
 
 import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
 import com.kdongsu5509.imhere.auth.application.port.out.JwtVerficationPort
-import com.kdongsu5509.imhere.common.exception.implementation.auth.*
+import com.kdongsu5509.imhere.common.exception.domain.auth.*
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jws
