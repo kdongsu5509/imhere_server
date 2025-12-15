@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.common.exception
+package com.kdongsu5509.imhere.common.exception.domain
 
 import org.springframework.http.HttpStatus
 

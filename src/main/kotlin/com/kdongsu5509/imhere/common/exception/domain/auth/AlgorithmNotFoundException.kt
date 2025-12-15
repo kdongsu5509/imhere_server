@@ -1,7 +1,7 @@
-package com.kdongsu5509.imhere.common.exception.implementation.auth
+package com.kdongsu5509.imhere.common.exception.domain.auth
 
-import com.kdongsu5509.imhere.common.exception.BaseException
-import com.kdongsu5509.imhere.common.exception.ErrorCode
+import com.kdongsu5509.imhere.common.exception.domain.BaseException
+import com.kdongsu5509.imhere.common.exception.domain.ErrorCode
 
 class AlgorithmNotFoundException(
     errorCode: ErrorCode = ErrorCode.ALGORITHM_NOT_FOUND,

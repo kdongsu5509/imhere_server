@@ -3,7 +3,7 @@ package com.kdongsu5509.imhere.auth.adapter.out.jjwt
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhere.auth.application.port.out.JwtVerficationPort
 import com.kdongsu5509.imhere.auth.application.port.out.LoadPublicKeyPort
-import com.kdongsu5509.imhere.common.exception.implementation.auth.OIDCInvalidException
+import com.kdongsu5509.imhere.common.exception.domain.auth.OIDCInvalidException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
