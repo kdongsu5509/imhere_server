@@ -18,7 +18,7 @@ class ImhereExceptionHandler(
     @ExceptionHandler(BaseException::class)
     fun handleBaseException(ex: BaseException): ResponseEntity<ErrorResponse> {
         val errorResponse = ErrorResponse(ex.errorCode.code, ex.message)
-        messageSendPort.sendMessage(ex.message)
+        messageSendPort.sendMessage(ex.toString())
         return ResponseEntity.status(ex.errorCode.status).body(errorResponse)
     }
 
