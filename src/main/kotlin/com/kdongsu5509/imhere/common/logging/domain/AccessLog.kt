@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.common.logging
+package com.kdongsu5509.imhere.common.logging.domain
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
@@ -23,10 +23,8 @@ data class AccessLog(
     val responseAt: LocalDateTime,
     val durationMs: Long
 ) {
-    // data class의 기본 toString()을 JSON 포맷으로 오버라이딩
     override fun toString(): String {
         return try {
-            // companion object에 있는 objectMapper 재사용 (메모리 절약)
             objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
         } catch (e: Exception) {
             "Log JSON Parsing Error"
@@ -34,29 +32,13 @@ data class AccessLog(
     }
 
     companion object {
-        // ★ 핵심 변경: 여기에 선언하면 Java의 'private static final'과 동일하게 동작합니다.
-        // 클래스 로딩 시점에 딱 한 번만 생성됩니다.
+        // 싱글톤 ObjectMapper (메모리 절약)
         private val objectMapper = ObjectMapper()
 
-        fun extractClientIp(request: HttpServletRequest): String {
-            val forwarded = request.getHeader("X-Forwarded-For")
-            if (!forwarded.isNullOrEmpty()) {
-                return forwarded.split(",")[0].trim()
-            }
-            return request.remoteAddr
-        }
-
-        fun extractHeaders(request: HttpServletRequest): Map<String, String> {
-            val headerMap = mutableMapOf<String, String>()
-            val headerNames = request.headerNames
-            while (headerNames.hasMoreElements()) {
-                val headerName = headerNames.nextElement()
-                request.getHeader(headerName)?.let {
-                    headerMap[headerName] = it
-                }
-            }
-            return headerMap
-        }
+        // 🚨 민감한 헤더 목록 (소문자로 작성)
+        private val SENSITIVE_HEADERS = setOf(
+            "authorization", "cookie", "set-cookie", "x-auth-token", "proxy-authorization"
+        )
 
         fun createAccessLogFromReqAndResp(
             wrappedRequest: ContentCachingRequestWrapper,
@@ -82,6 +64,31 @@ data class AccessLog(
                 requestBody = getRequestBody(wrappedRequest),
                 responseBody = getResponseBody(wrappedResponse)
             )
+        }
+
+        private fun extractHeaders(request: HttpServletRequest): Map<String, String> {
+            val headerMap = mutableMapOf<String, String>()
+            val headerNames = request.headerNames
+            while (headerNames.hasMoreElements()) {
+                val headerName = headerNames.nextElement()
+
+                request.getHeader(headerName)?.let { value ->
+                    if (SENSITIVE_HEADERS.contains(headerName.lowercase())) {
+                        headerMap[headerName] = "true"
+                    } else {
+                        headerMap[headerName] = value
+                    }
+                }
+            }
+            return headerMap
+        }
+
+        private fun extractClientIp(request: HttpServletRequest): String {
+            val forwarded = request.getHeader("X-Forwarded-For")
+            if (!forwarded.isNullOrEmpty()) {
+                return forwarded.split(",")[0].trim()
+            }
+            return request.remoteAddr
         }
 
         private fun getRequestBody(wrappedRequest: ContentCachingRequestWrapper): String {

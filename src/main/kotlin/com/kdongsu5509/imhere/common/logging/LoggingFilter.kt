@@ -2,6 +2,7 @@ package com.kdongsu5509.imhere.common.logging
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.imhere.common.alert.port.out.MessageSendPort
+import com.kdongsu5509.imhere.common.logging.domain.AccessLog
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -54,13 +55,14 @@ class LoggingFilter(
             )
 
             logFormattedAccessLog(accessLog)
+
             wrappedResponse.copyBodyToResponse()
             MDC.clear()
         }
     }
 
     private fun isIgnoredUrl(uri: String): Boolean {
-        return uri.startsWith("/actuator") || uri.startsWith("/health")
+        return uri.startsWith("/actuator") || uri.startsWith("/health") || uri.startsWith("/favicon.ico")
     }
 
     private fun logFormattedAccessLog(accessLog: AccessLog) {
@@ -70,7 +72,6 @@ class LoggingFilter(
         createRequestLog(accessLog, loggingContents)
         createResponseLog(accessLog, loggingContents)
 
-        // 400 이상 에러 발생 시 디스코드 알림
         if (accessLog.status >= 400) {
             messageSendPort.sendMessage("## 🚨 HTTP Error\n\n```json\n$loggingContents\n```")
         }
@@ -100,7 +101,6 @@ class LoggingFilter(
         sb.append("Method:   ").append(accessLog.method).append("\n")
         sb.append("URI:      ").append(accessLog.uri)
 
-        // QueryString이 있으면 추가
         if (!accessLog.queryString.isNullOrEmpty()) {
             sb.append("?").append(accessLog.queryString)
         }
@@ -108,16 +108,12 @@ class LoggingFilter(
 
         sb.append("From:     ").append(accessLog.remoteIp).append("\n")
         sb.append("User-Agent: ").append(accessLog.userAgent).append("\n")
+
         sb.append("Headers:  ").append(accessLog.headers).append("\n")
 
-        if (!accessLog.requestBody.isNullOrEmpty()) {
+        if (accessLog.requestBody.isNotEmpty()) {
             sb.append("Request:  ").append("\n")
-            try {
-                val jsonNode = objectMapper.readTree(accessLog.requestBody)
-                sb.append(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode)).append("\n")
-            } catch (e: Exception) {
-                sb.append(accessLog.requestBody).append("\n")
-            }
+            sb.append(formatAndMaskBody(accessLog.requestBody)).append("\n")
         }
     }
 
@@ -127,15 +123,23 @@ class LoggingFilter(
         sb.append("Status:   ").append(accessLog.status).append("\n")
         sb.append("Duration: ").append(accessLog.durationMs).append("ms\n")
 
-        if (!accessLog.responseBody.isNullOrEmpty()) {
+        if (accessLog.responseBody.isNotEmpty()) {
             sb.append("Response: ").append("\n")
-            try {
-                val jsonNode = objectMapper.readTree(accessLog.responseBody)
-                sb.append(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode)).append("\n")
-            } catch (e: Exception) {
-                sb.append(accessLog.responseBody).append("\n")
-            }
+            sb.append(formatAndMaskBody(accessLog.responseBody)).append("\n")
         }
         sb.append("--------------------------------------------------\n")
+    }
+
+    private fun formatAndMaskBody(body: String): String {
+        return try {
+            val jsonNode = objectMapper.readTree(body)
+            val prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode)
+
+            prettyJson.replace(Regex("\"(password|pw|confirmPassword|secret)\"\\s*:\\s*\"[^\"]+\"")) { matchResult ->
+                "\"${matchResult.groupValues[1]}\": \"*****\""
+            }
+        } catch (e: Exception) {
+            body
+        }
     }
 }
