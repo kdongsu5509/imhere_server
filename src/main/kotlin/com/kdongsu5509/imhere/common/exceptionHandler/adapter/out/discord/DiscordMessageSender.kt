@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 
 @Component
-class DiscordMessageService(
+class DiscordMessageSender(
     private val restClientBuilder: RestClient.Builder
 ) : MessageSendPort {
 

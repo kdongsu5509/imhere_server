@@ -14,7 +14,7 @@ import org.springframework.web.client.RestClient
 
 @ExtendWith(MockitoExtension::class)
 class DiscordMessageServiceTest {
-    private lateinit var messageService: DiscordMessageService
+    private lateinit var messageService: DiscordMessageSender
     private lateinit var mockServer: MockRestServiceServer
 
     @BeforeEach
@@ -23,7 +23,7 @@ class DiscordMessageServiceTest {
 
         mockServer = MockRestServiceServer.bindTo(builder).build()
 
-        messageService = DiscordMessageService(builder)
+        messageService = DiscordMessageSender(builder)
 
         messageService.specificWebhookUrl = "/api/webhooks/test-url"
     }
