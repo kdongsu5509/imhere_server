@@ -20,7 +20,7 @@ class FilterConfig(
             LoggingFilter(messageSendPort, objectMapper)
         )
 
-        registration.order = Ordered.HIGHEST_PRECEDENCE
+        registration.order = Ordered.LOWEST_PRECEDENCE
         registration.addUrlPatterns("/*")
 
         return registration
