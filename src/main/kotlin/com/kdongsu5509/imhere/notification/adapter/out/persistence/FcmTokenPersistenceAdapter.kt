@@ -1,7 +1,7 @@
 package com.kdongsu5509.imhere.notification.adapter.out.persistence
 
 import com.kdongsu5509.imhere.auth.adapter.out.persistence.SpringDataUserRepository
-import com.kdongsu5509.imhere.common.exception.implementation.auth.UserNotFoundException
+import com.kdongsu5509.imhere.common.exception.domain.auth.UserNotFoundException
 import com.kdongsu5509.imhere.notification.application.domain.FcmToken
 import com.kdongsu5509.imhere.notification.application.port.out.FindTokenPort
 import com.kdongsu5509.imhere.notification.application.port.out.SaveTokenPersistencePort

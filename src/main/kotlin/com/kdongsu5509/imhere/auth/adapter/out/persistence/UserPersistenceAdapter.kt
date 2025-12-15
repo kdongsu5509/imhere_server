@@ -4,7 +4,7 @@ import com.kdongsu5509.imhere.auth.application.port.out.CheckUserPort
 import com.kdongsu5509.imhere.auth.application.port.out.LoadUserPort
 import com.kdongsu5509.imhere.auth.application.port.out.SaveUserPort
 import com.kdongsu5509.imhere.auth.domain.User
-import com.kdongsu5509.imhere.common.exception.implementation.auth.UserNotFoundException
+import com.kdongsu5509.imhere.common.exception.domain.auth.UserNotFoundException
 import org.springframework.stereotype.Component
 
 @Component

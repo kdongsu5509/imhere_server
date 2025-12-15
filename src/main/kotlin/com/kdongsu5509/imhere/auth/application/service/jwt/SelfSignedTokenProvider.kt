@@ -2,8 +2,8 @@ package com.kdongsu5509.imhere.auth.application.service.jwt
 
 import com.kdongsu5509.imhere.auth.application.dto.SelfSignedJWT
 import com.kdongsu5509.imhere.auth.application.port.out.CachePort
-import com.kdongsu5509.imhere.common.exception.implementation.auth.ImHereTokenExpiredException
-import com.kdongsu5509.imhere.common.exception.implementation.auth.ImHereTokenInvalidException
+import com.kdongsu5509.imhere.common.exception.domain.auth.ImHereTokenExpiredException
+import com.kdongsu5509.imhere.common.exception.domain.auth.ImHereTokenInvalidException
 import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.Instant

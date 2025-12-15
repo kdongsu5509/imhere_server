@@ -4,7 +4,7 @@ import com.kdongsu5509.imhere.auth.adapter.out.persistence.SpringDataUserReposit
 import com.kdongsu5509.imhere.auth.adapter.out.persistence.UserJpaEntity
 import com.kdongsu5509.imhere.auth.domain.OAuth2Provider
 import com.kdongsu5509.imhere.auth.domain.UserRole
-import com.kdongsu5509.imhere.common.exception.implementation.auth.UserNotFoundException
+import com.kdongsu5509.imhere.common.exception.domain.auth.UserNotFoundException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -92,7 +92,7 @@ class FcmTokenPersistenceAdapterTest {
         `when`(springDataUserRepository.findByEmail(testEmail)).thenReturn(testUser)
         `when`(springDataFcmTokenRepository.save(any(FcmTokenEntity::class.java)))
             .thenAnswer { it.arguments[0] }
-        
+
         // when
         fcmTokenPersistenceAdapter.save(newToken, testEmail)
 
