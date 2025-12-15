@@ -1,6 +1,7 @@
 package com.kdongsu5509.imhere.message.adapter.`in`
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.kdongsu5509.imhere.common.alert.port.out.MessageSendPort
 import com.kdongsu5509.imhere.message.adapter.dto.MessageSendRequest
 import com.kdongsu5509.imhere.message.application.port.MultipleMessageSendUseCasePort
 import com.kdongsu5509.imhere.message.application.port.SingleMessageSendUseCasePort
@@ -47,6 +48,9 @@ class MessageControllerTest {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
+
+    @MockitoBean
+    private lateinit var messageSendPort: MessageSendPort
 
     @MockitoBean
     private lateinit var singleMessageSendUseCasePort: SingleMessageSendUseCasePort

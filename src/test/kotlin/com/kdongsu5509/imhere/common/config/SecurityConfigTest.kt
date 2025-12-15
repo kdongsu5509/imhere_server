@@ -9,6 +9,7 @@ import com.kdongsu5509.imhere.auth.application.port.`in`.ReissueJWTPort
 import com.kdongsu5509.imhere.auth.application.service.JwtAuthenticationFilter
 import com.kdongsu5509.imhere.auth.application.service.jwt.JwtTokenUtil
 import com.kdongsu5509.imhere.auth.domain.OAuth2Provider
+import com.kdongsu5509.imhere.common.alert.port.out.MessageSendPort
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
@@ -50,6 +51,9 @@ class SecurityConfigTest {
 
     @MockitoBean
     private lateinit var reissueJwtPort: ReissueJWTPort
+
+    @MockitoBean
+    private lateinit var messageSendPort: MessageSendPort
 
     @MockitoBean
     private lateinit var jwtTokenUtil: JwtTokenUtil
