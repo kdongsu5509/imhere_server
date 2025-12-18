@@ -27,7 +27,7 @@ class MessageController(
         singleMessageSendUseCasePort.send(request, email)
     }
 
-    @PostMapping("multipleSend", )
+    @PostMapping("/multipleSend")
     fun sendMultiple(@RequestBody request: MultipleMessageSendRequest, @AuthenticationPrincipal user: UserDetails) {
         val email = user.username
         multipleMessageSendUseCasePort.send(request, email)
