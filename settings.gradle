@@ -1,1 +1,10 @@
 rootProject.name = 'imhere'
+
+// Infrastructure Modules
+include 'imhere-config'
+include 'imhere-eureka'
+include 'imhere-api-gateway'
+
+// Business Modules
+include 'imhere-notification-service'
+include 'imhere-prev'  // Previous monolithic version

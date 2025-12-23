@@ -1,0 +1,29 @@
+server:
+  port: 8000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone : http://localhost:8761/eureka/
+    registry-fetch-interval-seconds: 5
+
+spring:
+  application:
+    name: IMHERE-API-GATEWAY
+  cloud:
+    gateway:
+      server:
+        webflux:
+          globalcors:
+            corsConfigurations:
+              '[/**]':
+                allowedOrigins: "*"
+                allowedMethods: [ GET, POST, PUT, DELETE, OPTIONS ]
+                allowedHeaders: "*"
+          routes:
+            - id: notification               # Service id
+              uri: lb://IMHERE-NOTIFICATION-SERVICE   # target service's url. we can see also at eureka.
+              predicates:                   # routing
+                - Path=/first-service/**
