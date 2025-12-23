@@ -23,7 +23,7 @@ spring:
                 allowedMethods: [ GET, POST, PUT, DELETE, OPTIONS ]
                 allowedHeaders: "*"
           routes:
-            - id: notification               # ??? id
-              uri: lb://IMHERE-NOTIFICATION-SERVICE   # ???? ??? ??
-              predicates:                   # ??? ??
+            - id: notification               # Service id
+              uri: lb://IMHERE-NOTIFICATION-SERVICE   # target service's url. we can see also at eureka.
+              predicates:                   # routing
                 - Path=/first-service/**
