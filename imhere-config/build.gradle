@@ -31,7 +31,7 @@ ext {
 dependencies {
 	/// Config Server
 	implementation 'org.springframework.cloud:spring-cloud-config-server'
-	
+
 	/// Spring Cloud Bus (RabbitMQ)
 	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 	
