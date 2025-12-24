@@ -11,7 +11,7 @@ import java.util.*
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 @EnableJpaRepositories(
-    basePackages = ["com.kdongsu5509.imhere.**.persistence"]
+    basePackages = ["com.kdongsu5509.imhereuserservice.adapter.out.persistence"]
 )
 class JpaConfig {
 

@@ -17,7 +17,6 @@ import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
 import java.time.Duration
 
-
 @Configuration
 class RedisConfig {
 
@@ -29,7 +28,7 @@ class RedisConfig {
 
         // BasicPolymorphicTypeValidator를 사용하여 특정 패키지만 허용
         val ptv = BasicPolymorphicTypeValidator.builder()
-            .allowIfBaseType("com.kdongsu5509.imhere.")
+            .allowIfBaseType("com.kdongsu5509.imhereuserservice.")
             .allowIfBaseType("java.util.")
             .build()
 
