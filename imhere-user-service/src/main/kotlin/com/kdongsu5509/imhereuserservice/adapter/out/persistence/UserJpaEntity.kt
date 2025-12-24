@@ -12,7 +12,7 @@ class UserJpaEntity : BaseEntity {
     @Id
     @GeneratedValue
     @UuidGenerator
-    var id: UUID? = null //TODO: 여기서 생성 방식으로 인한 문제가 발생하여서 동시성 비슷한 문제가 발생.
+    var id: UUID? = null
 
     var email: String = ""
 

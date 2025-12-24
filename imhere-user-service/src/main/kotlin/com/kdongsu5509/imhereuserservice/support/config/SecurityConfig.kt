@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.support.config
 
-import com.kdongsu5509.imhere.auth.application.service.JwtAuthenticationFilter
+import com.kdongsu5509.imhereuserservice.application.service.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
@@ -24,7 +24,6 @@ class SecurityConfig(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http {
-            // 1. 보안 기능 비활성화 및 설정
             csrf { disable() }           // REST API 서버이므로 CSRF 비활성화
             formLogin { disable() }      // 기본 폼 로그인 비활성화
             httpBasic { disable() }      // HTTP Basic 인증 비활성화
@@ -39,7 +38,7 @@ class SecurityConfig(
 
             // 3. 인가 설정
             authorizeHttpRequests {
-                authorize("/api/*/auth/**", permitAll)
+                authorize("/api/*/auth/**", permitAll) //TODO : 변경 필수.
                 authorize("/actuator/**", permitAll)
                 authorize(anyRequest, authenticated)
             }
