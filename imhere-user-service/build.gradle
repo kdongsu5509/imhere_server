@@ -34,6 +34,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	//SPRING CLOUD EUREKA
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	//SPRING CLOUD CONFIG
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+	//ACTUATOR
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
