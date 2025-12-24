@@ -6,5 +6,6 @@ include 'imhere-eureka'
 include 'imhere-api-gateway'
 
 // Business Modules
+include 'imhere-user-service'
 include 'imhere-notification-service'
 include 'imhere-prev'  // Previous monolithic version

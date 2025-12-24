@@ -31,16 +31,13 @@ ext {
 dependencies {
 	/// Config Server
 	implementation 'org.springframework.cloud:spring-cloud-config-server'
-	
+
 	/// Spring Cloud Bus (RabbitMQ)
 	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 	
 	/// Actuator
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-	//For BootStrap => use Encryption
-	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
-	
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -16,6 +16,15 @@ spring:
     gateway:
       server:
         webflux:
+          default-filters:
+            - name: LoggingFilter
+              args:
+                enabled: true
+                sendAlertOnError: true
+                ignoredPatterns:
+                  - /actuator
+                  - /health
+                  - /favicon.ico
           globalcors:
             corsConfigurations:
               '[/**]':
