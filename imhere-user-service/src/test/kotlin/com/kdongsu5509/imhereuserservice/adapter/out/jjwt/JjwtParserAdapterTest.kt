@@ -1,9 +1,9 @@
-package com.kdongsu5509.imhere.auth.adapter.out.jjwt
+package com.kdongsu5509.imhereuserservice.adapter.out.jjwt
 
-import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
-import com.kdongsu5509.imhere.auth.application.port.out.JwtVerficationPort
-import com.kdongsu5509.imhere.auth.application.port.out.LoadPublicKeyPort
-import com.kdongsu5509.imhere.common.exception.domain.auth.OIDCInvalidException
+import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKey
+import com.kdongsu5509.imhereuserservice.application.port.out.LoadPublicKeyPort
+import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtVerificationPort
+import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.OIDCInvalidException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
@@ -25,7 +25,7 @@ class JjwtParserAdapterTest {
     private lateinit var loadPublicKeyPort: LoadPublicKeyPort
 
     @Mock
-    private lateinit var jwtVerficationPort: JwtVerficationPort
+    private lateinit var jwtVerificationPort: JwtVerificationPort
 
     private lateinit var kakaoOIDCProperties: KakaoOIDCProperties
     private lateinit var jjwtParserAdapter: JjwtParserAdapter
@@ -40,7 +40,7 @@ class JjwtParserAdapterTest {
         jjwtParserAdapter = JjwtParserAdapter(
             loadPublicKeyPort,
             kakaoOIDCProperties,
-            jwtVerficationPort
+            jwtVerificationPort
         )
     }
 
@@ -67,7 +67,7 @@ class JjwtParserAdapterTest {
         val jws = createMockJws(email, sub)
 
         `when`(loadPublicKeyPort.loadPublicKey(kid)).thenReturn(oidcPublicKey)
-        `when`(jwtVerficationPort.verifySignature(signedToken, oidcPublicKey.n, oidcPublicKey.e))
+        `when`(jwtVerificationPort.verifySignature(signedToken, oidcPublicKey.n, oidcPublicKey.e))
             .thenReturn(jws)
 
         // when
@@ -81,7 +81,7 @@ class JjwtParserAdapterTest {
         assertThat(result.email).isEqualTo(email)
 
         verify(loadPublicKeyPort).loadPublicKey(kid)
-        verify(jwtVerficationPort).verifySignature(signedToken, oidcPublicKey.n, oidcPublicKey.e)
+        verify(jwtVerificationPort).verifySignature(signedToken, oidcPublicKey.n, oidcPublicKey.e)
     }
 
     @Test
@@ -148,7 +148,7 @@ class JjwtParserAdapterTest {
         )
 
         `when`(loadPublicKeyPort.loadPublicKey(kid)).thenReturn(oidcPublicKey)
-        `when`(jwtVerficationPort.verifySignature(signedToken, oidcPublicKey.n, oidcPublicKey.e))
+        `when`(jwtVerificationPort.verifySignature(signedToken, oidcPublicKey.n, oidcPublicKey.e))
             .thenReturn(jws)
 
         // when
@@ -181,7 +181,7 @@ class JjwtParserAdapterTest {
         val jws = createMockJwsWithoutEmail("test-sub")
 
         `when`(loadPublicKeyPort.loadPublicKey(kid)).thenReturn(oidcPublicKey)
-        `when`(jwtVerficationPort.verifySignature(signedToken, oidcPublicKey.n, oidcPublicKey.e))
+        `when`(jwtVerificationPort.verifySignature(signedToken, oidcPublicKey.n, oidcPublicKey.e))
             .thenReturn(jws)
 
         // when

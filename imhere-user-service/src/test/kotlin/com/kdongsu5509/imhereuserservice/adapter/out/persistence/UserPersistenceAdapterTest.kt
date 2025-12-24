@@ -1,8 +1,8 @@
-package com.kdongsu5509.imhere.auth.adapter.out.persistence
+package com.kdongsu5509.imhereuserservice.adapter.out.persistence
 
-import com.kdongsu5509.imhere.auth.domain.OAuth2Provider
-import com.kdongsu5509.imhere.auth.domain.User
-import com.kdongsu5509.imhere.auth.domain.UserRole
+import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
+import com.kdongsu5509.imhereuserservice.domain.User
+import com.kdongsu5509.imhereuserservice.domain.UserRole
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtendWith
