@@ -1,9 +1,9 @@
 package com.kdongsu5509.imhereuserservice.application.service.oidc.kakao
 
 import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
-import com.kdongsu5509.imhereuserservice.application.port.out.JwtParserPort
-import com.kdongsu5509.imhereuserservice.application.port.out.JwtVerificationPort
-import com.kdongsu5509.imhereuserservice.application.port.out.oidc.OIDCVerificationPort
+import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtParserPort
+import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtVerificationPort
+import com.kdongsu5509.imhereuserservice.application.port.out.token.oidc.OIDCVerificationPort
 import io.jsonwebtoken.MalformedJwtException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.support.resp
+package com.kdongsu5509.imhereuserservice.adapter.`in`.web
 
 import org.springframework.http.HttpStatus
 

@@ -21,19 +21,23 @@ class AuthController(val handleOIDCUseCase: HandleOIDCUseCase, val reissueJwtPor
     @PostMapping("/login")
     fun handleIdToken(
         @Validated @RequestBody tokenInfo: TokenInfo
-    ): ImhereJwt {
+    ): APIResponse<ImhereJwt?> {
         val jwt: SelfSignedJWT = handleOIDCUseCase.verifyIdTokenAndReturnJwt(
             tokenInfo.idToken, tokenInfo.provider
         )
 
-        return ImhereJwt(jwt.accessToken, jwt.refreshToken)
+        return APIResponse.success(
+            ImhereJwt(jwt.accessToken, jwt.refreshToken)
+        )
     }
 
     @PostMapping("/reissue")
     fun handleJwtTokenReissueRequest(
         @Validated @RequestBody jwtRefreshToken: JwtRefreshToken
-    ): ImhereJwt {
+    ): APIResponse<ImhereJwt?> {
         val jwt = reissueJwtPort.reissue(jwtRefreshToken.refreshToken)
-        return ImhereJwt(jwt.accessToken, jwt.refreshToken)
+        return APIResponse.success(
+            ImhereJwt(jwt.accessToken, jwt.refreshToken)
+        )
     }
 }

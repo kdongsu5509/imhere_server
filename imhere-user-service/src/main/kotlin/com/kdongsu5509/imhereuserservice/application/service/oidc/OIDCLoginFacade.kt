@@ -7,7 +7,7 @@ import com.kdongsu5509.imhereuserservice.application.port.`in`.IssueJWTPort
 import com.kdongsu5509.imhereuserservice.application.port.`in`.VerifyOIDCPort
 import com.kdongsu5509.imhereuserservice.application.port.out.CheckUserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.LoadUserPort
-import com.kdongsu5509.imhereuserservice.application.port.out.oidc.OIDCVerificationPort
+import com.kdongsu5509.imhereuserservice.application.port.out.token.oidc.OIDCVerificationPort
 import com.kdongsu5509.imhereuserservice.application.port.out.SaveUserPort
 import com.kdongsu5509.imhereuserservice.application.service.jwt.JwtTokenProvider
 import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
