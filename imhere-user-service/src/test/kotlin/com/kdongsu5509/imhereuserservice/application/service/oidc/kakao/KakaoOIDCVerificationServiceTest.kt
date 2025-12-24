@@ -1,8 +1,8 @@
-package com.kdongsu5509.imhere.auth.application.service.oidc.kakao
+package com.kdongsu5509.imhereuserservice.application.service.oidc.kakao
 
-import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
-import com.kdongsu5509.imhere.auth.application.port.out.JwtParserPort
-import com.kdongsu5509.imhere.auth.application.port.out.JwtVerficationPort
+import com.kdongsu5509.imhereuserservice.application.dto.OIDCDecodePayload
+import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtParserPort
+import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtVerificationPort
 import io.jsonwebtoken.MalformedJwtException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -20,13 +20,13 @@ class KakaoOIDCVerificationServiceTest {
     private lateinit var jwtParserPort: JwtParserPort
 
     @Mock
-    private lateinit var jwtVerficationPort: JwtVerficationPort
+    private lateinit var jwtVerificationPort: JwtVerificationPort
 
     private lateinit var kakaoOIDCVerificationService: KakaoOIDCVerificationService
 
     @org.junit.jupiter.api.BeforeEach
     fun setUp() {
-        kakaoOIDCVerificationService = KakaoOIDCVerificationService(jwtParserPort, jwtVerficationPort)
+        kakaoOIDCVerificationService = KakaoOIDCVerificationService(jwtParserPort, jwtVerificationPort)
     }
 
     @Test
@@ -43,7 +43,7 @@ class KakaoOIDCVerificationServiceTest {
         )
 
         `when`(jwtParserPort.parse(idToken)).thenReturn(payload)
-        doNothing().`when`(jwtVerficationPort).verifyPayLoad(payload)
+        doNothing().`when`(jwtVerificationPort).verifyPayLoad(payload)
 
         // when
         val result = kakaoOIDCVerificationService.verifyAndReturnUserInformation(idToken)
@@ -53,7 +53,7 @@ class KakaoOIDCVerificationServiceTest {
         assertThat(result.email).isEqualTo(email)
 
         verify(jwtParserPort).parse(idToken)
-        verify(jwtVerficationPort).verifyPayLoad(payload)
+        verify(jwtVerificationPort).verifyPayLoad(payload)
     }
 
     @Test
@@ -69,7 +69,7 @@ class KakaoOIDCVerificationServiceTest {
         )
 
         `when`(jwtParserPort.parse(idToken)).thenReturn(payload)
-        doNothing().`when`(jwtVerficationPort).verifyPayLoad(payload)
+        doNothing().`when`(jwtVerificationPort).verifyPayLoad(payload)
 
         // when & then
         assertThrows<MalformedJwtException> {
@@ -79,7 +79,7 @@ class KakaoOIDCVerificationServiceTest {
         }
 
         verify(jwtParserPort).parse(idToken)
-        verify(jwtVerficationPort).verifyPayLoad(payload)
+        verify(jwtVerificationPort).verifyPayLoad(payload)
     }
 
     @Test
@@ -96,7 +96,7 @@ class KakaoOIDCVerificationServiceTest {
         val exception = MalformedJwtException("Invalid payload")
 
         `when`(jwtParserPort.parse(idToken)).thenReturn(payload)
-        doThrow(exception).`when`(jwtVerficationPort).verifyPayLoad(payload)
+        doThrow(exception).`when`(jwtVerificationPort).verifyPayLoad(payload)
 
         // when & then
         assertThrows<MalformedJwtException> {
@@ -104,7 +104,7 @@ class KakaoOIDCVerificationServiceTest {
         }
 
         verify(jwtParserPort).parse(idToken)
-        verify(jwtVerficationPort).verifyPayLoad(payload)
+        verify(jwtVerificationPort).verifyPayLoad(payload)
     }
 }
 

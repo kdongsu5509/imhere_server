@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.auth.application.service.jwt
+package com.kdongsu5509.imhereuserservice.application.service.jwt
 
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts

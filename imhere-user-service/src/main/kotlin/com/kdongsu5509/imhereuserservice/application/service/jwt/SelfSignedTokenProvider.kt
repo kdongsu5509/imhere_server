@@ -12,13 +12,13 @@ import java.time.ZoneId
 
 @Component
 class SelfSignedTokenProvider(
-    private val jwtToeknIssuer: JwtTokenIssuer,
+    private val jwtTokenIssuer: JwtTokenIssuer,
     private val jwtTokenUtil: JwtTokenUtil,
     private val cachePort: CachePort,
 ) : JwtTokenProvider {
     override fun issueJwtAuth(email: String, role: String): SelfSignedJWT {
-        val accessToken = jwtToeknIssuer.createAccessToken(email, role)
-        val refreshToken = jwtToeknIssuer.createRefreshToken(email, role)
+        val accessToken = jwtTokenIssuer.createAccessToken(email, role)
+        val refreshToken = jwtTokenIssuer.createRefreshToken(email, role)
 
         val expiredDateTime = jwtTokenUtil.getExpirationDateFromToken(refreshToken).atZone(ZoneId.systemDefault())
         val duration: Duration = Duration.between(Instant.now(), expiredDateTime.toInstant())

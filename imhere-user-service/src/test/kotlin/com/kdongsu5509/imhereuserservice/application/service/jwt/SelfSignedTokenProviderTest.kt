@@ -1,8 +1,8 @@
-package com.kdongsu5509.imhere.auth.application.service.jwt
+package com.kdongsu5509.imhereuserservice.application.service.jwt
 
-import com.kdongsu5509.imhere.auth.application.port.out.CachePort
-import com.kdongsu5509.imhere.common.exception.domain.auth.ImHereTokenExpiredException
-import com.kdongsu5509.imhere.common.exception.domain.auth.ImHereTokenInvalidException
+import com.kdongsu5509.imhereuserservice.application.port.out.CachePort
+import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.ImHereTokenExpiredException
+import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.ImHereTokenInvalidException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

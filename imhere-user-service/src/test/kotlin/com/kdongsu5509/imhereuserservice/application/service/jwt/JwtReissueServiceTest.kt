@@ -1,7 +1,7 @@
-package com.kdongsu5509.imhere.auth.application.service.jwt
+package com.kdongsu5509.imhereuserservice.application.service.jwt
 
-import com.kdongsu5509.imhere.auth.application.dto.SelfSignedJWT
-import com.kdongsu5509.imhere.common.exception.domain.auth.ImHereTokenInvalidException
+import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT
+import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.ImHereTokenInvalidException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName

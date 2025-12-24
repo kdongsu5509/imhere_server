@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.auth.application.service.jwt
+package com.kdongsu5509.imhereuserservice.application.service.jwt
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName

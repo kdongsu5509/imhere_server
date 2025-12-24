@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.auth.application.service.security
+package com.kdongsu5509.imhereuserservice.application.service.security
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
