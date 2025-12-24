@@ -1,11 +1,10 @@
-package com.kdongsu5509.imhereuserservice.exception.domain.auth
+package com.kdongsu5509.imhereuserservice.support.exception.domain.auth
 
 import com.kdongsu5509.imhereuserservice.exception.domain.BaseException
 import com.kdongsu5509.imhereuserservice.exception.domain.ErrorCode
 
-
-class AlgorithmNotFoundException(
-    errorCode: ErrorCode = ErrorCode.ALGORITHM_NOT_FOUND,
+class InvalidKeyException(
+    errorCode: ErrorCode = ErrorCode.INVALID_KEY,
     detailMessage: String? = null
 ) : BaseException(
     errorCode,

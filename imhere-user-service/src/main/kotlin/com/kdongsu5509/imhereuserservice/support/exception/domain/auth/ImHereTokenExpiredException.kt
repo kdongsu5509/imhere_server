@@ -1,10 +1,10 @@
-package com.kdongsu5509.imhereuserservice.exception.domain.auth
+package com.kdongsu5509.imhereuserservice.support.exception.domain.auth
 
 import com.kdongsu5509.imhereuserservice.exception.domain.BaseException
 import com.kdongsu5509.imhereuserservice.exception.domain.ErrorCode
 
-class InvalidEncodingException(
-    errorCode: ErrorCode = ErrorCode.INVALID_ENCODING,
+class ImHereTokenExpiredException(
+    errorCode: ErrorCode = ErrorCode.IMHERE_EXPIRED_TOKEN,
     detailMessage: String? = null
 ) : BaseException(
     errorCode,

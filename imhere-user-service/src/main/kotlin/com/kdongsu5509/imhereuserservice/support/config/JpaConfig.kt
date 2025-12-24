@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.config
+package com.kdongsu5509.imhereuserservice.support.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

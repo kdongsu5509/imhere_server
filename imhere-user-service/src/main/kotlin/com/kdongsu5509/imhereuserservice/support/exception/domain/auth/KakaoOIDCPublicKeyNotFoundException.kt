@@ -1,9 +1,10 @@
-package com.kdongsu5509.imhereuserservice.exception.domain.notification
+package com.kdongsu5509.imhereuserservice.support.exception.domain.auth
+
 import com.kdongsu5509.imhereuserservice.exception.domain.BaseException
 import com.kdongsu5509.imhereuserservice.exception.domain.ErrorCode
 
-class FcmTokenNotFoundException(
-    errorCode: ErrorCode = ErrorCode.FCM_TOKEN_NOT_FOUND,
+class KakaoOIDCPublicKeyNotFoundException(
+    errorCode: ErrorCode = ErrorCode.KAKAO_OIDC_PUBLIC_KEY_NOT_FOUND
 ) : BaseException(
     errorCode,
     errorCode.message

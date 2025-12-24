@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.adapter.`in`.web
 
-import JwtRefreshToken
+import com.kdongsu5509.imhereuserservice.adapter.dto.req.JwtRefreshToken
 import com.kdongsu5509.imhereuserservice.adapter.dto.req.TokenInfo
 import com.kdongsu5509.imhereuserservice.adapter.dto.resp.ImhereJwt
 import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT

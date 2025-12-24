@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.config
+package com.kdongsu5509.imhereuserservice.support.config
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.ObjectMapper

@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.persistence
+package com.kdongsu5509.imhereuserservice.support.persistence
 
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners

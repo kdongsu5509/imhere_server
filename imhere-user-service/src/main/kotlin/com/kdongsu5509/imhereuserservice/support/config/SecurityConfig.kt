@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.config
+package com.kdongsu5509.imhereuserservice.support.config
 
 import com.kdongsu5509.imhere.auth.application.service.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
