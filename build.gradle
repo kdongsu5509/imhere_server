@@ -1,151 +1,19 @@
+// 플러그인 정의 - apply false로 하위 모듈에 자동 적용 방지
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '2.2.21'
-    id 'org.jetbrains.kotlin.plugin.spring' version '2.2.21'
-    id 'org.springframework.boot' version '3.5.7'
-    id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.jetbrains.kotlin.plugin.jpa' version '2.2.21'
-    id 'jacoco'
+    id 'org.springframework.boot' version '3.5.7' apply false
+    id 'org.jetbrains.kotlin.jvm' version '2.2.21' apply false
+    id 'org.jetbrains.kotlin.plugin.spring' version '2.2.21' apply false
+    id 'io.spring.dependency-management' version '1.1.7' apply false
+    id 'org.jetbrains.kotlin.plugin.jpa' version '2.2.21' apply false
 }
 
 group = 'com.kdongsu5509'
 version = '0.0.1-SNAPSHOT'
-description = 'Demo project for Spring Boot'
+description = 'ImHere Multi-Module Project'
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+// 공통 설정 (모든 하위 프로젝트에 적용)
+subprojects {
+    repositories {
+        mavenCentral()
     }
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    //WEB
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    //SPRING SECURITY
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    //SPRING DATA
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.boot:spring-boot-starter-cache'
-    //JWT
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-    implementation 'org.testcontainers:testcontainers-bom:1.20.2'
-    //SOLAPI - 백엔드 문자 발송 서비스를 위한 문자 서비스 API
-    implementation 'com.solapi:sdk:1.0.3'
-    //Firebase
-    implementation 'com.google.firebase:firebase-admin:9.7.0'
-    //JACKSON
-    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-    implementation 'org.jetbrains.kotlin:kotlin-reflect'
-    testImplementation 'org.testcontainers:postgresql'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.projectlombok:lombok'
-    //
-    //아래는 테스트 설정
-    //
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    //테스트 db -> h2
-    testRuntimeOnly 'com.h2database:h2'
-    //테스트 컨테이너
-    testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.testcontainers:testcontainers'
-}
-
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll '-Xjsr305=strict'
-    }
-}
-
-allOpen {
-    annotation 'jakarta.persistence.Entity'
-    annotation 'jakarta.persistence.MappedSuperclass'
-    annotation 'jakarta.persistence.Embeddable'
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
-/**
- * JaCoCo Code Coverage 설정
- */
-jacoco {
-    toolVersion = "0.8.13"
-    reportsDirectory = layout.buildDirectory.dir("reports/jacoco").get().asFile
-}
-jacocoTestReport {
-
-    reports {
-        html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
-        xml.required = false
-        csv.required = false
-    }
-
-    afterEvaluate {
-        classDirectories.setFrom(
-                classDirectories.files.collect { file ->
-                    fileTree(dir: file, exclude: ['**/*Application*',
-                                                  '**/*Config*',
-                                                  '**/dto/**',
-                                                  '**/vo/**',
-                                                  '**/domain/**',
-                                                  '**/port/**',
-                                                  '**/common/resp/**',
-                                                  '**/*Exception*',
-                                                  '**/*Properties*',
-                                                  '**/*Mapper*',
-                                                  '**/*ErrorCode*',
-                                                  '**/*ErrorResponse*']
-                    )
-                })
-    }
-
-    dependsOn test
-}
-
-jacocoTestCoverageVerification {
-    afterEvaluate {
-        classDirectories.setFrom(
-                classDirectories.files.collect { file ->
-                    fileTree(dir: file, exclude: ['**/*Application*',
-                                                  '**/*Config*',
-                                                  '**/*Dto*',
-                                                  '**/vo/**',
-                                                  '**/*Entity*',
-                                                  '**/*Exception*',
-                                                  '**/*Properties*',
-                                                  '**/*Mapper*',
-                                                  '**/*ErrorCode*',
-                                                  '**/*ErrorResponse*']
-                    )
-                })
-    }
-
-    dependsOn test
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-
-    jacoco {
-        destinationFile = file("$buildDir/jacoco/jacoco.exec")
-    }
-    finalizedBy jacocoTestReport
 }

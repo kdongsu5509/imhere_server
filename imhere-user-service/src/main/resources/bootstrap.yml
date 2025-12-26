@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: IMHERE-USER-SERVICE  # application.yaml과 일치
+  cloud:
+    config:
+      uri: http://localhost:8888  # Config Server 주소
+      retry:
+        max-attempts: 3
+        initial-interval: 1000
