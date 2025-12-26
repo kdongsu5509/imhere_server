@@ -33,13 +33,9 @@ class SelfSignedTokenProvider(
         val username = jwtTokenUtil.getUsernameFromToken(refreshToken)
         val role = jwtTokenUtil.getRoleFromToken(refreshToken)
 
-        //a. 토큰 유효성 검사
+        // 토큰 유효성 검사 (만료 시간 포함)
         if (!jwtTokenUtil.validateToken(refreshToken)) {
             throw ImHereTokenInvalidException()
-        }
-        //b. 토큰 만료 시간 검사
-        if (jwtTokenUtil.getExpirationDateFromToken(refreshToken).isBefore(LocalDateTime.now())) {
-            throw ImHereTokenExpiredException()
         }
 
         val refreshTokenFromRedis = cachePort.find("refresh:$username") as String?

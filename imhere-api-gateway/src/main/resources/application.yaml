@@ -6,7 +6,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone : http://localhost:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
     registry-fetch-interval-seconds: 5
 
 spring:
@@ -25,6 +25,14 @@ spring:
                   - /actuator
                   - /health
                   - /favicon.ico
+            - name: AuthorizationHeaderFilter
+              args:
+                excludePaths:
+                  - "/actuator/**"       # 모든 서비스의 actuator 제외
+                  - "/*/actuator/**"     # /user-service/actuator 패턴 대응
+                  - "/api/v1/auth/login"
+                  - "/api/v1/auth/signup"
+                  - "/health-check"
           globalcors:
             corsConfigurations:
               '[/**]':
@@ -32,7 +40,21 @@ spring:
                 allowedMethods: [ GET, POST, PUT, DELETE, OPTIONS ]
                 allowedHeaders: "*"
           routes:
-            - id: notification               # Service id
-              uri: lb://IMHERE-NOTIFICATION-SERVICE   # target service's url. we can see also at eureka.
-              predicates:                   # routing
-                - Path=/first-service/**
+            - id: common-endpoints
+              uri:
+            - id: user-service-auth
+              uri: lb://IMHERE-USER-SERVICE
+              predicates: # routing 조건
+                - Path=/api/v1/auth/**
+            - id: user-service
+              uri: lb://IMHERE-USER-SERVICE
+              predicates:
+                - Path=/api/v1/users/**
+              filters:
+                - AuthorizationHeaderFilter
+            - id: notification-service
+              uri: lb://IMHERE-NOTIFICATION-SERVICE
+              predicates:
+                - Path=/api/v1/notifications/**, /api/v1/messages/**
+              filters:
+                - AuthorizationHeaderFilter
