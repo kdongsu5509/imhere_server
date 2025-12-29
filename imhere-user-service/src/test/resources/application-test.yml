@@ -1,0 +1,34 @@
+spring:
+  data:
+    redis:
+      port: 6379
+      host: host.docker.internal
+  batch:
+    job:
+      enabled: false
+  datasource:
+    # H2를 PostgreSQL 모드로 실행
+    url: jdbc:h2:mem:testdb;
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+
+jwt:
+  secret: testSecretKeyForJwtAuthenticationTesting12345678901234567890
+  access-expiration-minutes: 30
+  refresh-expiration-days: 7
+  access-header-name: Authorization
+
+oidc:
+  kakao:
+    issuer: "https://kauth.kakao.com"
+    audience: "bf284f33bfeba9bc59575706d0eb0e9c"
+    cacheKey: "kakaoOidcKeys::kakaoPublicKeySet"
