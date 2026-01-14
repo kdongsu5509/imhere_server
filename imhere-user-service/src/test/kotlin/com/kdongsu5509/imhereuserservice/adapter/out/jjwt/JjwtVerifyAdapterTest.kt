@@ -24,6 +24,14 @@ class JjwtVerifyAdapterTest {
     private lateinit var jjwtVerifyAdapter: JjwtVerifyAdapter
     private lateinit var keyPair: KeyPair
 
+    private val payload = OIDCDecodePayload(
+        iss = "https://kauth.kakao.com",
+        aud = "test-audience",
+        sub = "test-sub",
+        email = "test@example.com",
+        nickname = "고동수"
+    )
+
     @BeforeEach
     fun setUp() {
         kakaoOIDCProperties = KakaoOIDCProperties(
@@ -42,14 +50,6 @@ class JjwtVerifyAdapterTest {
     @Test
     @DisplayName("유효한 페이로드를 검증한다")
     fun verifyPayLoad_validPayload_success() {
-        // given
-        val payload = OIDCDecodePayload(
-            iss = "https://kauth.kakao.com",
-            aud = "test-audience",
-            sub = "test-sub",
-            email = "test@example.com"
-        )
-
         // when & then - 예외가 발생하지 않아야 함
         jjwtVerifyAdapter.verifyPayLoad(payload)
     }
@@ -57,40 +57,38 @@ class JjwtVerifyAdapterTest {
     @Test
     @DisplayName("issuer가 일치하지 않으면 OIDCInvalidException을 발생시킨다")
     fun verifyPayLoad_invalidIssuer_throwsException() {
-        // given
-        val payload = OIDCDecodePayload(
-            iss = "https://invalid-issuer.com",
+        val badPayload = OIDCDecodePayload(
+            iss = "https://dsko.dsko.com",
             aud = "test-audience",
             sub = "test-sub",
-            email = "test@example.com"
+            email = "test@example.com",
+            nickname = "고동수"
         )
-
         // when & then
         assertThrows<OIDCInvalidException> {
-            jjwtVerifyAdapter.verifyPayLoad(payload)
+            jjwtVerifyAdapter.verifyPayLoad(badPayload)
         }.also { exception ->
             assertThat(exception.message).contains("토큰의 issuer가 일치하지 않습니다")
-            assertThat(exception.message).contains("https://invalid-issuer.com")
+            assertThat(exception.message).contains("https://dsko.dsko.com")
         }
     }
 
     @Test
     @DisplayName("audience가 일치하지 않으면 OIDCInvalidException을 발생시킨다")
     fun verifyPayLoad_invalidAudience_throwsException() {
-        // given
-        val payload = OIDCDecodePayload(
+        val badPayload = OIDCDecodePayload(
             iss = "https://kauth.kakao.com",
-            aud = "invalid-audience",
+            aud = "bad-audience",
             sub = "test-sub",
-            email = "test@example.com"
+            email = "test@example.com",
+            nickname = "고동수"
         )
-
         // when & then
         assertThrows<OIDCInvalidException> {
-            jjwtVerifyAdapter.verifyPayLoad(payload)
+            jjwtVerifyAdapter.verifyPayLoad(badPayload)
         }.also { exception ->
             assertThat(exception.message).contains("토큰의 audience가 일치하지 않습니다")
-            assertThat(exception.message).contains("invalid-audience")
+            assertThat(exception.message).contains("bad-audience")
         }
     }
 
@@ -198,7 +196,6 @@ class JjwtVerifyAdapterTest {
 
     private fun encodeBase64Url(bigInteger: BigInteger): String {
         val bytes = bigInteger.toByteArray()
-        // BigInteger는 부호 비트를 포함하므로, 양수인 경우 앞의 0 바이트를 제거
         val positiveBytes = if (bytes[0] == 0.toByte()) bytes.sliceArray(1 until bytes.size) else bytes
         return Base64.getUrlEncoder().withoutPadding().encodeToString(positiveBytes)
     }

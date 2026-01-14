@@ -1,7 +1,6 @@
 package com.kdongsu5509.imhereuserservice.application.service.jwt
 
 import com.kdongsu5509.imhereuserservice.application.port.out.CachePort
-import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.ImHereTokenExpiredException
 import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.ImHereTokenInvalidException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -77,7 +76,6 @@ class SelfSignedTokenProviderTest {
         `when`(jwtTokenUtil.getUsernameFromToken(refreshToken)).thenReturn(username)
         `when`(jwtTokenUtil.getRoleFromToken(refreshToken)).thenReturn(role)
         `when`(jwtTokenUtil.validateToken(refreshToken)).thenReturn(true)
-        `when`(jwtTokenUtil.getExpirationDateFromToken(refreshToken)).thenReturn(expirationDate)
         `when`(cachePort.find(redisKey)).thenReturn(refreshToken)
         `when`(jwtTokenIssuer.createAccessToken(username, role)).thenReturn(newAccessToken)
         `when`(jwtTokenIssuer.createRefreshToken(username, role)).thenReturn(newRefreshToken)
@@ -94,7 +92,6 @@ class SelfSignedTokenProviderTest {
         verify(jwtTokenUtil).getUsernameFromToken(refreshToken)
         verify(jwtTokenUtil).getRoleFromToken(refreshToken)
         verify(jwtTokenUtil).validateToken(refreshToken)
-        verify(jwtTokenUtil).getExpirationDateFromToken(refreshToken)
         verify(cachePort).find(redisKey)
         verify(jwtTokenIssuer).createAccessToken(username, role)
         verify(jwtTokenIssuer).createRefreshToken(username, role)
@@ -141,21 +138,19 @@ class SelfSignedTokenProviderTest {
         val expiredRefreshToken = "expired-refresh-token"
         val username = "test@example.com"
         val role = "ROLE_USER"
-        val expiredDate = java.time.LocalDateTime.now().minusDays(1)
 
         `when`(jwtTokenUtil.getUsernameFromToken(expiredRefreshToken)).thenReturn(username)
         `when`(jwtTokenUtil.getRoleFromToken(expiredRefreshToken)).thenReturn(role)
-        `when`(jwtTokenUtil.validateToken(expiredRefreshToken)).thenReturn(true)
-        `when`(jwtTokenUtil.getExpirationDateFromToken(expiredRefreshToken)).thenReturn(expiredDate)
+        `when`(jwtTokenUtil.validateToken(expiredRefreshToken)).thenReturn(false)
 
         // when & then
-        assertThrows<ImHereTokenExpiredException> {
+        assertThrows<ImHereTokenInvalidException> {
             selfSignedTokenProvider.reissueJwtToken(expiredRefreshToken)
         }.also { exception ->
-            assertThat(exception.message).isEqualTo("만료된 토큰입니다")
+            assertThat(exception.message).isEqualTo("잘못된 토큰입니다")
         }
 
-        verify(jwtTokenUtil).getExpirationDateFromToken(expiredRefreshToken)
+        verify(jwtTokenUtil).validateToken(expiredRefreshToken)
     }
 
     @Test
@@ -166,13 +161,11 @@ class SelfSignedTokenProviderTest {
         val differentTokenInRedis = "different-refresh-token"
         val username = "test@example.com"
         val role = "ROLE_USER"
-        val expirationDate = java.time.LocalDateTime.now().plusDays(1)
         val redisKey = "refresh:$username"
 
         `when`(jwtTokenUtil.getUsernameFromToken(refreshToken)).thenReturn(username)
         `when`(jwtTokenUtil.getRoleFromToken(refreshToken)).thenReturn(role)
         `when`(jwtTokenUtil.validateToken(refreshToken)).thenReturn(true)
-        `when`(jwtTokenUtil.getExpirationDateFromToken(refreshToken)).thenReturn(expirationDate)
         `when`(cachePort.find(redisKey)).thenReturn(differentTokenInRedis)
 
         // when & then
@@ -198,7 +191,6 @@ class SelfSignedTokenProviderTest {
         `when`(jwtTokenUtil.getUsernameFromToken(refreshToken)).thenReturn(username)
         `when`(jwtTokenUtil.getRoleFromToken(refreshToken)).thenReturn(role)
         `when`(jwtTokenUtil.validateToken(refreshToken)).thenReturn(true)
-        `when`(jwtTokenUtil.getExpirationDateFromToken(refreshToken)).thenReturn(expirationDate)
         `when`(cachePort.find(redisKey)).thenReturn(null)
 
         // when & then
@@ -226,7 +218,6 @@ class SelfSignedTokenProviderTest {
         `when`(jwtTokenUtil.getUsernameFromToken(refreshToken)).thenReturn(username)
         `when`(jwtTokenUtil.getRoleFromToken(refreshToken)).thenReturn(role)
         `when`(jwtTokenUtil.validateToken(refreshToken)).thenReturn(true)
-        `when`(jwtTokenUtil.getExpirationDateFromToken(refreshToken)).thenReturn(expirationDate)
         `when`(cachePort.find(redisKey)).thenReturn(refreshToken)
         `when`(jwtTokenIssuer.createAccessToken(username, role)).thenReturn(newAccessToken)
         `when`(jwtTokenIssuer.createRefreshToken(username, role)).thenReturn(newRefreshToken)

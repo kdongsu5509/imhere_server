@@ -24,6 +24,14 @@ class KakaoOIDCVerificationServiceTest {
 
     private lateinit var kakaoOIDCVerificationService: KakaoOIDCVerificationService
 
+    private val payload = OIDCDecodePayload(
+        iss = "https://kauth.kakao.com",
+        aud = "test-audience",
+        sub = "test-sub",
+        email = "test@example.com",
+        nickname = "고동수"
+    )
+
     @org.junit.jupiter.api.BeforeEach
     fun setUp() {
         kakaoOIDCVerificationService = KakaoOIDCVerificationService(jwtParserPort, jwtVerificationPort)
@@ -35,12 +43,6 @@ class KakaoOIDCVerificationServiceTest {
         // given
         val idToken = "valid-id-token"
         val email = "test@example.com"
-        val payload = OIDCDecodePayload(
-            iss = "https://kauth.kakao.com",
-            aud = "test-audience",
-            sub = "test-sub",
-            email = email
-        )
 
         `when`(jwtParserPort.parse(idToken)).thenReturn(payload)
         doNothing().`when`(jwtVerificationPort).verifyPayLoad(payload)
@@ -51,6 +53,7 @@ class KakaoOIDCVerificationServiceTest {
         // then
         assertThat(result).isNotNull()
         assertThat(result.email).isEqualTo(email)
+        assertThat(result.nickname).isEqualTo("고동수")
 
         verify(jwtParserPort).parse(idToken)
         verify(jwtVerificationPort).verifyPayLoad(payload)
@@ -61,15 +64,16 @@ class KakaoOIDCVerificationServiceTest {
     fun verifyAndReturnUserInformation_noEmail_throwsException() {
         // given
         val idToken = "token-without-email"
-        val payload = OIDCDecodePayload(
+        val payloadWithoutEmail = OIDCDecodePayload(
             iss = "https://kauth.kakao.com",
             aud = "test-audience",
             sub = "test-sub",
-            email = null
+            email = null,
+            nickname = "고동수"
         )
 
-        `when`(jwtParserPort.parse(idToken)).thenReturn(payload)
-        doNothing().`when`(jwtVerificationPort).verifyPayLoad(payload)
+        `when`(jwtParserPort.parse(idToken)).thenReturn(payloadWithoutEmail)
+        doNothing().`when`(jwtVerificationPort).verifyPayLoad(payloadWithoutEmail)
 
         // when & then
         assertThrows<MalformedJwtException> {
@@ -79,7 +83,7 @@ class KakaoOIDCVerificationServiceTest {
         }
 
         verify(jwtParserPort).parse(idToken)
-        verify(jwtVerificationPort).verifyPayLoad(payload)
+        verify(jwtVerificationPort).verifyPayLoad(payloadWithoutEmail)
     }
 
     @Test
@@ -87,12 +91,6 @@ class KakaoOIDCVerificationServiceTest {
     fun verifyAndReturnUserInformation_payloadVerificationFails_throwsException() {
         // given
         val idToken = "invalid-token"
-        val payload = OIDCDecodePayload(
-            iss = "https://kauth.kakao.com",
-            aud = "test-audience",
-            sub = "test-sub",
-            email = "test@example.com"
-        )
         val exception = MalformedJwtException("Invalid payload")
 
         `when`(jwtParserPort.parse(idToken)).thenReturn(payload)
@@ -105,6 +103,34 @@ class KakaoOIDCVerificationServiceTest {
 
         verify(jwtParserPort).parse(idToken)
         verify(jwtVerificationPort).verifyPayLoad(payload)
+    }
+
+    @Test
+    @DisplayName("닉네임이 없는 ID 토큰은 빈 문자열로 반환한다")
+    fun verifyAndReturnUserInformation_noNickname_returnsEmptyString() {
+        // given
+        val idToken = "token-without-nickname"
+        val payloadWithoutNickname = OIDCDecodePayload(
+            iss = "https://kauth.kakao.com",
+            aud = "test-audience",
+            sub = "test-sub",
+            email = "test@example.com",
+            nickname = null
+        )
+
+        `when`(jwtParserPort.parse(idToken)).thenReturn(payloadWithoutNickname)
+        doNothing().`when`(jwtVerificationPort).verifyPayLoad(payloadWithoutNickname)
+
+        // when
+        val result = kakaoOIDCVerificationService.verifyAndReturnUserInformation(idToken)
+
+        // then
+        assertThat(result).isNotNull()
+        assertThat(result.email).isEqualTo("test@example.com")
+        assertThat(result.nickname).isEqualTo("")
+
+        verify(jwtParserPort).parse(idToken)
+        verify(jwtVerificationPort).verifyPayLoad(payloadWithoutNickname)
     }
 }
 
