@@ -19,6 +19,6 @@ class KakaoOIDCVerificationService(
         val payload = jwtParserPort.parse(idToken)
         jwtVerificationPort.verifyPayLoad(payload)
         payload.email ?: throw MalformedJwtException("ID 토큰에 이메일 정보가 없습니다")
-        return UserInformation(payload.email)
+        return UserInformation(payload.email, payload.nickname.orEmpty())
     }
 }
