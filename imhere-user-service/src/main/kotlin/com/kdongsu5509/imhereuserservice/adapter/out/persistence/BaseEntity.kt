@@ -23,7 +23,7 @@ abstract class BaseEntity {
 
     @CreatedBy
     @Column(updatable = false)
-    var createdBy: String? = null // 로그인 전에는 null일 수 있음
+    var createdBy: String? = null
 
     @LastModifiedBy
     var updatedBy: String? = null

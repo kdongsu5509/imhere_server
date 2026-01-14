@@ -8,6 +8,7 @@ class UserMapper {
     fun mapToJpaEntity(domainUser: User): UserJpaEntity {
         return UserJpaEntity(
             domainUser.email,
+            domainUser.nickname,
             domainUser.role,
             domainUser.oauthProvider
         )
@@ -16,6 +17,7 @@ class UserMapper {
     fun mapToDomainEntity(jpaEntity: UserJpaEntity): User {
         return User(
             jpaEntity.email,
+            jpaEntity.nickname,
             jpaEntity.provider,
             jpaEntity.role
         )
