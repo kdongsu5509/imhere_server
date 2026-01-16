@@ -2,9 +2,9 @@ package com.kdongsu5509.imhereuserservice.adapter.out.jjwt
 
 import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhereuserservice.application.dto.OIDCDecodePayload
+import com.kdongsu5509.imhereuserservice.application.port.out.LoadPublicKeyPort
 import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtParserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtVerificationPort
-import com.kdongsu5509.imhereuserservice.application.port.out.LoadPublicKeyPort
 import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.OIDCInvalidException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
@@ -59,7 +59,8 @@ class JjwtParserAdapter(
             iss = body.issuer,
             aud = body.audience,
             sub = body.subject,
-            email = body.get("email", String::class.java)
+            email = body.get("email", String::class.java),
+            nickname = body.get("nickname", String::class.java)
         )
     }
 }

@@ -27,8 +27,9 @@ class UserPersistenceAdapterTest {
 
     companion object {
         val testEmail = "test@test.com"
-        val testUser = User(testEmail, OAuth2Provider.KAKAO, UserRole.NORMAL)
-        val testUserEntity = UserJpaEntity(testUser.email, testUser.role, OAuth2Provider.KAKAO)
+        val testNickname = "고동수"
+        val testUser = User(testEmail, testNickname, OAuth2Provider.KAKAO, UserRole.NORMAL)
+        val testUserEntity = UserJpaEntity(testUser.email, testUser.nickname, testUser.role, OAuth2Provider.KAKAO)
     }
 
     @Test
@@ -36,7 +37,7 @@ class UserPersistenceAdapterTest {
     fun existByEmail_success() {
         //given
         val email = "test@test.com"
-        `when`(springDataUserRepository.existsByEmail(email)).thenReturn(true);
+        `when`(springDataUserRepository.existsByEmail(email)).thenReturn(true)
 
         //when
         val result = userPersistenceAdapter.existsByEmail(email)
