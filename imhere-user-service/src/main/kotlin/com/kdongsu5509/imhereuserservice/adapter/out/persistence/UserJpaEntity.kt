@@ -7,7 +7,7 @@ import org.hibernate.annotations.UuidGenerator
 import java.util.*
 
 @Entity
-class UserJpaEntity : BaseEntity {
+class UserJpaEntity : BaseTimeEntity {
     @Id
     @GeneratedValue
     @UuidGenerator
