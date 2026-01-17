@@ -8,7 +8,7 @@ class APIResponse<T> private constructor(
     val data: T?
 ) {
     companion object {
-        fun <T> success(data: T?): APIResponse<T?> {
+        fun <T> success(data: T): APIResponse<T> {
             return APIResponse(
                 HttpStatus.OK.value(),
                 HttpStatus.OK.reasonPhrase,

@@ -5,8 +5,7 @@ spring:
   application:
     name: IMHERE-CONFIG
   profiles:
-    active: git
-    include: private
+    include: git
 
 management:
   endpoints:
