@@ -91,7 +91,7 @@ logs/
 **/application-private.yaml
 
 # imhere-config의 민감 파일
-/imhere-config/src/main/resources/bootstrap.yaml
+/imhere-config/src/main/resources/application-git.yaml
 
 # 암호화 키 파일
 *.jks
@@ -99,3 +99,4 @@ logs/
 
 # 도커 컴포즈 파일
 docker-compose.yml
+/src/main/resources/application-secret.yaml
