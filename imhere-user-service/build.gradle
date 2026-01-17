@@ -1,10 +1,9 @@
 plugins {
-    id 'org.springframework.boot' version '3.5.7'
-    id 'org.jetbrains.kotlin.jvm' version '2.2.21'
-    id 'org.jetbrains.kotlin.plugin.spring'
-    id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.jetbrains.kotlin.plugin.jpa'
-    id 'org.jetbrains.kotlin.kapt'
+	id 'org.springframework.boot' version '3.5.7'
+	id 'org.jetbrains.kotlin.jvm' version '2.2.21'
+	id 'org.jetbrains.kotlin.plugin.spring' version '2.2.21'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.jetbrains.kotlin.plugin.jpa' version '2.2.21'
 }
 
 group = 'com.kdongsu5509'
@@ -12,82 +11,72 @@ version = '0.0.1-SNAPSHOT'
 description = 'imhere-user-service'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
 }
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    //JWT
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-    implementation 'org.testcontainers:testcontainers-bom:1.20.2'
-    //SPRING SECURITY
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    //SPRING DATA
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.boot:spring-boot-starter-cache'
-    //SPRING CLOUD EUREKA
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-    //SPRING CLOUD CONFIG
-    implementation 'org.springframework.cloud:spring-cloud-starter-config'
-    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
-    //ACTUATOR
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	//JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	implementation 'org.testcontainers:testcontainers-bom:1.20.2'
+	//SPRING SECURITY
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	//SPRING DATA
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	//SPRING CLOUD EUREKA
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	//SPRING CLOUD CONFIG
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+	//ACTUATOR
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-    implementation 'org.jetbrains.kotlin:kotlin-reflect'
-    implementation 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+	implementation 'org.jetbrains.kotlin:kotlin-reflect'
+	implementation 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    testRuntimeOnly 'com.h2database:h2'
-    testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.testcontainers:testcontainers'
-
-    //p6spy - SQL 쿼리 로깅(value가 상세히 보임)
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
-    //query_dsl
-    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
-
-    // annotationProcessor -> kotlin에서 queryDSL 사용 위한 변경
-    kapt 'com.querydsl:querydsl-apt:5.1.0:jakarta'
-    kapt 'jakarta.annotation:jakarta.annotation-api'
-    kapt 'jakarta.persistence:jakarta.persistence-api'
+	testRuntimeOnly 'com.h2database:h2'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:testcontainers'
 }
 
 ext {
-    set('springCloudVersion', "2025.0.1")
+	set('springCloudVersion', "2025.0.1")
 }
 
 dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
 
 kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll '-Xjsr305=strict'
-    }
+	compilerOptions {
+		freeCompilerArgs.addAll '-Xjsr305=strict'
+	}
 }
 
 allOpen {
-    annotation 'jakarta.persistence.Entity'
-    annotation 'jakarta.persistence.MappedSuperclass'
-    annotation 'jakarta.persistence.Embeddable'
+	annotation 'jakarta.persistence.Entity'
+	annotation 'jakarta.persistence.MappedSuperclass'
+	annotation 'jakarta.persistence.Embeddable'
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }

@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 class UserPersistenceAdapter(
     private val userMapper: UserMapper,
-    private val springDataUserRepository: SpringDataUserRepository,
-    private val springQueryDSLUserRepository: SpringQueryDSLUserRepository
-
+    private val springDataUserRepository: SpringDataUserRepository
 ) : CheckUserPort, SaveUserPort, LoadUserPort {
     override fun existsByEmail(email: String): Boolean {
         return springDataUserRepository.existsByEmail(email)
@@ -27,13 +25,5 @@ class UserPersistenceAdapter(
         val findJpaEntity: UserJpaEntity? = springDataUserRepository.findByEmail(email)
         findJpaEntity ?: throw UserNotFoundException()
         return userMapper.mapToDomainEntity(findJpaEntity)
-    }
-
-    override fun findByEmailAndNickname(keyword: String): List<User> {
-        val findJpaEntities = springQueryDSLUserRepository.findUserByKeyword(keyword)
-        if (findJpaEntities.isEmpty()) return listOf()
-        return findJpaEntities.stream()
-            .map { entity -> userMapper.mapToDomainEntity(entity) }
-            .toList()
     }
 }
