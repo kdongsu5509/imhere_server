@@ -4,5 +4,5 @@ import com.kdongsu5509.imhereuserservice.domain.User
 
 interface LoadUserPort {
     fun findByEmail(email: String): User
-    fun findByEmailAndNickname()
+    fun findByEmailAndNickname(keyword: String): List<User>
 }
