@@ -13,6 +13,7 @@ class UserJpaEntity : BaseTimeEntity {
     @UuidGenerator
     var id: UUID? = null
 
+    @Column(unique = true)
     var email: String = ""
 
     var nickname: String = ""
