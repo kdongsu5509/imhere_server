@@ -35,15 +35,26 @@ class OIDCLoginFacade(
     }
 
     override fun issue(email: String, nickname: String, oauth2Provider: OAuth2Provider): SelfSignedJWT {
-        if (!checkUserPort.existsByEmail(email)) {
-            val user = User(email, nickname, oauth2Provider, UserRole.NORMAL)
-            saveUserPort.save(user)
+        if (isNewMember(email)) {
+            saveNewMembersInformation(email, nickname, oauth2Provider)
         }
+
         val savedUser = loadUserPort.findByEmail(email)
 
+        return createJWTWithUserInfo(savedUser)
+    }
+
+    private fun createJWTWithUserInfo(savedUser: User): SelfSignedJWT {
         return jwtTokenProvider.issueJwtAuth(
             savedUser.email,
             savedUser.role.toString()
         )
     }
+
+    private fun saveNewMembersInformation(email: String, nickname: String, oauth2Provider: OAuth2Provider) {
+        val user = User(email, nickname, oauth2Provider, UserRole.NORMAL)
+        saveUserPort.save(user)
+    }
+
+    private fun isNewMember(email: String): Boolean = !checkUserPort.existsByEmail(email)
 }
