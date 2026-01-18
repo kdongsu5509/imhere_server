@@ -1,13 +1,11 @@
-package com.kdongsu5509.imhereuserservice.application.service.jwt
+package com.kdongsu5509.imhereuserservice.application.service.auth.jwt
 
 import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT
 import com.kdongsu5509.imhereuserservice.application.port.out.CachePort
-import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.ImHereTokenExpiredException
 import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.ImHereTokenInvalidException
 import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.Instant
-import java.time.LocalDateTime
 import java.time.ZoneId
 
 @Component

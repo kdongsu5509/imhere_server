@@ -1,22 +1,23 @@
-package com.kdongsu5509.imhereuserservice.application.service
+package com.kdongsu5509.imhereuserservice.application.service.auth
 
-import com.kdongsu5509.imhereuserservice.application.service.jwt.JwtTokenUtil
+import com.kdongsu5509.imhereuserservice.application.service.auth.jwt.JwtTokenUtil
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers.anyString
+import org.mockito.ArgumentMatchers
 import org.mockito.Mock
-import org.mockito.Mockito.never
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
-
+import java.io.PrintWriter
+import java.io.StringWriter
 
 @ExtendWith(MockitoExtension::class)
 class JwtAuthenticationFilterTest {
@@ -50,50 +51,50 @@ class JwtAuthenticationFilterTest {
         val role = "ROLE_USER"
         val bearerToken = "Bearer $token"
 
-        `when`(request.getHeader("Authorization")).thenReturn(bearerToken)
-        `when`(jwtTokenUtil.validateToken(token)).thenReturn(true)
-        `when`(jwtTokenUtil.getUsernameFromToken(token)).thenReturn(email)
-        `when`(jwtTokenUtil.getRoleFromToken(token)).thenReturn(role)
+        Mockito.`when`(request.getHeader("Authorization")).thenReturn(bearerToken)
+        Mockito.`when`(jwtTokenUtil.validateToken(token)).thenReturn(true)
+        Mockito.`when`(jwtTokenUtil.getUsernameFromToken(token)).thenReturn(email)
+        Mockito.`when`(jwtTokenUtil.getRoleFromToken(token)).thenReturn(role)
 
         // when
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain)
 
         // then
-        verify(jwtTokenUtil).validateToken(token)
-        verify(jwtTokenUtil).getUsernameFromToken(token)
-        verify(jwtTokenUtil).getRoleFromToken(token)
-        verify(filterChain).doFilter(request, response)
-        assertThat(SecurityContextHolder.getContext().authentication).isNotNull()
-        assertThat(SecurityContextHolder.getContext().authentication.name).isEqualTo(email)
+        Mockito.verify(jwtTokenUtil).validateToken(token)
+        Mockito.verify(jwtTokenUtil).getUsernameFromToken(token)
+        Mockito.verify(jwtTokenUtil).getRoleFromToken(token)
+        Mockito.verify(filterChain).doFilter(request, response)
+        Assertions.assertThat(SecurityContextHolder.getContext().authentication).isNotNull()
+        Assertions.assertThat(SecurityContextHolder.getContext().authentication.name).isEqualTo(email)
     }
 
     @Test
     @DisplayName("토큰이 없으면 필터를 통과한다")
     fun doFilterInternal_noToken_passesThrough() {
         // given
-        `when`(request.getHeader("Authorization")).thenReturn(null)
+        Mockito.`when`(request.getHeader("Authorization")).thenReturn(null)
 
         // when
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain)
 
         // then
-        verify(jwtTokenUtil, never()).validateToken(anyString())
-        verify(filterChain).doFilter(request, response)
-        assertThat(SecurityContextHolder.getContext().authentication).isNull()
+        Mockito.verify(jwtTokenUtil, Mockito.never()).validateToken(ArgumentMatchers.anyString())
+        Mockito.verify(filterChain).doFilter(request, response)
+        Assertions.assertThat(SecurityContextHolder.getContext().authentication).isNull()
     }
 
     @Test
     @DisplayName("Bearer 접두사가 없으면 필터를 통과한다")
     fun doFilterInternal_noBearerPrefix_passesThrough() {
         // given
-        `when`(request.getHeader("Authorization")).thenReturn("invalid-token")
+        Mockito.`when`(request.getHeader("Authorization")).thenReturn("invalid-token")
 
         // when
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain)
 
         // then
-        verify(jwtTokenUtil, never()).validateToken(anyString())
-        verify(filterChain).doFilter(request, response)
+        Mockito.verify(jwtTokenUtil, Mockito.never()).validateToken(ArgumentMatchers.anyString())
+        Mockito.verify(filterChain).doFilter(request, response)
     }
 
     @Test
@@ -103,44 +104,44 @@ class JwtAuthenticationFilterTest {
         val token = "invalid-jwt-token"
         val bearerToken = "Bearer $token"
 
-        `when`(request.getHeader("Authorization")).thenReturn(bearerToken)
-        `when`(jwtTokenUtil.validateToken(token)).thenReturn(false)
-        `when`(response.writer).thenReturn(java.io.PrintWriter(java.io.StringWriter()))
+        Mockito.`when`(request.getHeader("Authorization")).thenReturn(bearerToken)
+        Mockito.`when`(jwtTokenUtil.validateToken(token)).thenReturn(false)
+        Mockito.`when`(response.writer).thenReturn(PrintWriter(StringWriter()))
 
         // when
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain)
 
         // then
-        verify(jwtTokenUtil).validateToken(token)
-        verify(response).status = 401
-        verify(response).contentType = "application/json;charset=UTF-8"
-        verify(filterChain, never()).doFilter(request, response)
+        Mockito.verify(jwtTokenUtil).validateToken(token)
+        Mockito.verify(response).status = 401
+        Mockito.verify(response).contentType = "application/json;charset=UTF-8"
+        Mockito.verify(filterChain, Mockito.never()).doFilter(request, response)
     }
 
     @Test
     @DisplayName("actuator 경로는 필터를 건너뛴다")
     fun shouldNotFilter_actuatorPath_returnsTrue() {
         // given
-        `when`(request.servletPath).thenReturn("/actuator/health")
+        Mockito.`when`(request.servletPath).thenReturn("/actuator/health")
 
         // when
         val result = jwtAuthenticationFilter.shouldNotFilter(request)
 
         // then
-        assertThat(result).isTrue()
+        Assertions.assertThat(result).isTrue()
     }
 
     @Test
     @DisplayName("일반 경로는 필터를 실행한다")
     fun shouldNotFilter_normalPath_returnsFalse() {
         // given
-        `when`(request.servletPath).thenReturn("/api/test")
+        Mockito.`when`(request.servletPath).thenReturn("/api/test")
 
         // when
         val result = jwtAuthenticationFilter.shouldNotFilter(request)
 
         // then
-        assertThat(result).isFalse()
+        Assertions.assertThat(result).isFalse()
     }
 
     @Test
@@ -153,25 +154,25 @@ class JwtAuthenticationFilterTest {
         val bearerToken = "Bearer $token"
 
         // 기존 인증 설정
-        val existingAuth = org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+        val existingAuth = UsernamePasswordAuthenticationToken(
             "existing@example.com",
             null,
-            listOf(org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_ADMIN"))
+            listOf(SimpleGrantedAuthority("ROLE_ADMIN"))
         )
         SecurityContextHolder.getContext().authentication = existingAuth
 
-        `when`(request.getHeader("Authorization")).thenReturn(bearerToken)
-        `when`(jwtTokenUtil.validateToken(token)).thenReturn(true)
-        `when`(jwtTokenUtil.getUsernameFromToken(token)).thenReturn(email)
-        `when`(jwtTokenUtil.getRoleFromToken(token)).thenReturn(role)
+        Mockito.`when`(request.getHeader("Authorization")).thenReturn(bearerToken)
+        Mockito.`when`(jwtTokenUtil.validateToken(token)).thenReturn(true)
+        Mockito.`when`(jwtTokenUtil.getUsernameFromToken(token)).thenReturn(email)
+        Mockito.`when`(jwtTokenUtil.getRoleFromToken(token)).thenReturn(role)
 
         // when
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain)
 
         // then
-        verify(jwtTokenUtil).validateToken(token)
-        verify(filterChain).doFilter(request, response)
+        Mockito.verify(jwtTokenUtil).validateToken(token)
+        Mockito.verify(filterChain).doFilter(request, response)
         // 기존 인증이 유지되어야 함
-        assertThat(SecurityContextHolder.getContext().authentication).isEqualTo(existingAuth)
+        Assertions.assertThat(SecurityContextHolder.getContext().authentication).isEqualTo(existingAuth)
     }
 }

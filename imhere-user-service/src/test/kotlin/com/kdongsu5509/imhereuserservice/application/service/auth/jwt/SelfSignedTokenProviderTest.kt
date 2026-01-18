@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.application.service.jwt
+package com.kdongsu5509.imhereuserservice.application.service.auth.jwt
 
 import com.kdongsu5509.imhereuserservice.application.port.out.CachePort
 import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.ImHereTokenInvalidException
@@ -14,6 +14,7 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import java.time.Duration
+import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)
 class SelfSignedTokenProviderTest {
@@ -42,7 +43,7 @@ class SelfSignedTokenProviderTest {
         val role = "USER"
         val accessToken = "access-token"
         val refreshToken = "refresh-token"
-        val expirationDate = java.time.LocalDateTime.now().plusDays(7)
+        val expirationDate = LocalDateTime.now().plusDays(7)
 
         `when`(jwtTokenIssuer.createAccessToken(email, role)).thenReturn(accessToken)
         `when`(jwtTokenIssuer.createRefreshToken(email, role)).thenReturn(refreshToken)
@@ -68,7 +69,7 @@ class SelfSignedTokenProviderTest {
         val refreshToken = "valid-refresh-token"
         val username = "test@example.com"
         val role = "ROLE_USER"
-        val expirationDate = java.time.LocalDateTime.now().plusDays(1)
+        val expirationDate = LocalDateTime.now().plusDays(1)
         val newAccessToken = "new-access-token"
         val newRefreshToken = "new-refresh-token"
         val redisKey = "refresh:$username"
@@ -185,7 +186,7 @@ class SelfSignedTokenProviderTest {
         val refreshToken = "refresh-token"
         val username = "test@example.com"
         val role = "ROLE_USER"
-        val expirationDate = java.time.LocalDateTime.now().plusDays(1)
+        val expirationDate = LocalDateTime.now().plusDays(1)
         val redisKey = "refresh:$username"
 
         `when`(jwtTokenUtil.getUsernameFromToken(refreshToken)).thenReturn(username)
@@ -210,7 +211,7 @@ class SelfSignedTokenProviderTest {
         val refreshToken = "valid-refresh-token"
         val username = "test@example.com"
         val role = "ROLE_USER"
-        val expirationDate = java.time.LocalDateTime.now().plusDays(1)
+        val expirationDate = LocalDateTime.now().plusDays(1)
         val newAccessToken = "new-access-token"
         val newRefreshToken = "new-refresh-token"
         val redisKey = "refresh:$username"

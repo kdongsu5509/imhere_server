@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.application.service.security
+package com.kdongsu5509.imhereuserservice.application.service.auth.security
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority

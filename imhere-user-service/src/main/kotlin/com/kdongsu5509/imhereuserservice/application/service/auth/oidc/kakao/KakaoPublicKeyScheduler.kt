@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.application.service.oidc.kakao
+package com.kdongsu5509.imhereuserservice.application.service.auth.oidc.kakao
 
 import com.kdongsu5509.imhereuserservice.application.port.out.OauthClientPort
 import jakarta.annotation.PostConstruct

@@ -1,7 +1,7 @@
-package com.kdongsu5509.imhereuserservice.application.service
+package com.kdongsu5509.imhereuserservice.application.service.auth
 
-import com.kdongsu5509.imhereuserservice.application.service.jwt.JwtTokenUtil
-import com.kdongsu5509.imhereuserservice.application.service.security.SimpleTokenUserDetails
+import com.kdongsu5509.imhereuserservice.application.service.auth.jwt.JwtTokenUtil
+import com.kdongsu5509.imhereuserservice.application.service.auth.security.SimpleTokenUserDetails
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

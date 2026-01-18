@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.application.service.jwt
+package com.kdongsu5509.imhereuserservice.application.service.auth.jwt
 
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
@@ -16,13 +16,14 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
+import javax.crypto.SecretKey
 
 @ExtendWith(MockitoExtension::class)
 class JwtTokenUtilTest {
 
     private lateinit var jwtTokenUtil: JwtTokenUtil
     private lateinit var jwtProperties: JwtProperties
-    private lateinit var secretKey: javax.crypto.SecretKey
+    private lateinit var secretKey: SecretKey
 
     @BeforeEach
     fun setUp() {

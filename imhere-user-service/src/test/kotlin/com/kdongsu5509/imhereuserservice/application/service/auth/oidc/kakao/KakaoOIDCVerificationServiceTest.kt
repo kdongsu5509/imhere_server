@@ -1,10 +1,11 @@
-package com.kdongsu5509.imhereuserservice.application.service.oidc.kakao
+package com.kdongsu5509.imhereuserservice.application.service.auth.oidc.kakao
 
 import com.kdongsu5509.imhereuserservice.application.dto.OIDCDecodePayload
 import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtParserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtVerificationPort
 import io.jsonwebtoken.MalformedJwtException
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -32,7 +33,7 @@ class KakaoOIDCVerificationServiceTest {
         nickname = "고동수"
     )
 
-    @org.junit.jupiter.api.BeforeEach
+    @BeforeEach
     fun setUp() {
         kakaoOIDCVerificationService = KakaoOIDCVerificationService(jwtParserPort, jwtVerificationPort)
     }

@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.application.service.oidc
+package com.kdongsu5509.imhereuserservice.application.service.auth.oidc
 
 import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT
 import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
@@ -9,7 +9,7 @@ import com.kdongsu5509.imhereuserservice.application.port.out.CheckUserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.LoadUserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.SaveUserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.token.oidc.OIDCVerificationPort
-import com.kdongsu5509.imhereuserservice.application.service.jwt.JwtTokenProvider
+import com.kdongsu5509.imhereuserservice.application.service.auth.jwt.JwtTokenProvider
 import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.User
 import com.kdongsu5509.imhereuserservice.domain.UserRole

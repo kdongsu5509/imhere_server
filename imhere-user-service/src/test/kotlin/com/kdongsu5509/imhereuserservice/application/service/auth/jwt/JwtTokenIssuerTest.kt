@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.application.service.jwt
+package com.kdongsu5509.imhereuserservice.application.service.auth.jwt
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -37,7 +37,7 @@ class JwtTokenIssuerTest {
 
         // then
         assertThat(accessToken).isNotEmpty()
-        
+
         // 토큰 파싱하여 검증
         val secretKey = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray(StandardCharsets.UTF_8))
         val claims = Jwts.parserBuilder()
@@ -52,7 +52,7 @@ class JwtTokenIssuerTest {
         assertThat(claims.id).isNotNull()
         assertThat(claims.issuedAt).isNotNull()
         assertThat(claims.expiration).isNotNull()
-        
+
         // 만료 시간이 현재 시간보다 미래인지 확인
         val expirationTime = LocalDateTime.ofInstant(claims.expiration.toInstant(), ZoneId.systemDefault())
         assertThat(expirationTime).isAfter(LocalDateTime.now())
@@ -70,7 +70,7 @@ class JwtTokenIssuerTest {
 
         // then
         assertThat(refreshToken).isNotEmpty()
-        
+
         // 토큰 파싱하여 검증
         val secretKey = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray(StandardCharsets.UTF_8))
         val claims = Jwts.parserBuilder()
@@ -85,7 +85,7 @@ class JwtTokenIssuerTest {
         assertThat(claims.id).isNotNull()
         assertThat(claims.issuedAt).isNotNull()
         assertThat(claims.expiration).isNotNull()
-        
+
         // 만료 시간이 현재 시간보다 미래인지 확인
         val expirationTime = LocalDateTime.ofInstant(claims.expiration.toInstant(), ZoneId.systemDefault())
         assertThat(expirationTime).isAfter(LocalDateTime.now())
@@ -104,7 +104,7 @@ class JwtTokenIssuerTest {
 
         // then
         val secretKey = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray(StandardCharsets.UTF_8))
-        
+
         val accessClaims = Jwts.parserBuilder()
             .setSigningKey(secretKey)
             .build()
@@ -137,7 +137,7 @@ class JwtTokenIssuerTest {
 
         // then
         val secretKey = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray(StandardCharsets.UTF_8))
-        
+
         val claims1 = Jwts.parserBuilder()
             .setSigningKey(secretKey)
             .build()

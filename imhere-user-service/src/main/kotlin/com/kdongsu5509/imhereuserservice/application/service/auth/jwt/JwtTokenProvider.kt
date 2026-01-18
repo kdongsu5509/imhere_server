@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.application.service.jwt
+package com.kdongsu5509.imhereuserservice.application.service.auth.jwt
 
 import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT
 
