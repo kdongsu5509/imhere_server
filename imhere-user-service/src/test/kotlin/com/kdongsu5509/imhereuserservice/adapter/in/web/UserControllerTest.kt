@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -36,7 +37,9 @@ class UserControllerTest {
 
     companion object {
         const val userSearchUrlWithoutKeyword = "/api/v1/user/search/"
-        const val dongsuKo = "고동수"
+        const val userSearchMeUrl = "/api/v1/user/search/me"
+        const val DSKO = "고동수"
+        const val TEST_EMAIL = "test@test.com"
     }
 
     @Test
@@ -68,7 +71,7 @@ class UserControllerTest {
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data[0].userEmail").value(testUsersButSizeIsOne[0].email))
-            .andExpect(jsonPath("$.data[0].userNickname").value(dongsuKo))
+            .andExpect(jsonPath("$.data[0].userNickname").value(DSKO))
     }
 
     @Test
@@ -79,12 +82,12 @@ class UserControllerTest {
 
         //when, then
         mockMvc.perform(
-            get(userSearchUrlWithoutKeyword + dongsuKo)
+            get(userSearchUrlWithoutKeyword + DSKO)
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data", hasSize<Any>(10)))
-            .andExpect(jsonPath("$.data[0].userNickname").value(dongsuKo))
+            .andExpect(jsonPath("$.data[0].userNickname").value(DSKO))
     }
 
     private fun createTestUser(size: Int): List<UserJpaEntity> {
@@ -95,7 +98,7 @@ class UserControllerTest {
 
             val testUserEntity = UserJpaEntity(
                 email = testEmail,
-                nickname = dongsuKo,
+                nickname = DSKO,
                 role = UserRole.NORMAL,
                 provider = OAuth2Provider.KAKAO
             )
@@ -103,5 +106,27 @@ class UserControllerTest {
         }
 
         return list
+    }
+
+    @Test
+    @WithMockUser(username = TEST_EMAIL)
+    @DisplayName("내 정보 조회")
+    fun searchMe_success() {
+        //given
+        val testUser = UserJpaEntity(
+            email = TEST_EMAIL,
+            nickname = DSKO,
+            role = UserRole.NORMAL,
+            provider = OAuth2Provider.KAKAO
+        )
+        springDataUserRepository.save(testUser)
+
+        //when, then
+        mockMvc.perform(
+            get(userSearchMeUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
+            .andExpect(jsonPath("$.data.userEmail").value(TEST_EMAIL))
+            .andExpect(jsonPath("$.data.userNickname").value(DSKO))
     }
 }

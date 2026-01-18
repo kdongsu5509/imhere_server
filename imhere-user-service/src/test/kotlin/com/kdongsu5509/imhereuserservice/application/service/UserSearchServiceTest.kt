@@ -1,5 +1,6 @@
 package com.kdongsu5509.imhereuserservice.application.service
 
+import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
 import com.kdongsu5509.imhereuserservice.application.port.out.LoadUserPort
 import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.User
@@ -22,22 +23,26 @@ class UserSearchServiceTest {
     @InjectMocks
     lateinit var userSearchService: UserSearchService
 
+    companion object {
+        const val TEST_KEYWORD = "테스트"
+        const val TEST_EMAIL = "test@test.com"
+        const val TEST_NICKNAME = "테스트"
+        val testOauthProvider = OAuth2Provider.KAKAO
+        val testRole = UserRole.NORMAL
+        val testUser = User(TEST_EMAIL, TEST_NICKNAME, testOauthProvider, testRole)
+    }
+
     @Test
     @DisplayName("찾은 사용자가 1명 이상이면 User 리스트로 잘 반환해서 나간다")
     fun searchUser_overThanOne() {
         //given
-        val testKeyword = "테스트"
-        val testEmail = "test@test.com"
-        val testNickname = "테스트"
-        val testOauthProvider = OAuth2Provider.KAKAO
-        val testRole = UserRole.NORMAL
-        `when`(loadUserPort.findByEmailAndNickname(testKeyword)).thenReturn(
-            listOf(User(testEmail, testNickname, testOauthProvider, testRole))
+        `when`(loadUserPort.findByEmailAndNickname(TEST_KEYWORD)).thenReturn(
+            listOf(testUser)
         )
 
         //when, then
         assertDoesNotThrow {
-            userSearchService.searchUser(testKeyword)
+            userSearchService.searchUser(TEST_KEYWORD)
         }
     }
 
@@ -57,5 +62,22 @@ class UserSearchServiceTest {
         Assertions.assertThat(result).isNotNull
         Assertions.assertThat(result).isEmpty()
         Assertions.assertThat(result).isInstanceOf(List::class.java)
+    }
+
+    @Test
+    @DisplayName("사용자의 정보를 잘 찾아오면 변환해서 잘 나간다.")
+    fun searchMe() {
+        //given
+        `when`(loadUserPort.findByEmail(TEST_KEYWORD)).thenReturn(
+            testUser
+        )
+
+        //when, then
+        var result: UserInformation? = null
+        assertDoesNotThrow {
+            result = userSearchService.searchMe(TEST_KEYWORD)
+        }
+        Assertions.assertThat(result).isNotNull
+        Assertions.assertThat(result).isInstanceOf(UserInformation::class.java)
     }
 }
