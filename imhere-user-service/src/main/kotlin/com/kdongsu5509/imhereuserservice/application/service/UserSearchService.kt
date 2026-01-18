@@ -11,4 +11,9 @@ class UserSearchService(private val loadUserPort: LoadUserPort) : UserSearchUseC
         val matchedUsers = loadUserPort.findByEmailAndNickname(keyword)
         return matchedUsers.map { user -> UserInformation(user.email, user.nickname) }
     }
+
+    override fun searchMe(email: String): UserInformation {
+        val me = loadUserPort.findByEmail(email)
+        return UserInformation(me.email, me.nickname)
+    }
 }

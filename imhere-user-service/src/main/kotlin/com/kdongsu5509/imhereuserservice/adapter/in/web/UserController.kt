@@ -3,6 +3,8 @@ package com.kdongsu5509.imhereuserservice.adapter.`in`.web
 import com.kdongsu5509.imhereuserservice.adapter.dto.resp.UserSearchResponse
 import com.kdongsu5509.imhereuserservice.application.port.`in`.UserSearchUseCase
 import jakarta.validation.constraints.NotBlank
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -24,5 +26,18 @@ class UserController(private val userSearchUseCase: UserSearchUseCase) {
         }
 
         return APIResponse.success(responseValue)
+    }
+
+    @GetMapping("/search/me")
+    fun searchMyInfo(
+        @AuthenticationPrincipal user: UserDetails
+    ): APIResponse<UserSearchResponse> {
+        val myInfo = userSearchUseCase.searchMe(user.username)
+
+        return APIResponse.success(
+            UserSearchResponse(
+                myInfo.email, myInfo.nickname
+            )
+        )
     }
 }
