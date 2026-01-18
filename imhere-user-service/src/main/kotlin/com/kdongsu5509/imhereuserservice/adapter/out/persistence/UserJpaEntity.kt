@@ -7,6 +7,7 @@ import org.hibernate.annotations.UuidGenerator
 import java.util.*
 
 @Entity
+@Table(name = "users")
 class UserJpaEntity : BaseTimeEntity {
     @Id
     @GeneratedValue
