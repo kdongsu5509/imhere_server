@@ -33,8 +33,8 @@ import java.util.*
 class AuthControllerIntegrationTest : TestRedisContainer() {
 
     companion object {
-        const val LOGIN_URL = "/api/v1/user/login"
-        const val REISSUE_URL = "/api/v1/user/reissue"
+        const val LOGIN_URL = "/api/v1/user/auth/login"
+        const val REISSUE_URL = "/api/v1/user/auth/reissue"
     }
 
     @Autowired
