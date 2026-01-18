@@ -4,8 +4,10 @@ import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.UserSearchUseCase
 import com.kdongsu5509.imhereuserservice.application.port.out.LoadUserPort
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
+@Transactional(readOnly = true)
 class UserSearchService(private val loadUserPort: LoadUserPort) : UserSearchUseCase {
     override fun searchUser(keyword: String): List<UserInformation> {
         val matchedUsers = loadUserPort.findByEmailAndNickname(keyword)
