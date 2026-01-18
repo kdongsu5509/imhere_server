@@ -1,7 +1,7 @@
 package com.kdongsu5509.imhereuserservice.adapter.`in`.web
 
 import com.kdongsu5509.imhereuserservice.adapter.dto.resp.UserSearchResponse
-import com.kdongsu5509.imhereuserservice.application.port.`in`.UserSearchUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.user.UserSearchUseCase
 import jakarta.validation.constraints.NotBlank
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails

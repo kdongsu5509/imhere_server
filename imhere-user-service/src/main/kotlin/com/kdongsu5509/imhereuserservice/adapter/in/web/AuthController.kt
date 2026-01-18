@@ -4,8 +4,8 @@ import com.kdongsu5509.imhereuserservice.adapter.dto.req.JwtRefreshToken
 import com.kdongsu5509.imhereuserservice.adapter.dto.req.TokenInfo
 import com.kdongsu5509.imhereuserservice.adapter.dto.resp.ImhereJwt
 import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT
-import com.kdongsu5509.imhereuserservice.application.port.`in`.HandleOIDCUseCase
-import com.kdongsu5509.imhereuserservice.application.port.`in`.ReissueJWTPort
+import com.kdongsu5509.imhereuserservice.application.port.`in`.auth.HandleOIDCUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.auth.ReissueJWTUseCase
 import lombok.extern.slf4j.Slf4j
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/user")
-class AuthController(val handleOIDCUseCase: HandleOIDCUseCase, val reissueJwtPort: ReissueJWTPort) {
+class AuthController(val handleOIDCUseCase: HandleOIDCUseCase, val reissueJwtUseCase: ReissueJWTUseCase) {
 
     @PostMapping("/login")
     fun handleIdToken(
@@ -35,7 +35,7 @@ class AuthController(val handleOIDCUseCase: HandleOIDCUseCase, val reissueJwtPor
     fun handleJwtTokenReissueRequest(
         @Validated @RequestBody jwtRefreshToken: JwtRefreshToken
     ): APIResponse<ImhereJwt?> {
-        val jwt = reissueJwtPort.reissue(jwtRefreshToken.refreshToken)
+        val jwt = reissueJwtUseCase.reissue(jwtRefreshToken.refreshToken)
         return APIResponse.success(
             ImhereJwt(jwt.accessToken, jwt.refreshToken)
         )

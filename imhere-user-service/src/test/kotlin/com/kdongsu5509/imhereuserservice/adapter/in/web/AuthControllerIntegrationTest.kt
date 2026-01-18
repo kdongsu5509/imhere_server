@@ -6,8 +6,8 @@ import com.kdongsu5509.imhereuserservice.TestRedisContainer
 import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.imhereuserservice.adapter.out.kakao.KakaoOauthClient
-import com.kdongsu5509.imhereuserservice.application.port.`in`.HandleOIDCUseCase
-import com.kdongsu5509.imhereuserservice.application.port.`in`.ReissueJWTPort
+import com.kdongsu5509.imhereuserservice.application.port.`in`.auth.HandleOIDCUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.auth.ReissueJWTUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -41,7 +41,7 @@ class AuthControllerIntegrationTest : TestRedisContainer() {
     lateinit var handleOidcUseCase: HandleOIDCUseCase
 
     @Autowired
-    lateinit var reissueJWTPort: ReissueJWTPort
+    lateinit var reissueJWTUseCase: ReissueJWTUseCase
 
     @Autowired
     lateinit var mockMvc: MockMvc

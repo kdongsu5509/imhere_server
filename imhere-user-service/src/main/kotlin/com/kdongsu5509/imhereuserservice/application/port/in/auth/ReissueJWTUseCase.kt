@@ -1,7 +1,7 @@
-package com.kdongsu5509.imhereuserservice.application.port.`in`
+package com.kdongsu5509.imhereuserservice.application.port.`in`.auth
 
 import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT
 
-interface ReissueJWTPort {
+interface ReissueJWTUseCase {
     fun reissue(refreshToken: String): SelfSignedJWT
 }

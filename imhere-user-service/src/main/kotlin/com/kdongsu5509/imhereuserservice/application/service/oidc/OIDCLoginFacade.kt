@@ -2,9 +2,9 @@ package com.kdongsu5509.imhereuserservice.application.service.oidc
 
 import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT
 import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
-import com.kdongsu5509.imhereuserservice.application.port.`in`.HandleOIDCUseCase
-import com.kdongsu5509.imhereuserservice.application.port.`in`.IssueJWTPort
-import com.kdongsu5509.imhereuserservice.application.port.`in`.VerifyOIDCPort
+import com.kdongsu5509.imhereuserservice.application.port.`in`.auth.HandleOIDCUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.auth.IssueJWTUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.auth.VerifyOIDCUseCase
 import com.kdongsu5509.imhereuserservice.application.port.out.CheckUserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.LoadUserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.SaveUserPort
@@ -24,7 +24,7 @@ class OIDCLoginFacade(
     private val jwtTokenProvider: JwtTokenProvider,
     private val saveUserPort: SaveUserPort,
     private val loadUserPort: LoadUserPort,
-) : HandleOIDCUseCase, VerifyOIDCPort, IssueJWTPort {
+) : HandleOIDCUseCase, VerifyOIDCUseCase, IssueJWTUseCase {
     override fun verifyIdTokenAndReturnJwt(idToken: String, oAuth2Provider: OAuth2Provider): SelfSignedJWT {
         val userInformation = verify(idToken, oAuth2Provider)
         return issue(userInformation.email, userInformation.nickname, oAuth2Provider)

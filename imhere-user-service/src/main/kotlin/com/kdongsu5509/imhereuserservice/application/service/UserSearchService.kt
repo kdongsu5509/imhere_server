@@ -1,7 +1,7 @@
 package com.kdongsu5509.imhereuserservice.application.service
 
 import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
-import com.kdongsu5509.imhereuserservice.application.port.`in`.UserSearchUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.user.UserSearchUseCase
 import com.kdongsu5509.imhereuserservice.application.port.out.LoadUserPort
 import org.springframework.stereotype.Component
 
