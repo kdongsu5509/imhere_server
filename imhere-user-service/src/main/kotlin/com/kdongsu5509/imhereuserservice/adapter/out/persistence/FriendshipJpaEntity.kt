@@ -14,8 +14,8 @@ class FriendshipJpaEntity : BaseTimeEntity {
     var id: UUID? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "register_id")
-    var register: UserJpaEntity? = null
+    @JoinColumn(name = "requester_id")
+    var requester: UserJpaEntity? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
@@ -25,11 +25,11 @@ class FriendshipJpaEntity : BaseTimeEntity {
     var friendshipStatus: FriendshipStatus? = null
 
     constructor(
-        register: UserJpaEntity?,
+        requester: UserJpaEntity?,
         receiver: UserJpaEntity?,
         friendshipStatus: FriendshipStatus?
     ) : this() {
-        this.register = register
+        this.requester = requester
         this.receiver = receiver
         this.friendshipStatus = friendshipStatus
     }
