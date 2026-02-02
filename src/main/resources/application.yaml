@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: imhere
+  profiles:
+    include: secret
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+        shutdown-timeout: 100ms
+
