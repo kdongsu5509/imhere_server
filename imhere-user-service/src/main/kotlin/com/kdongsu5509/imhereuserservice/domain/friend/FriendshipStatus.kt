@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.domain
+package com.kdongsu5509.imhereuserservice.domain.friend
 
 enum class FriendshipStatus {
     PENDING, // 최초 요청 시.

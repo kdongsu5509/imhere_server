@@ -2,9 +2,9 @@ package com.kdongsu5509.imhereuserservice.adapter.out.persistence.user
 
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.SpringDataUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.UserJpaEntity
-import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
-import com.kdongsu5509.imhereuserservice.domain.User
-import com.kdongsu5509.imhereuserservice.domain.UserRole
+import com.kdongsu5509.imhereuserservice.domain.auth.OAuth2Provider
+import com.kdongsu5509.imhereuserservice.domain.auth.User
+import com.kdongsu5509.imhereuserservice.domain.auth.UserRole
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtendWith

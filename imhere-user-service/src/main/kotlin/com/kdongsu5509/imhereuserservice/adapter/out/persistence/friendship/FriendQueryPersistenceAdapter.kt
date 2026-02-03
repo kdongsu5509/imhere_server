@@ -4,7 +4,7 @@ import com.kdongsu5509.imhereuserservice.adapter.out.persistence.FriendshipJpaEn
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friend.FriendMapper
 import com.kdongsu5509.imhereuserservice.application.port.out.friend.FriendLoadPort
 import com.kdongsu5509.imhereuserservice.application.port.out.friend.FriendRequestLoadPort
-import com.kdongsu5509.imhereuserservice.domain.Friend
+import com.kdongsu5509.imhereuserservice.domain.friend.Friend
 import org.springframework.stereotype.Component
 
 @Component

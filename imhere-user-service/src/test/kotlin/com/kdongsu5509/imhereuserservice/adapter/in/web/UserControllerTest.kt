@@ -3,8 +3,8 @@ package com.kdongsu5509.imhereuserservice.adapter.`in`.web
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.SpringDataUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.UserJpaEntity
-import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
-import com.kdongsu5509.imhereuserservice.domain.UserRole
+import com.kdongsu5509.imhereuserservice.domain.auth.OAuth2Provider
+import com.kdongsu5509.imhereuserservice.domain.auth.UserRole
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

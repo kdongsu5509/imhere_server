@@ -3,7 +3,7 @@ package com.kdongsu5509.imhereuserservice.adapter.out.persistence.friendship
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.FriendshipJpaEntity
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.QFriendshipJpaEntity
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.QUserJpaEntity
-import com.kdongsu5509.imhereuserservice.domain.FriendshipStatus
+import com.kdongsu5509.imhereuserservice.domain.friend.FriendshipStatus
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 

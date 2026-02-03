@@ -1,7 +1,7 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.persistence.friend
 
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.FriendshipJpaEntity
-import com.kdongsu5509.imhereuserservice.domain.Friend
+import com.kdongsu5509.imhereuserservice.domain.friend.Friend
 import org.springframework.stereotype.Component
 
 @Component

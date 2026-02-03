@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.persistence
 
-import com.kdongsu5509.imhereuserservice.domain.FriendshipStatus
+import com.kdongsu5509.imhereuserservice.domain.friend.FriendshipStatus
 import jakarta.persistence.*
 import org.hibernate.annotations.UuidGenerator
 import java.util.*

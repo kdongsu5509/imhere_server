@@ -10,9 +10,9 @@ import com.kdongsu5509.imhereuserservice.application.port.out.LoadUserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.SaveUserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.token.oidc.OIDCVerificationPort
 import com.kdongsu5509.imhereuserservice.application.service.auth.jwt.JwtTokenProvider
-import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
-import com.kdongsu5509.imhereuserservice.domain.User
-import com.kdongsu5509.imhereuserservice.domain.UserRole
+import com.kdongsu5509.imhereuserservice.domain.auth.OAuth2Provider
+import com.kdongsu5509.imhereuserservice.domain.auth.User
+import com.kdongsu5509.imhereuserservice.domain.auth.UserRole
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
