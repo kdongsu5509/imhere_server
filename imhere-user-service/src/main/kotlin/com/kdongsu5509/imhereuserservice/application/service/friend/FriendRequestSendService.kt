@@ -2,7 +2,7 @@ package com.kdongsu5509.imhereuserservice.application.service.friend
 
 import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.SendFriendRequestUseCase
 import com.kdongsu5509.imhereuserservice.application.port.out.friend.FriendRequestSavePort
-import com.kdongsu5509.imhereuserservice.domain.FriendshipStatus
+import com.kdongsu5509.imhereuserservice.domain.friend.FriendshipStatus
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

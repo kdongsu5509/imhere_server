@@ -1,8 +1,9 @@
-package com.kdongsu5509.imhereuserservice.adapter.`in`.web
+package com.kdongsu5509.imhereuserservice.adapter.`in`.web.auth
 
 import com.kdongsu5509.imhereuserservice.adapter.dto.req.JwtRefreshToken
 import com.kdongsu5509.imhereuserservice.adapter.dto.req.TokenInfo
 import com.kdongsu5509.imhereuserservice.adapter.dto.resp.ImhereJwt
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.APIResponse
 import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT
 import com.kdongsu5509.imhereuserservice.application.port.`in`.auth.HandleOIDCUseCase
 import com.kdongsu5509.imhereuserservice.application.port.`in`.auth.ReissueJWTUseCase
@@ -26,7 +27,7 @@ class AuthController(val handleOIDCUseCase: HandleOIDCUseCase, val reissueJwtUse
             tokenInfo.idToken, tokenInfo.provider
         )
 
-        return APIResponse.success(
+        return APIResponse.Companion.success(
             ImhereJwt(jwt.accessToken, jwt.refreshToken)
         )
     }
@@ -36,7 +37,7 @@ class AuthController(val handleOIDCUseCase: HandleOIDCUseCase, val reissueJwtUse
         @Validated @RequestBody jwtRefreshToken: JwtRefreshToken
     ): APIResponse<ImhereJwt?> {
         val jwt = reissueJwtUseCase.reissue(jwtRefreshToken.refreshToken)
-        return APIResponse.success(
+        return APIResponse.Companion.success(
             ImhereJwt(jwt.accessToken, jwt.refreshToken)
         )
     }

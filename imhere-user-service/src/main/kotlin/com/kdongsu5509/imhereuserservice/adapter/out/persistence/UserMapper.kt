@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.persistence
 
-import com.kdongsu5509.imhereuserservice.domain.User
+import com.kdongsu5509.imhereuserservice.domain.auth.User
 import org.springframework.stereotype.Component
 
 @Component

@@ -1,7 +1,7 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.persistence
 
-import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
-import com.kdongsu5509.imhereuserservice.domain.UserRole
+import com.kdongsu5509.imhereuserservice.domain.auth.OAuth2Provider
+import com.kdongsu5509.imhereuserservice.domain.auth.UserRole
 import jakarta.persistence.*
 import org.hibernate.annotations.UuidGenerator
 import java.util.*

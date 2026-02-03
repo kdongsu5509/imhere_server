@@ -2,9 +2,9 @@ package com.kdongsu5509.imhereuserservice.adapter.out.persistence
 
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friendship.SpringDataFriendshipRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friendship.SpringQueryDSLFriendRepository
-import com.kdongsu5509.imhereuserservice.domain.FriendshipStatus
-import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
-import com.kdongsu5509.imhereuserservice.domain.UserRole
+import com.kdongsu5509.imhereuserservice.domain.auth.OAuth2Provider
+import com.kdongsu5509.imhereuserservice.domain.auth.UserRole
+import com.kdongsu5509.imhereuserservice.domain.friend.FriendshipStatus
 import com.querydsl.jpa.impl.JPAQueryFactory
 import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Assertions

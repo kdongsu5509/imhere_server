@@ -4,9 +4,9 @@ import com.kdongsu5509.imhereuserservice.adapter.out.persistence.SpringDataUserR
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.SpringQueryDSLUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.UserJpaEntity
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.UserMapper
-import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
-import com.kdongsu5509.imhereuserservice.domain.User
-import com.kdongsu5509.imhereuserservice.domain.UserRole
+import com.kdongsu5509.imhereuserservice.domain.auth.OAuth2Provider
+import com.kdongsu5509.imhereuserservice.domain.auth.User
+import com.kdongsu5509.imhereuserservice.domain.auth.UserRole
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito

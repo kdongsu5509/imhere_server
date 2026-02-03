@@ -1,7 +1,7 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.persistence
 
-import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
-import com.kdongsu5509.imhereuserservice.domain.UserRole
+import com.kdongsu5509.imhereuserservice.domain.auth.OAuth2Provider
+import com.kdongsu5509.imhereuserservice.domain.auth.UserRole
 import com.querydsl.jpa.impl.JPAQueryFactory
 import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Assertions

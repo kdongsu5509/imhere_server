@@ -3,9 +3,9 @@ package com.kdongsu5509.imhereuserservice.adapter.out.persistence.friendship
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.FriendshipJpaEntity
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.UserJpaEntity
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friend.FriendMapper
-import com.kdongsu5509.imhereuserservice.domain.FriendshipStatus
-import com.kdongsu5509.imhereuserservice.domain.OAuth2Provider
-import com.kdongsu5509.imhereuserservice.domain.UserRole
+import com.kdongsu5509.imhereuserservice.domain.auth.OAuth2Provider
+import com.kdongsu5509.imhereuserservice.domain.auth.UserRole
+import com.kdongsu5509.imhereuserservice.domain.friend.FriendshipStatus
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

@@ -3,7 +3,7 @@ package com.kdongsu5509.imhereuserservice.adapter.out.persistence.user
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.SpringDataUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.UserMapper
 import com.kdongsu5509.imhereuserservice.application.port.out.SaveUserPort
-import com.kdongsu5509.imhereuserservice.domain.User
+import com.kdongsu5509.imhereuserservice.domain.auth.User
 import org.springframework.stereotype.Component
 
 @Component
