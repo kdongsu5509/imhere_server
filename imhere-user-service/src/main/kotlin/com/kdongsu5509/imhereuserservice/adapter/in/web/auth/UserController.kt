@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.adapter.`in`.web.auth
 
-import com.kdongsu5509.imhereuserservice.adapter.dto.resp.UserSearchResponse
+import com.kdongsu5509.imhereuserservice.adapter.dto.friends.UserSearchResponse
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.APIResponse
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.UserSearchUseCase
 import jakarta.validation.constraints.NotBlank

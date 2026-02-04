@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.adapter.dto.resp
+package com.kdongsu5509.imhereuserservice.adapter.dto.auth
 
 data class ImhereJwt(
     val accessToken: String,

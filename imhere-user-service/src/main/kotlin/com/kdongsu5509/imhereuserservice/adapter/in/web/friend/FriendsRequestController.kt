@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.adapter.`in`.web.friend
 
-import com.kdongsu5509.imhereuserservice.adapter.dto.req.FriendsRequest
+import com.kdongsu5509.imhereuserservice.adapter.dto.friends.FriendsRequest
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.APIResponse
 import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.SendFriendRequestUseCase
 import jakarta.validation.constraints.NotBlank

@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.adapter.dto.req
+package com.kdongsu5509.imhereuserservice.adapter.dto.auth
 
 import com.kdongsu5509.imhereuserservice.domain.auth.OAuth2Provider
 import jakarta.validation.constraints.NotBlank
