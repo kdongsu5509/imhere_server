@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.support.exception.domain
+package com.kdongsu5509.imhereuserservice.support.exception
 
 abstract class BaseException(
     val errorCode: ErrorCode,

@@ -3,7 +3,7 @@ package com.kdongsu5509.imhereuserservice.adapter.out.jjwt
 import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhereuserservice.application.port.out.LoadPublicKeyPort
 import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtVerificationPort
-import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.OIDCInvalidException
+import com.kdongsu5509.imhereuserservice.support.exception.auth.OIDCInvalidException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts

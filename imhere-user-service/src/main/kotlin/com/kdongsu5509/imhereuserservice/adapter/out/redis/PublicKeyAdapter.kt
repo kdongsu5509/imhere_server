@@ -5,8 +5,8 @@ import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.imhereuserservice.adapter.out.jjwt.KakaoOIDCProperties
 import com.kdongsu5509.imhereuserservice.application.port.out.CachePort
 import com.kdongsu5509.imhereuserservice.application.port.out.LoadPublicKeyPort
-import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.KakaoOIDCKeyFetchFailFromRedisException
-import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.KakaoOIDCPublicKeyNotFoundException
+import com.kdongsu5509.imhereuserservice.support.exception.auth.KakaoOIDCKeyFetchFailFromRedisException
+import com.kdongsu5509.imhereuserservice.support.exception.auth.KakaoOIDCPublicKeyNotFoundException
 import org.springframework.stereotype.Component
 
 @Component

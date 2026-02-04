@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.support.exception.domain
+package com.kdongsu5509.imhereuserservice.support.exception
 
 import org.springframework.http.HttpStatus
 
@@ -81,6 +81,21 @@ enum class ErrorCode(
         HttpStatus.NOT_FOUND,
         "USER_001",
         "사용자를 찾을 수 없습니다."
+    ),
+
+    /**
+     * TERM ERROR : 약관 관련 오류
+     */
+    TERM_DEFINITION_EXIST(
+        HttpStatus.BAD_REQUEST,
+        "TERM_001",
+        "이미 존재하는 약관 입니다."
+    ),
+
+    TERM_DEFINITION_NOT_FOUND(
+        HttpStatus.NOT_FOUND,
+        "TERM_002",
+        "해당 약관 종류는 존재하지 않습니다"
     ),
 
     /**

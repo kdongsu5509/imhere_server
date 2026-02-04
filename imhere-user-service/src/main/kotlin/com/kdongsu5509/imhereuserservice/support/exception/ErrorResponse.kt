@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.support.exception.domain
+package com.kdongsu5509.imhereuserservice.support.exception
 
 data class ErrorResponse(
     val code: String,

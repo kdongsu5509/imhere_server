@@ -1,10 +1,10 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.jjwt
 
 import com.kdongsu5509.imhereuserservice.application.dto.OIDCDecodePayload
-import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.InvalidEncodingException
-import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.InvalidKeyException
-import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.OIDCExpiredException
-import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.OIDCInvalidException
+import com.kdongsu5509.imhereuserservice.support.exception.auth.InvalidEncodingException
+import com.kdongsu5509.imhereuserservice.support.exception.auth.InvalidKeyException
+import com.kdongsu5509.imhereuserservice.support.exception.auth.OIDCExpiredException
+import com.kdongsu5509.imhereuserservice.support.exception.auth.OIDCInvalidException
 import io.jsonwebtoken.Jwts
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

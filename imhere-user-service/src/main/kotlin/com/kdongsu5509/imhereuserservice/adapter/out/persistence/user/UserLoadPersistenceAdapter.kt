@@ -6,7 +6,7 @@ import com.kdongsu5509.imhereuserservice.adapter.out.persistence.UserJpaEntity
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.UserMapper
 import com.kdongsu5509.imhereuserservice.application.port.out.LoadUserPort
 import com.kdongsu5509.imhereuserservice.domain.auth.User
-import com.kdongsu5509.imhereuserservice.support.exception.domain.auth.UserNotFoundException
+import com.kdongsu5509.imhereuserservice.support.exception.auth.UserNotFoundException
 import org.springframework.stereotype.Component
 
 @Component
