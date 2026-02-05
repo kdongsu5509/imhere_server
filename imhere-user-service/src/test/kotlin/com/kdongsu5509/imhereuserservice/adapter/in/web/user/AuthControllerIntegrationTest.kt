@@ -1,14 +1,14 @@
-package com.kdongsu5509.imhereuserservice.adapter.`in`.web
+package com.kdongsu5509.imhereuserservice.adapter.`in`.web.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.kdongsu5509.imhereuserservice.TestJwtBuilder
-import com.kdongsu5509.imhereuserservice.TestRedisContainer
 import com.kdongsu5509.imhereuserservice.adapter.out.auth.oauth.KakaoOauthClient
 import com.kdongsu5509.imhereuserservice.adapter.out.auth.oauth.dto.OIDCPublicKey
 import com.kdongsu5509.imhereuserservice.adapter.out.auth.oauth.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.AuthenticateWithOidcUseCase
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.ReissueJWTUseCase
 import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
+import com.kdongsu5509.imhereuserservice.testSupport.TestJwtBuilder
+import com.kdongsu5509.imhereuserservice.testSupport.TestRedisContainer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

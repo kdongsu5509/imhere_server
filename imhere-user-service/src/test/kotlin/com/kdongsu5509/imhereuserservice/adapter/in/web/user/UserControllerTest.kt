@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.adapter.`in`.web
+package com.kdongsu5509.imhereuserservice.adapter.`in`.web.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
