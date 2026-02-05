@@ -5,6 +5,7 @@ import com.kdongsu5509.imhereuserservice.adapter.out.auth.oauth.dto.OIDCPublicKe
 import com.kdongsu5509.imhereuserservice.application.port.out.user.JwtVerificationPort
 import com.kdongsu5509.imhereuserservice.application.port.out.user.oauth.PublicKeyLoadPort
 import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
+import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
@@ -110,7 +111,7 @@ class JjwtParserAdapterTest {
         assertThrows<BusinessException> {
             jjwtParserAdapter.getKidFromOriginTokenHeader(invalidToken)
         }.also { exception ->
-            assertThat(exception.message).contains("토큰 형식이 올바르지 않습니다")
+            assertThat(exception.message).contains(ErrorCode.OIDC_INVALID.message)
         }
     }
 
