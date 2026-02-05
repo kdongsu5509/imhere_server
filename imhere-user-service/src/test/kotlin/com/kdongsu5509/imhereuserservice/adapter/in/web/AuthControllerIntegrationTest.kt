@@ -8,6 +8,7 @@ import com.kdongsu5509.imhereuserservice.adapter.out.auth.oauth.dto.OIDCPublicKe
 import com.kdongsu5509.imhereuserservice.adapter.out.auth.oauth.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.AuthenticateWithOidcUseCase
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.ReissueJWTUseCase
+import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -104,7 +105,7 @@ class AuthControllerIntegrationTest : TestRedisContainer() {
         )
             .andExpect(status().is4xxClientError)
             .andExpect(jsonPath("$.data.code").value("AUTH_COMMON_001"))
-            .andExpect(jsonPath("$.data.message").value("토큰 형식이 올바르지 않습니다."))
+            .andExpect(jsonPath("$.data.message").value(ErrorCode.OIDC_INVALID.message))
     }
 
     @Test
