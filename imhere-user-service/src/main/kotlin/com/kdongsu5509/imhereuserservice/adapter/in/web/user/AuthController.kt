@@ -1,9 +1,9 @@
 package com.kdongsu5509.imhereuserservice.adapter.`in`.web.user
 
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.common.APIResponse
-import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.ImhereJwt
-import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.JwtRefreshToken
-import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.TokenInfo
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.AuthenticationRequest
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.AuthenticationResponse
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.ReAuthenticationResponse
 import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.AuthenticateWithOidcUseCase
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.ReissueJWTUseCase
@@ -24,24 +24,24 @@ class AuthController(
 
     @PostMapping("/login")
     fun handleIdToken(
-        @Validated @RequestBody tokenInfo: TokenInfo
-    ): APIResponse<ImhereJwt?> {
+        @Validated @RequestBody authenticationRequest: AuthenticationRequest
+    ): APIResponse<AuthenticationResponse?> {
         val jwt: SelfSignedJWT = authenticateWithOidcUseCase.verifyIdTokenAndReturnJwt(
-            tokenInfo.idToken, tokenInfo.provider
+            authenticationRequest.idToken, authenticationRequest.provider
         )
 
         return APIResponse.success(
-            ImhereJwt(jwt.accessToken, jwt.refreshToken)
+            AuthenticationResponse(jwt.accessToken, jwt.refreshToken)
         )
     }
 
     @PostMapping("/reissue")
     fun handleJwtTokenReissueRequest(
-        @Validated @RequestBody jwtRefreshToken: JwtRefreshToken
-    ): APIResponse<ImhereJwt?> {
-        val jwt = reissueJwtUseCase.reissue(jwtRefreshToken.refreshToken)
+        @Validated @RequestBody reAuthenticationResponse: ReAuthenticationResponse
+    ): APIResponse<AuthenticationResponse?> {
+        val jwt = reissueJwtUseCase.reissue(reAuthenticationResponse.refreshToken)
         return APIResponse.Companion.success(
-            ImhereJwt(jwt.accessToken, jwt.refreshToken)
+            AuthenticationResponse(jwt.accessToken, jwt.refreshToken)
         )
     }
 }
