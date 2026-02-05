@@ -2,7 +2,7 @@ package com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends
 
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.common.APIResponse
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto.FriendsRequest
-import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.SendFriendRequestUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.CreateFriendRequestUseCase
 import jakarta.validation.constraints.NotBlank
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/user/friends")
 class FriendsRequestController(
-    private val sendFriendRequestUseCase: SendFriendRequestUseCase
+    private val createFriendRequestUseCase: CreateFriendRequestUseCase
 ) {
     @PostMapping("/requests")
     fun requestFriendship(
@@ -20,7 +20,7 @@ class FriendsRequestController(
         @Validated @RequestBody friendsRequest: FriendsRequest
     ): APIResponse<Unit> {
 
-        sendFriendRequestUseCase.request(
+        createFriendRequestUseCase.request(
             user.username,
             friendsRequest.targetEmail
         )

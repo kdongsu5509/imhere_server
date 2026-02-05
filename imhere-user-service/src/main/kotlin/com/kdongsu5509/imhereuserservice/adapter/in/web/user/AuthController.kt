@@ -5,7 +5,7 @@ import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.ImhereJwt
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.JwtRefreshToken
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.TokenInfo
 import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT
-import com.kdongsu5509.imhereuserservice.application.port.`in`.user.HandleOIDCUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.user.AuthenticateWithOidcUseCase
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.ReissueJWTUseCase
 import lombok.extern.slf4j.Slf4j
 import org.springframework.validation.annotation.Validated
@@ -17,17 +17,20 @@ import org.springframework.web.bind.annotation.RestController
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/user/auth")
-class AuthController(val handleOIDCUseCase: HandleOIDCUseCase, val reissueJwtUseCase: ReissueJWTUseCase) {
+class AuthController(
+    val authenticateWithOidcUseCase: AuthenticateWithOidcUseCase,
+    val reissueJwtUseCase: ReissueJWTUseCase
+) {
 
     @PostMapping("/login")
     fun handleIdToken(
         @Validated @RequestBody tokenInfo: TokenInfo
     ): APIResponse<ImhereJwt?> {
-        val jwt: SelfSignedJWT = handleOIDCUseCase.verifyIdTokenAndReturnJwt(
+        val jwt: SelfSignedJWT = authenticateWithOidcUseCase.verifyIdTokenAndReturnJwt(
             tokenInfo.idToken, tokenInfo.provider
         )
 
-        return APIResponse.Companion.success(
+        return APIResponse.success(
             ImhereJwt(jwt.accessToken, jwt.refreshToken)
         )
     }

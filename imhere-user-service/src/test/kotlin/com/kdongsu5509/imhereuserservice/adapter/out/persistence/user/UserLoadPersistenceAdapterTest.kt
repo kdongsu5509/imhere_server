@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.persistence.user
 
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.adapter.UserLoadPersistenceAdapter
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.adapter.UserPersistenceAdapterLoad
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
@@ -31,13 +31,40 @@ class UserLoadPersistenceAdapterTest {
     lateinit var springQueryDSLUserRepository: SpringQueryDSLUserRepository
 
     @InjectMocks
-    lateinit var userLoadPersistenceAdapter: UserLoadPersistenceAdapter
+    lateinit var userLoadPersistenceAdapter: UserPersistenceAdapterLoad
 
     companion object {
         const val testEmail = "test@test.com"
         const val testNickname = "고동수"
         val testUser = User(testEmail, testNickname, OAuth2Provider.KAKAO, UserRole.NORMAL)
         val testUserEntity = UserJpaEntity(testUser.email, testUser.nickname, testUser.role, OAuth2Provider.KAKAO)
+    }
+
+    @Test
+    @DisplayName("존재하는 이메일은 true을 반환한다")
+    fun existByEmail_success() {
+        //given
+        val email = "test@test.com"
+        Mockito.`when`(springDataUserRepository.existsByEmail(email)).thenReturn(true)
+
+        //when
+        val result = userLoadPersistenceAdapter.existsByEmail(email)
+
+        //then
+        Assertions.assertThat(result).isTrue
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 이메일이라고 확인되면 false를 반환한다")
+    fun existByEmail_fail() {
+        //given
+        Mockito.`when`(springDataUserRepository.existsByEmail(testEmail)).thenReturn(false)
+
+        //when
+        val result = userLoadPersistenceAdapter.existsByEmail(testEmail)
+
+        //then
+        Assertions.assertThat(result).isFalse
     }
 
     @Test
