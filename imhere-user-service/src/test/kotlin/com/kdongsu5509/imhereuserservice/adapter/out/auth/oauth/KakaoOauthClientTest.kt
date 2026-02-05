@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.adapter.out.kakao
+package com.kdongsu5509.imhereuserservice.adapter.out.auth.oauth
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.imhereuserservice.adapter.out.auth.oauth.KakaoOauthClient

@@ -1,8 +1,6 @@
-package com.kdongsu5509.imhereuserservice.application.service.user.jwt
+package com.kdongsu5509.imhereuserservice.application.service.user
 
 import com.kdongsu5509.imhereuserservice.application.dto.SelfSignedJWT
-import com.kdongsu5509.imhereuserservice.application.service.user.JwtReissueService
-import com.kdongsu5509.imhereuserservice.application.service.user.JwtTokenProvider
 import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
 import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import org.assertj.core.api.Assertions.assertThat

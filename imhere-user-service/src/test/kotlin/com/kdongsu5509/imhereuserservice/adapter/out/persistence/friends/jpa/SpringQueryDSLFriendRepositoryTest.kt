@@ -1,8 +1,5 @@
-package com.kdongsu5509.imhereuserservice.adapter.out.persistence
+package com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa
 
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.FriendshipJpaEntity
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.SpringDataFriendshipRepository
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.SpringQueryDSLFriendRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.imhereuserservice.domain.friend.FriendshipStatus

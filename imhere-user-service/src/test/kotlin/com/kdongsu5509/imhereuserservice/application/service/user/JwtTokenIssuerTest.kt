@@ -1,7 +1,5 @@
-package com.kdongsu5509.imhereuserservice.application.service.user.jwt
+package com.kdongsu5509.imhereuserservice.application.service.user
 
-import com.kdongsu5509.imhereuserservice.application.service.user.JwtProperties
-import com.kdongsu5509.imhereuserservice.application.service.user.JwtTokenIssuer
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.assertj.core.api.Assertions.assertThat

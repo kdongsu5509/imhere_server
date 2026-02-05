@@ -1,9 +1,8 @@
-package com.kdongsu5509.imhereuserservice.application.service.user.oidc.kakao
+package com.kdongsu5509.imhereuserservice.application.service.user
 
 import com.kdongsu5509.imhereuserservice.application.dto.OIDCDecodePayload
 import com.kdongsu5509.imhereuserservice.application.port.out.user.JwtParserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.user.JwtVerificationPort
-import com.kdongsu5509.imhereuserservice.application.service.user.KakaoOIDCVerificationService
 import io.jsonwebtoken.MalformedJwtException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

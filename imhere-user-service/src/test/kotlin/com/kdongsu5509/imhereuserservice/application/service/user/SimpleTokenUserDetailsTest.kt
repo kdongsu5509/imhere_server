@@ -1,6 +1,5 @@
-package com.kdongsu5509.imhereuserservice.application.service.user.security
+package com.kdongsu5509.imhereuserservice.application.service.user
 
-import com.kdongsu5509.imhereuserservice.application.service.user.SimpleTokenUserDetails
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

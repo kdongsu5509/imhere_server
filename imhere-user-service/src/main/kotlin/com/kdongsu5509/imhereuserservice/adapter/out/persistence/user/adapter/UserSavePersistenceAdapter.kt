@@ -7,7 +7,7 @@ import com.kdongsu5509.imhereuserservice.domain.user.User
 import org.springframework.stereotype.Component
 
 @Component
-class UserPersistenceAdapterSave(
+class UserSavePersistenceAdapter(
     private val userMapper: UserMapper,
     private val springDataUserRepository: SpringDataUserRepository,
 

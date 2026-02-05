@@ -5,6 +5,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.jetbrains.kotlin.plugin.jpa'
     id 'org.jetbrains.kotlin.kapt'
+    id 'jacoco'
 }
 
 group = 'com.kdongsu5509'
@@ -91,6 +92,36 @@ allOpen {
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
 }
-compileKotlin {
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+    reports {
+        html.required = true
+        xml.required = true
+        csv.required = false
+    }
+
+    // Kotlin 파일 분석을 위해 classDirectories 설정이 필요할 수 있음
+    def Qdomains = []
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "**/dto/**",
+                    "**/config/**",
+                    "**/exception/**",
+                    "**/common/**",
+                    "**/domain/**",
+                    "**/port/**",
+                    "**/ImhereUserServiceApplicationKt**",
+                    "**/Q*", // QueryDSL Q-types
+                    "**/*Application*"
+            ] + Qdomains)
+        }))
+    }
 }

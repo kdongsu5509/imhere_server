@@ -1,7 +1,5 @@
-package com.kdongsu5509.imhereuserservice.adapter.out.persistence
+package com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa
 
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
 import com.querydsl.jpa.impl.JPAQueryFactory
