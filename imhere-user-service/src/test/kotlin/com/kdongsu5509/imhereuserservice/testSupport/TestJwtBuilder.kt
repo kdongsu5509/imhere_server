@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice
+package com.kdongsu5509.imhereuserservice.testSupport
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm

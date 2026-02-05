@@ -11,7 +11,7 @@ import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import org.springframework.stereotype.Component
 
 @Component
-class UserPersistenceAdapterLoad(
+class UserLoadPersistenceAdapter(
     private val userMapper: UserMapper,
     private val springDataUserRepository: SpringDataUserRepository,
     private val springQueryDSLUserRepository: SpringQueryDSLUserRepository

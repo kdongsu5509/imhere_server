@@ -1,9 +1,6 @@
-package com.kdongsu5509.imhereuserservice.application.service.user.jwt
+package com.kdongsu5509.imhereuserservice.application.service.user
 
 import com.kdongsu5509.imhereuserservice.application.port.out.user.CachePort
-import com.kdongsu5509.imhereuserservice.application.service.user.JwtTokenIssuer
-import com.kdongsu5509.imhereuserservice.application.service.user.JwtTokenUtil
-import com.kdongsu5509.imhereuserservice.application.service.user.SelfSignedTokenProvider
 import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

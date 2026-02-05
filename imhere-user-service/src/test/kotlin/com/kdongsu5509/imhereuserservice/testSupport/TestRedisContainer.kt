@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice
+package com.kdongsu5509.imhereuserservice.testSupport
 
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
@@ -25,5 +25,5 @@ abstract class TestRedisContainer {
             registry.add("spring.data.redis.port") { redisContainer.getMappedPort(REDIS_PORT) }
         }
     }
-    
+
 }

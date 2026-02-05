@@ -1,7 +1,6 @@
-package com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends
+package com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.mapper
 
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.FriendshipJpaEntity
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.mapper.FriendMapper
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.imhereuserservice.domain.friend.FriendshipStatus
 import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider

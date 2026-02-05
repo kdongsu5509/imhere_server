@@ -1,7 +1,6 @@
-package com.kdongsu5509.imhereuserservice.application.service.user.jwt
+package com.kdongsu5509.imhereuserservice.application.service.user
 
-import com.kdongsu5509.imhereuserservice.application.service.user.JwtProperties
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,7 +27,7 @@ class JwtPropertiesTest {
         // given
         val secretInTestApplicationYaml = "testsecretkey"
         // when, then
-        assertEquals(secretInTestApplicationYaml, jwtProperties.secret)
+        Assertions.assertEquals(secretInTestApplicationYaml, jwtProperties.secret)
     }
 
     @Test
@@ -37,7 +36,7 @@ class JwtPropertiesTest {
         // given
         val accessExpirationInTestApplicationYaml = 1L
         // when, then
-        assertEquals(accessExpirationInTestApplicationYaml, jwtProperties.accessExpirationMinutes)
+        Assertions.assertEquals(accessExpirationInTestApplicationYaml, jwtProperties.accessExpirationMinutes)
     }
 
     @Test
@@ -46,7 +45,7 @@ class JwtPropertiesTest {
         // given
         val refreshExpirationInTestApplicationYaml = 1L
         // when, then
-        assertEquals(refreshExpirationInTestApplicationYaml, jwtProperties.refreshExpirationDays)
+        Assertions.assertEquals(refreshExpirationInTestApplicationYaml, jwtProperties.refreshExpirationDays)
     }
 
     @Test
@@ -55,6 +54,6 @@ class JwtPropertiesTest {
         // given
         val accessHeaderNameInTestApplicationYaml = "Authorization"
         // when, then
-        assertEquals(accessHeaderNameInTestApplicationYaml, jwtProperties.accessHeaderName)
+        Assertions.assertEquals(accessHeaderNameInTestApplicationYaml, jwtProperties.accessHeaderName)
     }
 }

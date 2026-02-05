@@ -1,8 +1,7 @@
-package com.kdongsu5509.imhereuserservice.application.service
+package com.kdongsu5509.imhereuserservice.application.service.friend
 
 import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
 import com.kdongsu5509.imhereuserservice.application.port.out.user.UserLoadPort
-import com.kdongsu5509.imhereuserservice.application.service.friend.ReadUserService
 import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.User
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
@@ -17,7 +16,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 
 @ExtendWith(MockitoExtension::class)
-class UserSearchServiceTest {
+class ReadUserServiceTest {
     @Mock
     lateinit var userLoadPort: UserLoadPort
 
