@@ -7,9 +7,9 @@ interface SpringDataTermsVersionRepository : JpaRepository<TermsVersionJpaEntity
     @Query(
         """
     SELECT v FROM TermsVersionJpaEntity v 
-    WHERE v.terms.id = :termsId 
+    WHERE v.terms.id = :termsDefinitionId
       AND v.isActive = true 
 """
     )
-    fun findActiveVersion(termsId: Long): TermsVersionJpaEntity?
+    fun findActiveVersion(termsDefinitionId: Long): TermsVersionJpaEntity?
 }
