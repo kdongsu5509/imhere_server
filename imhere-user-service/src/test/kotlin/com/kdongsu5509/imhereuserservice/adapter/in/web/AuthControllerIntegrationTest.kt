@@ -3,10 +3,10 @@ package com.kdongsu5509.imhereuserservice.adapter.`in`.web
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.imhereuserservice.TestJwtBuilder
 import com.kdongsu5509.imhereuserservice.TestRedisContainer
-import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKey
-import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKeyResponse
-import com.kdongsu5509.imhereuserservice.adapter.out.kakao.KakaoOauthClient
-import com.kdongsu5509.imhereuserservice.application.port.`in`.user.HandleOIDCUseCase
+import com.kdongsu5509.imhereuserservice.adapter.out.auth.oauth.KakaoOauthClient
+import com.kdongsu5509.imhereuserservice.adapter.out.auth.oauth.dto.OIDCPublicKey
+import com.kdongsu5509.imhereuserservice.adapter.out.auth.oauth.dto.OIDCPublicKeyResponse
+import com.kdongsu5509.imhereuserservice.application.port.`in`.user.AuthenticateWithOidcUseCase
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.ReissueJWTUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -38,7 +38,7 @@ class AuthControllerIntegrationTest : TestRedisContainer() {
     }
 
     @Autowired
-    lateinit var handleOidcUseCase: HandleOIDCUseCase
+    lateinit var authenticateWithOidcUseCase: AuthenticateWithOidcUseCase
 
     @Autowired
     lateinit var reissueJWTUseCase: ReissueJWTUseCase

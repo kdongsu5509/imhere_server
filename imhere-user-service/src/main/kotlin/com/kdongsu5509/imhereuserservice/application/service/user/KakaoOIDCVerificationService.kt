@@ -3,7 +3,7 @@ package com.kdongsu5509.imhereuserservice.application.service.user
 import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
 import com.kdongsu5509.imhereuserservice.application.port.out.user.JwtParserPort
 import com.kdongsu5509.imhereuserservice.application.port.out.user.JwtVerificationPort
-import com.kdongsu5509.imhereuserservice.application.port.out.user.OIDCVerificationPort
+import com.kdongsu5509.imhereuserservice.application.port.out.user.oauth.OIDCVerificationPort
 import io.jsonwebtoken.MalformedJwtException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

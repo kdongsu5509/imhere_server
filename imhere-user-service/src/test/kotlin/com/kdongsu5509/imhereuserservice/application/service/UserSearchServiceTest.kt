@@ -1,8 +1,8 @@
 package com.kdongsu5509.imhereuserservice.application.service
 
 import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
-import com.kdongsu5509.imhereuserservice.application.port.out.user.LoadUserPort
-import com.kdongsu5509.imhereuserservice.application.service.friend.UserSearchService
+import com.kdongsu5509.imhereuserservice.application.port.out.user.UserLoadPort
+import com.kdongsu5509.imhereuserservice.application.service.friend.ReadUserService
 import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.User
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
@@ -19,10 +19,10 @@ import org.mockito.junit.jupiter.MockitoExtension
 @ExtendWith(MockitoExtension::class)
 class UserSearchServiceTest {
     @Mock
-    lateinit var loadUserPort: LoadUserPort
+    lateinit var userLoadPort: UserLoadPort
 
     @InjectMocks
-    lateinit var userSearchService: UserSearchService
+    lateinit var userSearchService: ReadUserService
 
     companion object {
         const val TEST_KEYWORD = "테스트"
@@ -37,7 +37,7 @@ class UserSearchServiceTest {
     @DisplayName("찾은 사용자가 1명 이상이면 User 리스트로 잘 반환해서 나간다")
     fun searchUser_overThanOne() {
         //given
-        `when`(loadUserPort.findByEmailAndNickname(TEST_KEYWORD)).thenReturn(
+        `when`(userLoadPort.findByEmailAndNickname(TEST_KEYWORD)).thenReturn(
             listOf(testUser)
         )
 
@@ -52,7 +52,7 @@ class UserSearchServiceTest {
     fun searchUser_zero() {
         // given
         val testKeyword = "존재하지않음"
-        `when`(loadUserPort.findByEmailAndNickname(testKeyword)).thenReturn(
+        `when`(userLoadPort.findByEmailAndNickname(testKeyword)).thenReturn(
             listOf()
         )
 
@@ -69,7 +69,7 @@ class UserSearchServiceTest {
     @DisplayName("사용자의 정보를 잘 찾아오면 변환해서 잘 나간다.")
     fun searchMe() {
         //given
-        `when`(loadUserPort.findByEmail(TEST_KEYWORD)).thenReturn(
+        `when`(userLoadPort.findByEmail(TEST_KEYWORD)).thenReturn(
             testUser
         )
 

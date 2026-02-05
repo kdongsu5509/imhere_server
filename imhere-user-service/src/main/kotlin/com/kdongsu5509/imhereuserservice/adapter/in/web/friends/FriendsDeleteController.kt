@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends
 
-import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.SendFriendRequestUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.CreateFriendRequestUseCase
 import jakarta.validation.constraints.NotBlank
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/user/friends")
 class FriendsDeleteController(
-    private val sendFriendRequestUseCase: SendFriendRequestUseCase
+    private val createFriendRequestUseCase: CreateFriendRequestUseCase
 ) {
     @PostMapping("/{id}")
     fun acceptToRequest(

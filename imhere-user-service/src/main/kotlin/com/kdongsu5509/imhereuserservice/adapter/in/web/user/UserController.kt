@@ -2,7 +2,7 @@ package com.kdongsu5509.imhereuserservice.adapter.`in`.web.user
 
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.common.APIResponse
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto.UserSearchResponse
-import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.UserSearchUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.user.ReadUserUseCase
 import jakarta.validation.constraints.NotBlank
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/user/search")
-class UserController(private val userSearchUseCase: UserSearchUseCase) {
+class UserController(private val loadUserUseCase: ReadUserUseCase) {
 
     @GetMapping("/{keyword}")
     fun searchUsers(
         @PathVariable @NotBlank(message = "이메일 혹은 사용자 닉네임을 입력하여야 합니다")
         keyword: String
     ): APIResponse<List<UserSearchResponse>> {
-        val findingUsers = userSearchUseCase.searchUser(keyword)
+        val findingUsers = loadUserUseCase.searchUser(keyword)
 
         val responseValue: List<UserSearchResponse> = findingUsers.map { user ->
             UserSearchResponse(user.email, user.nickname)
@@ -33,7 +33,7 @@ class UserController(private val userSearchUseCase: UserSearchUseCase) {
     fun searchMyInfo(
         @AuthenticationPrincipal user: UserDetails
     ): APIResponse<UserSearchResponse> {
-        val myInfo = userSearchUseCase.searchMe(user.username)
+        val myInfo = loadUserUseCase.searchMe(user.username)
 
         return APIResponse.Companion.success(
             UserSearchResponse(

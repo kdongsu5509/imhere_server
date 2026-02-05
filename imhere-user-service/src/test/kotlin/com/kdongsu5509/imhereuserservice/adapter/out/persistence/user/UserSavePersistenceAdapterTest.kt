@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.persistence.user
 
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.adapter.UserSavePersistenceAdapter
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.adapter.UserPersistenceAdapterSave
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
@@ -29,7 +29,7 @@ class UserSavePersistenceAdapterTest {
     lateinit var springQueryDSLUserRepository: SpringQueryDSLUserRepository
 
     @InjectMocks
-    lateinit var userSavePersistenceAdapter: UserSavePersistenceAdapter
+    lateinit var userSavePersistenceAdapter: UserPersistenceAdapterSave
 
     companion object {
         const val testEmail = "test@test.com"

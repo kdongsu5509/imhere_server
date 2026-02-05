@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.application.service.user
 
-import com.kdongsu5509.imhereuserservice.application.port.out.user.OauthClientPort
+import com.kdongsu5509.imhereuserservice.application.port.out.user.oauth.OauthClientPort
 import jakarta.annotation.PostConstruct
 import lombok.extern.slf4j.Slf4j
 import org.slf4j.LoggerFactory
