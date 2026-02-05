@@ -15,7 +15,7 @@ class TermsDefinitionCommandPersistenceAdapter(
 
     override fun saveTermDefinition(termsName: String, termType: TermsTypes, isRequired: Boolean) {
         springDataTermsDefinitionRepository.save(
-            mapper.mapToTermDefinitionJpaEntity(
+            mapper.mapToJpaEntity(
                 termsName, termType, isRequired
             )
         )

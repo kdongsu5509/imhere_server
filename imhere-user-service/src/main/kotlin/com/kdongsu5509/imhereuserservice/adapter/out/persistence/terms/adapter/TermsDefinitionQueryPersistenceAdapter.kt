@@ -26,6 +26,6 @@ class TermsDefinitionQueryPersistenceAdapter(
         val queryResult = springDataTermsDefinitionRepository.findById(termDefinitionId)
             .orElseThrow { BusinessException(ErrorCode.TERM_DEFINITION_NOT_FOUND) }
 
-        return termDefinitionMapper.mapToJpaEntityToDomainEntity(queryResult)
+        return termDefinitionMapper.mapToToDomainEntity(queryResult)
     }
 }

@@ -44,7 +44,7 @@ class TermsVersionCommandPersistenceAdapter(
         content: String,
         effectiveDate: LocalDateTime
     ): TermsVersionJpaEntity {
-        val termVersionJpaEntity = termVersionMapper.mapToTermVersionJpaEntity(
+        val termVersionJpaEntity = termVersionMapper.mapToJpaEntity(
             queriedTermDefinition,
             version,
             content,
