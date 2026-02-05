@@ -1,7 +1,7 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.kakao
 
 import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKeyResponse
-import com.kdongsu5509.imhereuserservice.application.port.out.OauthClientPort
+import com.kdongsu5509.imhereuserservice.application.port.out.user.OauthClientPort
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable

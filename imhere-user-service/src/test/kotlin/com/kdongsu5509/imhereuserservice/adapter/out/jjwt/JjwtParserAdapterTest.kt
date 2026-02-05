@@ -1,9 +1,9 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.jjwt
 
 import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKey
-import com.kdongsu5509.imhereuserservice.application.port.out.LoadPublicKeyPort
-import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtVerificationPort
-import com.kdongsu5509.imhereuserservice.support.exception.auth.OIDCInvalidException
+import com.kdongsu5509.imhereuserservice.application.port.out.user.JwtVerificationPort
+import com.kdongsu5509.imhereuserservice.application.port.out.user.LoadPublicKeyPort
+import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
@@ -106,7 +106,7 @@ class JjwtParserAdapterTest {
         val invalidToken = "invalid.token" // 2개 부분만 있음
 
         // when & then
-        assertThrows<OIDCInvalidException> {
+        assertThrows<BusinessException> {
             jjwtParserAdapter.getKidFromOriginTokenHeader(invalidToken)
         }.also { exception ->
             assertThat(exception.message).contains("토큰 형식이 올바르지 않습니다")
@@ -120,7 +120,7 @@ class JjwtParserAdapterTest {
         val emptyToken = ""
 
         // when & then
-        assertThrows<OIDCInvalidException> {
+        assertThrows<BusinessException> {
             jjwtParserAdapter.getKidFromOriginTokenHeader(emptyToken)
         }
     }

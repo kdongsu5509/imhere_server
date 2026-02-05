@@ -6,8 +6,8 @@ import com.kdongsu5509.imhereuserservice.TestRedisContainer
 import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.imhereuserservice.adapter.out.kakao.KakaoOauthClient
-import com.kdongsu5509.imhereuserservice.application.port.`in`.auth.HandleOIDCUseCase
-import com.kdongsu5509.imhereuserservice.application.port.`in`.auth.ReissueJWTUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.user.HandleOIDCUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.user.ReissueJWTUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

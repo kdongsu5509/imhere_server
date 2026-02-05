@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.redis
 
-import com.kdongsu5509.imhereuserservice.application.port.out.CachePort
+import com.kdongsu5509.imhereuserservice.application.port.out.user.CachePort
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import java.time.Duration

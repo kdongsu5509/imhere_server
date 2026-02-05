@@ -1,10 +1,11 @@
 package com.kdongsu5509.imhereuserservice.application.service
 
 import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
-import com.kdongsu5509.imhereuserservice.application.port.out.LoadUserPort
-import com.kdongsu5509.imhereuserservice.domain.auth.OAuth2Provider
-import com.kdongsu5509.imhereuserservice.domain.auth.User
-import com.kdongsu5509.imhereuserservice.domain.auth.UserRole
+import com.kdongsu5509.imhereuserservice.application.port.out.user.LoadUserPort
+import com.kdongsu5509.imhereuserservice.application.service.friend.UserSearchService
+import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
+import com.kdongsu5509.imhereuserservice.domain.user.User
+import com.kdongsu5509.imhereuserservice.domain.user.UserRole
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.DisplayName

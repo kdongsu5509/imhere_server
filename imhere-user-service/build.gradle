@@ -92,3 +92,5 @@ allOpen {
 tasks.named('test') {
     useJUnitPlatform()
 }
+compileKotlin {
+}
