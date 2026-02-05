@@ -1,10 +1,7 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.jjwt
 
 import com.kdongsu5509.imhereuserservice.application.dto.OIDCDecodePayload
-import com.kdongsu5509.imhereuserservice.support.exception.auth.InvalidEncodingException
-import com.kdongsu5509.imhereuserservice.support.exception.auth.InvalidKeyException
-import com.kdongsu5509.imhereuserservice.support.exception.auth.OIDCExpiredException
-import com.kdongsu5509.imhereuserservice.support.exception.auth.OIDCInvalidException
+import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
 import io.jsonwebtoken.Jwts
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -65,7 +62,7 @@ class JjwtVerifyAdapterTest {
             nickname = "고동수"
         )
         // when & then
-        assertThrows<OIDCInvalidException> {
+        assertThrows<BusinessException> {
             jjwtVerifyAdapter.verifyPayLoad(badPayload)
         }.also { exception ->
             assertThat(exception.message).contains("토큰의 issuer가 일치하지 않습니다")
@@ -84,7 +81,7 @@ class JjwtVerifyAdapterTest {
             nickname = "고동수"
         )
         // when & then
-        assertThrows<OIDCInvalidException> {
+        assertThrows<BusinessException> {
             jjwtVerifyAdapter.verifyPayLoad(badPayload)
         }.also { exception ->
             assertThat(exception.message).contains("토큰의 audience가 일치하지 않습니다")
@@ -119,7 +116,7 @@ class JjwtVerifyAdapterTest {
         val exponent = encodeBase64Url(rsaPublicKey.publicExponent)
 
         // when & then
-        assertThrows<OIDCExpiredException> {
+        assertThrows<BusinessException> {
             jjwtVerifyAdapter.verifySignature(expiredToken, modulus, exponent)
         }
     }
@@ -134,7 +131,7 @@ class JjwtVerifyAdapterTest {
         val exponent = encodeBase64Url(rsaPublicKey.publicExponent)
 
         // when & then
-        assertThrows<InvalidEncodingException> {
+        assertThrows<BusinessException> {
             jjwtVerifyAdapter.verifySignature(token, invalidModulus, exponent)
         }
     }
@@ -149,7 +146,7 @@ class JjwtVerifyAdapterTest {
         val invalidExponent = "invalid-base64-url-encoding!!!"
 
         // when & then
-        assertThrows<InvalidEncodingException> {
+        assertThrows<BusinessException> {
             jjwtVerifyAdapter.verifySignature(token, modulus, invalidExponent)
         }
     }
@@ -164,7 +161,7 @@ class JjwtVerifyAdapterTest {
         val invalidExponent = Base64.getUrlEncoder().withoutPadding().encodeToString(byteArrayOf(1, 2, 3))
 
         // when & then
-        assertThrows<InvalidKeyException> {
+        assertThrows<BusinessException> {
             jjwtVerifyAdapter.verifySignature(token, invalidModulus, invalidExponent)
         }
     }

@@ -1,8 +1,9 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.jjwt
 
 import com.kdongsu5509.imhereuserservice.application.dto.OIDCDecodePayload
-import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtVerificationPort
-import com.kdongsu5509.imhereuserservice.support.exception.auth.*
+import com.kdongsu5509.imhereuserservice.application.port.out.user.JwtVerificationPort
+import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
+import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jws
@@ -38,22 +39,24 @@ class JjwtVerifyAdapter(
                 .build()
                 .parseClaimsJws(token)
         } catch (e: ExpiredJwtException) {
-            throw OIDCExpiredException()
+            throw BusinessException(ErrorCode.OIDC_EXPIRED)
         }
     }
 
     private fun verifyIssuer(actualIssuer: String) {
         if (actualIssuer != kakaoOIDCProperties.issuer) {
-            throw OIDCInvalidException(
-                detailMessage = "토큰의 issuer가 일치하지 않습니다. 토큰 Issuer: $actualIssuer"
+            throw BusinessException(
+                ErrorCode.OIDC_INVALID,
+                "토큰의 issuer가 일치하지 않습니다. 토큰 Issuer: $actualIssuer"
             )
         }
     }
 
     private fun verifyAudience(actualAudience: String) {
         if (actualAudience != kakaoOIDCProperties.audience) {
-            throw OIDCInvalidException(
-                detailMessage = "토큰의 audience가 일치하지 않습니다. 토큰 Audience: $actualAudience"
+            throw BusinessException(
+                ErrorCode.OIDC_INVALID,
+                "토큰의 audience가 일치하지 않습니다. 토큰 Audience: $actualAudience"
             )
         }
     }
@@ -62,11 +65,11 @@ class JjwtVerifyAdapter(
         try {
             return createKey(modulus, exponent)
         } catch (e: NoSuchAlgorithmException) {
-            throw AlgorithmNotFoundException()
+            throw BusinessException(ErrorCode.ALGORITHM_NOT_FOUND)
         } catch (e: InvalidKeySpecException) {
-            throw InvalidKeyException()
+            throw BusinessException(ErrorCode.INVALID_KEY)
         } catch (e: IllegalArgumentException) {
-            throw InvalidEncodingException()
+            throw BusinessException(ErrorCode.INVALID_ENCODING)
         }
     }
 

@@ -2,10 +2,11 @@ package com.kdongsu5509.imhereuserservice.adapter.out.jjwt
 
 import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhereuserservice.application.dto.OIDCDecodePayload
-import com.kdongsu5509.imhereuserservice.application.port.out.LoadPublicKeyPort
-import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtParserPort
-import com.kdongsu5509.imhereuserservice.application.port.out.token.jwt.JwtVerificationPort
-import com.kdongsu5509.imhereuserservice.support.exception.auth.OIDCInvalidException
+import com.kdongsu5509.imhereuserservice.application.port.out.user.JwtParserPort
+import com.kdongsu5509.imhereuserservice.application.port.out.user.JwtVerificationPort
+import com.kdongsu5509.imhereuserservice.application.port.out.user.LoadPublicKeyPort
+import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
+import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
@@ -48,7 +49,7 @@ class JjwtParserAdapter(
     private fun getUnsignedToken(token: String): String {
         val splitToken = token.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         if (splitToken.size != 3) {
-            throw OIDCInvalidException(detailMessage = "토큰 형식이 올바르지 않습니다.")
+            throw BusinessException(ErrorCode.OIDC_INVALID, "토큰 형식이 올바르지 않습니다.")
         }
         return "${splitToken[0]}.${splitToken[1]}."
     }

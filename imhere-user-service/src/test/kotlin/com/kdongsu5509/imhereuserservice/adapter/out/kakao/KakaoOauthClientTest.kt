@@ -3,7 +3,7 @@ package com.kdongsu5509.imhereuserservice.adapter.out.kakao
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhereuserservice.adapter.out.dto.OIDCPublicKeyResponse
-import com.kdongsu5509.imhereuserservice.application.port.out.OauthClientPort
+import com.kdongsu5509.imhereuserservice.application.port.out.user.OauthClientPort
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
