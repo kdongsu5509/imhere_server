@@ -117,6 +117,7 @@ jacocoTestReport {
                     "**/exception/**",
                     "**/common/**",
                     "**/domain/**",
+                    "**/*Entity*",
                     "**/port/**",
                     "**/ImhereUserServiceApplicationKt**",
                     "**/Q*", // QueryDSL Q-types

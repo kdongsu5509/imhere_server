@@ -1,12 +1,7 @@
 package com.kdongsu5509.imhereuserservice.application.port.`in`.terms
 
-import java.time.LocalDateTime
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.terms.dto.NewTermVersionRequest
 
 interface CreateTermVersionUseCase {
-    fun createNewTermVersion(
-        termDefinitionId: Long,
-        version: String,
-        content: String,
-        effectiveDate: LocalDateTime
-    )
+    fun createNewTermVersion(newTermVersionRequest: NewTermVersionRequest)
 }

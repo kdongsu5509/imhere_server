@@ -44,7 +44,7 @@ class TermsVersionCommandPersistenceAdapter(
         content: String,
         effectiveDate: LocalDateTime
     ): TermsVersionJpaEntity {
-        val termVersionJpaEntity = termVersionMapper.mapToTermVersionJpaEntity(
+        val termVersionJpaEntity = termVersionMapper.mapToJpaEntity(
             queriedTermDefinition,
             version,
             content,
@@ -55,8 +55,9 @@ class TermsVersionCommandPersistenceAdapter(
         return termVersionJpaEntity
     }
 
+
     private fun deactivePrevTermVersion(termDefinitionId: Long) {
-        springDataTermsVersionRepository.findActiveVersion(termDefinitionId)?.let { activeVersion ->
+        springDataTermsVersionRepository.findActiveVersion(termDefinitionId).ifPresent { activeVersion ->
             activeVersion.isActive = false
         }
     }

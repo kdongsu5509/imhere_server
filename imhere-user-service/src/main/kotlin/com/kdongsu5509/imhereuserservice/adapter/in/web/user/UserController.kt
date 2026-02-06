@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1/user/search")
+@RequestMapping("/api/v1/user/info")
 class UserController(private val loadUserUseCase: ReadUserUseCase) {
 
     @GetMapping("/{keyword}")
@@ -35,7 +35,7 @@ class UserController(private val loadUserUseCase: ReadUserUseCase) {
     ): APIResponse<UserSearchResponse> {
         val myInfo = loadUserUseCase.searchMe(user.username)
 
-        return APIResponse.Companion.success(
+        return APIResponse.success(
             UserSearchResponse(
                 myInfo.email, myInfo.nickname
             )
