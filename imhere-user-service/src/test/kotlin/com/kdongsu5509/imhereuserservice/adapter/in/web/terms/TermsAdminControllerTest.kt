@@ -2,7 +2,6 @@ package com.kdongsu5509.imhereuserservice.adapter.`in`.web.terms
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.terms.dto.NewTermDefinitionRequest
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.terms.jpa.SpringDataTermsDefinitionRepository
 import com.kdongsu5509.imhereuserservice.domain.terms.TermsTypes
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional
 class TermsAdminControllerTest @Autowired constructor(
     private val mockMvc: MockMvc,
     private val objectMapper: ObjectMapper,
-    private val springDataTermsDefinitionRepository: SpringDataTermsDefinitionRepository
 ) {
 
     @Test
