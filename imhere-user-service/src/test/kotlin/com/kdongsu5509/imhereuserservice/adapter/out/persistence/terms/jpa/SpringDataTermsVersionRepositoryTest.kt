@@ -28,16 +28,16 @@ class SpringDataTermsVersionRepositoryTest @Autowired constructor(
         repository.save(activeVersion)
 
         // when
-        val result = repository.findActiveVersion(definition.id!!)
+        val result = repository.findActiveVersion(definition.id!!).get()
 
         // then
         assertThat(result).isNotNull
-        assertThat(result?.version).isEqualTo("1.0")
-        assertThat(result?.isActive).isTrue()
+        assertThat(result.version).isEqualTo("1.0")
+        assertThat(result.isActive).isTrue()
     }
 
     @Test
-    @DisplayName("활성화된 버전이 없으면 null을 반환한다.")
+    @DisplayName("활성화된 버전이 없으면 비어있는 Optional을 반환한다.")
     fun findActiveVersion_ReturnNull() {
         // given
         val definition = termsDefinitionRepository.save(
@@ -51,7 +51,7 @@ class SpringDataTermsVersionRepositoryTest @Autowired constructor(
         val result = repository.findActiveVersion(definition.id!!)
 
         // then
-        assertThat(result).isNull()
+        assertThat(result.isEmpty).isTrue()
     }
 
     private fun createActiveTermVersion(definition: TermsDefinitionJpaEntity): TermsVersionJpaEntity =

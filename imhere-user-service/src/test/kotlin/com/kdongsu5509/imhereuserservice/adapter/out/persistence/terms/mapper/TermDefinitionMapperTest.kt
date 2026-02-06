@@ -38,7 +38,9 @@ class TermDefinitionMapperTest {
         //given
         val testJpaEntity = TermsDefinitionJpaEntity(
             TERM_TITLE, testTermsType, testIsRequired
-        )
+        ).apply {
+            id = 999L
+        }
 
         //when
         val result = termDefinitionMapper.mapToDomainEntity(testJpaEntity)

@@ -14,9 +14,14 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.BDDMockito.given
 import org.mockito.Mock
+import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import java.util.*
 
 @ExtendWith(MockitoExtension::class)
@@ -77,6 +82,7 @@ class TermsDefinitionQueryPersistenceAdapterTest {
         val testJpaEntity = TermsDefinitionJpaEntity(
             TERM_TITLE, testTermsType, true
         )
+        testJpaEntity.id = 10L
         `when`(springDataTermsDefinitionRepository.findById(id)).thenReturn(Optional.of(testJpaEntity))
 
         // when
@@ -101,5 +107,47 @@ class TermsDefinitionQueryPersistenceAdapterTest {
         }.also {
             assertThat(it.errorCode).isEqualTo(ErrorCode.TERM_DEFINITION_NOT_FOUND)
         }
+    }
+
+    @Test
+    @DisplayName("약관 목록 조회 시 페이징된 결과를 반환한다")
+    fun loadAllTermsDefinitions_success() {
+        // given
+        val pageable = PageRequest.of(0, 10)
+        val testDefinitionOne = TermsDefinitionJpaEntity("약관1", TermsTypes.SERVICE, true)
+        val testDefinitionTwo = TermsDefinitionJpaEntity("약관2", TermsTypes.PRIVACY, true)
+        testDefinitionOne.id = 1L
+        testDefinitionTwo.id = 2L
+        val jpaEntities = listOf(
+            testDefinitionOne, testDefinitionTwo
+        )
+        val page = PageImpl(jpaEntities, pageable, jpaEntities.size.toLong())
+
+        `when`(springDataTermsDefinitionRepository.findAll(pageable)).thenReturn(page)
+
+        // when
+        val result = adapter.loadAllTermsDefinitions(pageable)
+
+        // then
+        assertThat(result.content).hasSize(2)
+        assertThat(result.content[0].title).isEqualTo("약관1")
+        verify(springDataTermsDefinitionRepository).findAll(pageable)
+    }
+
+    @Test
+    @DisplayName("약관 목록 조회 시 데이터가 없으면 빈 페이지를 반환한다")
+    fun loadAllTermsDefinitions_success_if_not_exist() {
+        // given
+        val pageable = PageRequest.of(0, 10)
+        given(springDataTermsDefinitionRepository.findAll(pageable))
+            .willReturn(Page.empty(pageable))
+
+        // when
+        val result = adapter.loadAllTermsDefinitions(pageable)
+
+        // then
+        assertThat(result).isNotNull
+        assertThat(result.content).isEmpty()
+        assertThat(result.totalElements).isEqualTo(0L)
     }
 }

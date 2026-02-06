@@ -1,5 +1,6 @@
 package com.kdongsu5509.imhereuserservice.application.service.term
 
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.terms.dto.NewTermDefinitionRequest
 import com.kdongsu5509.imhereuserservice.application.port.out.term.TermsDefinitionLoadPort
 import com.kdongsu5509.imhereuserservice.application.port.out.term.TermsDefinitionSavePort
 import com.kdongsu5509.imhereuserservice.domain.terms.TermsTypes
@@ -43,10 +44,12 @@ class TermsDefinitionCreateServiceTest {
         val termsType = TermsTypes.LOCATION
         val required = true
 
+        val testReq = NewTermDefinitionRequest(termsName, termsType, required)
+
         `when`(termsDefinitionLoadPort.checkExistence(termsName, termsType)).thenReturn(false)
 
         // when
-        termsDefinitionCreateService.createNewTermsDefinition(termsName, termsType, required)
+        termsDefinitionCreateService.createNewTermsDefinition(testReq)
 
         // then
         verify(termsDefinitionLoadPort).checkExistence(termsName, termsType)
@@ -60,12 +63,13 @@ class TermsDefinitionCreateServiceTest {
         val termsName = "서비스 이용약관"
         val termsType = TermsTypes.SERVICE
         val required = true
+        val testReq = NewTermDefinitionRequest(termsName, termsType, required)
 
         `when`(termsDefinitionLoadPort.checkExistence(termsName, termsType)).thenReturn(true)
 
         // when & then
         assertThrows<BusinessException> {
-            termsDefinitionCreateService.createNewTermsDefinition(termsName, termsType, required)
+            termsDefinitionCreateService.createNewTermsDefinition(testReq)
         }.also {
             assertThat(it.errorCode).isEqualTo(ErrorCode.TERM_DEFINITION_EXIST)
         }
