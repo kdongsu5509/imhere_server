@@ -16,6 +16,14 @@ class APIResponse<T> private constructor(
             )
         }
 
+        fun <T> successWithHttpStatusCode(httpStatusCode: Int, data: T): APIResponse<T> {
+            return APIResponse(
+                httpStatusCode,
+                HttpStatus.OK.reasonPhrase,
+                data
+            )
+        }
+
         fun success(): APIResponse<Unit> {
             return APIResponse(
                 HttpStatus.OK.value(),

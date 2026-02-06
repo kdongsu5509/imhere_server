@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class TermDefinitionMapper {
-    fun mapToTermDefinitionJpaEntity(
+    fun mapToJpaEntity(
         termsTitle: String,
         termType: TermsTypes,
         isRequired: Boolean
@@ -17,10 +17,11 @@ class TermDefinitionMapper {
         )
     }
 
-    fun mapToJpaEntityToDomainEntity(
+    fun mapToDomainEntity(
         jpaEntity: TermsDefinitionJpaEntity
     ): TermDefinition {
         return TermDefinition(
+            jpaEntity.id!!,
             jpaEntity.termsTitle,
             jpaEntity.termsType,
             jpaEntity.isRequired

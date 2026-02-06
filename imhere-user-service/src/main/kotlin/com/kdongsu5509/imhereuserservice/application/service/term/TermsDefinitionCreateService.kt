@@ -1,5 +1,6 @@
 package com.kdongsu5509.imhereuserservice.application.service.term
 
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.terms.dto.NewTermDefinitionRequest
 import com.kdongsu5509.imhereuserservice.application.port.`in`.terms.CreateTermsDefinitionUseCase
 import com.kdongsu5509.imhereuserservice.application.port.out.term.TermsDefinitionLoadPort
 import com.kdongsu5509.imhereuserservice.application.port.out.term.TermsDefinitionSavePort
@@ -15,14 +16,16 @@ class TermsDefinitionCreateService(
     private val termsDefinitionLoadPort: TermsDefinitionLoadPort,
     private val termsDefinitionSavePort: TermsDefinitionSavePort,
 ) : CreateTermsDefinitionUseCase {
-    override fun createNewTermsDefinition(
-        termsName: String,
-        termsType: TermsTypes,
-        required: Boolean
-    ) {
-        validateTermsDefinitionUniqueness(termsName, termsType)
+
+    override fun createNewTermsDefinition(newTermDefinitionRequest: NewTermDefinitionRequest) {
+        val name = newTermDefinitionRequest.termsName
+        val type = newTermDefinitionRequest.termsType
+        val required = newTermDefinitionRequest.isRequired
+
+        validateTermsDefinitionUniqueness(name, type)
+        
         termsDefinitionSavePort.saveTermDefinition(
-            termsName, termsType, required
+            name, type, required
         )
     }
 

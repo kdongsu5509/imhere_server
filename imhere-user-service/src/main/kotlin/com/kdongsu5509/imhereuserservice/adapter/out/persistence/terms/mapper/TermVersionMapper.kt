@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 @Component
 class TermVersionMapper {
-    fun mapToTermVersionJpaEntity(
+    fun mapToJpaEntity(
         termDefinitionJpaEntity: TermsDefinitionJpaEntity,
         version: String,
         content: String,

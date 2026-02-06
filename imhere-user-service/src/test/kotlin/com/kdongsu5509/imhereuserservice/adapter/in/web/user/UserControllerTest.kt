@@ -36,8 +36,8 @@ class UserControllerTest {
     lateinit var mockMvc: MockMvc
 
     companion object {
-        const val userSearchUrlWithoutKeyword = "/api/v1/user/search/"
-        const val userSearchMeUrl = "/api/v1/user/search/me"
+        const val userSearchUrlWithoutKeyword = "/api/v1/user/info/"
+        const val userSearchMeUrl = "/api/v1/user/info/me"
         const val DSKO = "고동수"
         const val TEST_EMAIL = "test@test.com"
     }

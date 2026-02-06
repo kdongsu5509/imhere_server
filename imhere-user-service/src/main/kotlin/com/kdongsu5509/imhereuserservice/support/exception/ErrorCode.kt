@@ -108,11 +108,21 @@ enum class ErrorCode(
     ),
 
     /**
+     * AUTHORIZATION : 권한 오류
+     */
+    FORBIDDEN(
+        HttpStatus.FORBIDDEN,
+        "NO_PERMISSION",
+        "권한이 없습니다"
+    ),
+
+
+    /**
      * INTERNAL SERVER ERRORS : 알 수 없는 서버 오류
      */
     UNKNOWN_ERROR(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "UNKNOWN_INTERNAL_SERVER",
         "알 수 없는 오류가 발생했습니다."
-    )
+    ),
 }
