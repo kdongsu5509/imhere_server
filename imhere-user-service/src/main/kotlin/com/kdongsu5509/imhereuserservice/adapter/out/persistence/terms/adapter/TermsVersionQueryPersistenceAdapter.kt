@@ -15,11 +15,12 @@ class TermsVersionQueryPersistenceAdapter(
 ) :
     TermsVersionLoadPort {
     override fun loadSpecificTermVersion(termDefinitionId: Long): TermVersion {
-        val queryResult = springDataTermsVersionRepository.findById(termDefinitionId).orElseThrow {
+        val queryResult = springDataTermsVersionRepository.findActiveVersion(termDefinitionId)
+
+        if (queryResult.isEmpty) {
             throw BusinessException(ErrorCode.TERM_DEFINITION_NOT_FOUND)
         }
 
-        return termVersionMapper.mapToDomainEntity(queryResult)
+        return termVersionMapper.mapToDomainEntity(queryResult.get())
     }
-
 }

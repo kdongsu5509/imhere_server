@@ -55,8 +55,9 @@ class TermsVersionCommandPersistenceAdapter(
         return termVersionJpaEntity
     }
 
+
     private fun deactivePrevTermVersion(termDefinitionId: Long) {
-        springDataTermsVersionRepository.findActiveVersion(termDefinitionId)?.let { activeVersion ->
+        springDataTermsVersionRepository.findActiveVersion(termDefinitionId).ifPresent { activeVersion ->
             activeVersion.isActive = false
         }
     }
