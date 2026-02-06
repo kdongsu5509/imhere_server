@@ -17,10 +17,11 @@ class TermDefinitionMapper {
         )
     }
 
-    fun mapToToDomainEntity(
+    fun mapToDomainEntity(
         jpaEntity: TermsDefinitionJpaEntity
     ): TermDefinition {
         return TermDefinition(
+            jpaEntity.id!!,
             jpaEntity.termsTitle,
             jpaEntity.termsType,
             jpaEntity.isRequired

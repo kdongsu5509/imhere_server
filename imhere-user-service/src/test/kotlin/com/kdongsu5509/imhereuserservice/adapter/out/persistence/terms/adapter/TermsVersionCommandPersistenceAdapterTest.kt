@@ -48,7 +48,6 @@ class TermsVersionCommandPersistenceAdapterFailureTest {
         val content = "내용"
         val effectiveDate = LocalDateTime.now()
 
-        // 리포지토리가 빈 Optional을 반환하도록 설정
         given(springDataTermsDefinitionRepository.findById(invalidId))
             .willReturn(Optional.empty())
 

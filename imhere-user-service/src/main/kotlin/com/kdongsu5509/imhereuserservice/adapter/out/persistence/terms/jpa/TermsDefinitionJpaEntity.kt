@@ -18,7 +18,7 @@ class TermsDefinitionJpaEntity(
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
+    var id: Long? = null
 
     @OneToMany(mappedBy = "terms", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val versions: MutableList<TermsVersionJpaEntity> = mutableListOf()

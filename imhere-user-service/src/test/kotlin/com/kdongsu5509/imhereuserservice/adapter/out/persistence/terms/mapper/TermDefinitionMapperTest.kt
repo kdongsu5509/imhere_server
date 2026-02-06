@@ -34,14 +34,14 @@ class TermDefinitionMapperTest {
     @ParameterizedTest
     @ValueSource(booleans = [false, true])
     @DisplayName("Jpa 엔티티를 도메인 객체로 잘 만든다.")
-    fun mapToToDomainEntity_success(testIsRequired: Boolean) {
+    fun mapToDomainEntity_success(testIsRequired: Boolean) {
         //given
         val testJpaEntity = TermsDefinitionJpaEntity(
             TERM_TITLE, testTermsType, testIsRequired
         )
 
         //when
-        val result = termDefinitionMapper.mapToToDomainEntity(testJpaEntity)
+        val result = termDefinitionMapper.mapToDomainEntity(testJpaEntity)
 
         //then
         Assertions.assertThat(result::class.java).isEqualTo(TermDefinition::class.java)

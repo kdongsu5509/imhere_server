@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/user/terms")
 class TermsAdminController(
     private val createTermsDefinitionUseCase: CreateTermsDefinitionUseCase,
-    private val createTermVersionUseCase: CreateTermVersionUseCase
+    private val createTermVersionUseCase: CreateTermVersionUseCase,
 ) {
     /**
      * Create
@@ -27,12 +27,7 @@ class TermsAdminController(
     fun createNewTermDefinition(
         @Validated @RequestBody newTermDefinitionRequest: NewTermDefinitionRequest
     ): APIResponse<Unit> {
-        createTermsDefinitionUseCase.createNewTermsDefinition(
-            newTermDefinitionRequest.termsName,
-            newTermDefinitionRequest.termsType,
-            newTermDefinitionRequest.isRequired,
-        )
-
+        createTermsDefinitionUseCase.createNewTermsDefinition(newTermDefinitionRequest)
         return APIResponse.success()
     }
 
@@ -41,13 +36,7 @@ class TermsAdminController(
     fun createNewTermVersion(
         @Validated @RequestBody newTermVersionRequest: NewTermVersionRequest
     ): APIResponse<Unit> {
-        createTermVersionUseCase.createNewTermVersion(
-            newTermVersionRequest.termDefinitionId,
-            newTermVersionRequest.version,
-            newTermVersionRequest.content,
-            newTermVersionRequest.effectiveDate
-        )
-
+        createTermVersionUseCase.createNewTermVersion(newTermVersionRequest)
         return APIResponse.success()
     }
 }

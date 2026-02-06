@@ -7,6 +7,8 @@ import com.kdongsu5509.imhereuserservice.domain.terms.TermDefinition
 import com.kdongsu5509.imhereuserservice.domain.terms.TermsTypes
 import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
 import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 
 @Component
@@ -26,6 +28,11 @@ class TermsDefinitionQueryPersistenceAdapter(
         val queryResult = springDataTermsDefinitionRepository.findById(termDefinitionId)
             .orElseThrow { BusinessException(ErrorCode.TERM_DEFINITION_NOT_FOUND) }
 
-        return termDefinitionMapper.mapToToDomainEntity(queryResult)
+        return termDefinitionMapper.mapToDomainEntity(queryResult)
+    }
+
+    override fun loadAllTermsDefinitions(pageable: Pageable): Page<TermDefinition> {
+        return springDataTermsDefinitionRepository.findAll(pageable)
+            .map { termDefinitionMapper.mapToDomainEntity(it) }
     }
 }

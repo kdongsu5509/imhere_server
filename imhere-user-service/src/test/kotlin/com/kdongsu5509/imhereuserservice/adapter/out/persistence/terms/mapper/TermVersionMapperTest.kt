@@ -42,6 +42,9 @@ class TermVersionMapperTest {
     fun shouldMapToDomainEntity() {
         // given
         val termDefinition = TermsDefinitionJpaEntity(TERM_TITLE, testTermType, true)
+        termDefinition.apply {
+            id = 1L
+        }
         val jpaEntity = TermsVersionJpaEntity(
             version = "v2.0",
             content = "업데이트된 내용",
