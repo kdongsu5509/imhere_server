@@ -4,5 +4,6 @@ data class User(
     var email: String,
     var nickname: String,
     var oauthProvider: OAuth2Provider,
-    var role: UserRole
+    var role: UserRole,
+    var status: UserStatus
 )
