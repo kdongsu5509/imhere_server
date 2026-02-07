@@ -32,7 +32,7 @@ class UserJpaEntity(
     @Id
     @GeneratedValue
     @UuidGenerator
-    var id: UUID? = null
+    val id: UUID? = null
 
     fun activate() {
         this.status = UserStatus.ACTIVE
