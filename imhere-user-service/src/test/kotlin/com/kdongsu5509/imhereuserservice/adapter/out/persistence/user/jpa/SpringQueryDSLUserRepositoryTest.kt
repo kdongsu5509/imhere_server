@@ -2,6 +2,7 @@ package com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa
 
 import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
+import com.kdongsu5509.imhereuserservice.domain.user.UserStatus
 import com.querydsl.jpa.impl.JPAQueryFactory
 import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Assertions
@@ -35,9 +36,12 @@ class SpringQueryDSLUserRepositoryTest @Autowired constructor(
     @BeforeEach
     @DisplayName("테스트 USER 주입")
     fun setUpUser() {
-        val testUser1 = UserJpaEntity("test1@kakao.com", "테스터1", UserRole.NORMAL, OAuth2Provider.KAKAO)
-        val testUser2 = UserJpaEntity("test2@kakao.com", "테스터2", UserRole.NORMAL, OAuth2Provider.KAKAO)
-        val testUser3 = UserJpaEntity("test3@kakao.com", "테스터3", UserRole.NORMAL, OAuth2Provider.KAKAO)
+        val testUser1 =
+            UserJpaEntity("test1@kakao.com", "테스터1", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
+        val testUser2 =
+            UserJpaEntity("test2@kakao.com", "테스터2", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
+        val testUser3 =
+            UserJpaEntity("test3@kakao.com", "테스터3", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
 
         val testUsers = listOf(testUser1, testUser2, testUser3)
         saveTestUsers(testUsers)
@@ -87,9 +91,12 @@ class SpringQueryDSLUserRepositoryTest @Autowired constructor(
     }
 
     private fun createAndSaveDuplicatedNicknameUsers() {
-        val duplicatedNameUser1 = UserJpaEntity("test11@kakao.com", "테스터1", UserRole.NORMAL, OAuth2Provider.KAKAO)
-        val duplicatedNameUser2 = UserJpaEntity("test12@kakao.com", "테스터2", UserRole.NORMAL, OAuth2Provider.KAKAO)
-        val duplicatedNameUser3 = UserJpaEntity("test13@kakao.com", "테스터3", UserRole.NORMAL, OAuth2Provider.KAKAO)
+        val duplicatedNameUser1 =
+            UserJpaEntity("test11@kakao.com", "테스터1", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
+        val duplicatedNameUser2 =
+            UserJpaEntity("test12@kakao.com", "테스터2", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
+        val duplicatedNameUser3 =
+            UserJpaEntity("test13@kakao.com", "테스터3", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
 
         val duplicatedNicknameUsers = listOf(duplicatedNameUser1, duplicatedNameUser2, duplicatedNameUser3)
         saveTestUsers(duplicatedNicknameUsers)
