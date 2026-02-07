@@ -27,7 +27,7 @@ class UserJpaEntity(
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    var status: UserStatus = UserStatus.PENDING
+    var status: UserStatus
 ) : BaseTimeEntity() {
     @Id
     @GeneratedValue
