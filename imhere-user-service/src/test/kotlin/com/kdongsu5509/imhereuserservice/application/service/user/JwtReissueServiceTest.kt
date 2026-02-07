@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhereuserservice.application.service.user
 
-import com.kdongsu5509.imhereuserservice.application.dto.AuthenticationProcessResult
+import com.kdongsu5509.imhereuserservice.application.dto.ImHereJwt
 import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
 import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import org.assertj.core.api.Assertions.assertThat
@@ -28,15 +28,15 @@ class JwtReissueServiceTest {
     fun reissue() {
         //given
         val mockRefreshToken = "prevRefreshToken"
-        val mockNewAuthenticationProcessResult = AuthenticationProcessResult(200, "accessToken", mockRefreshToken)
-        `when`(jwtTokenProvider.reissueJwtToken(mockRefreshToken)).thenReturn(mockNewAuthenticationProcessResult)
+        val mockImHereJWT = ImHereJwt("accessToken", mockRefreshToken)
+        `when`(jwtTokenProvider.reissueJwtToken(mockRefreshToken)).thenReturn(mockImHereJWT)
 
         //when
         val result = jwtReissueService.reissue(mockRefreshToken)
 
         //then
         assertThat(result).isNotNull
-        assertEquals(mockNewAuthenticationProcessResult, result)
+        assertEquals(mockImHereJWT, result)
     }
 
     @Test

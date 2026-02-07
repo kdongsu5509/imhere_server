@@ -43,8 +43,33 @@ class SpringQueryDSLUserRepositoryTest @Autowired constructor(
         val testUser3 =
             UserJpaEntity("test3@kakao.com", "테스터3", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
 
-        val testUsers = listOf(testUser1, testUser2, testUser3)
+        val testUser4 =
+            UserJpaEntity("test4@kakao.com", "테스터4", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.PENDING)
+        val testUser5 =
+            UserJpaEntity("test5@kakao.com", "테스터5", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.PENDING)
+
+        val testUsers = listOf(testUser1, testUser2, testUser3, testUser4, testUser5)
         saveTestUsers(testUsers)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["test999@kakao.com", "test1000@kakao.com"])
+    @DisplayName("없는 사용자들을 검색하면 조회되지 않는다")
+    fun findActiveUserByEmail_not_exist_user(testEmail: String) {
+        //when
+        val queryResult = userRepository.findActiveUserByEmail(testEmail)
+        //then
+        Assertions.assertEquals(true, queryResult.isEmpty)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["test4@kakao.com", "test5@kakao.com"])
+    @DisplayName("비활성화 된 사용자들을 검색하면 조회되지 않는다")
+    fun findActiveUserByEmail_pending_user(testEmail: String) {
+        //when
+        val queryResult = userRepository.findActiveUserByEmail(testEmail)
+        //then
+        Assertions.assertEquals(true, queryResult.isEmpty)
     }
 
     @ParameterizedTest

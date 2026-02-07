@@ -70,7 +70,7 @@ class ReadUserServiceTest {
     @DisplayName("사용자의 정보를 잘 찾아오면 변환해서 잘 나간다.")
     fun searchMe() {
         //given
-        `when`(userLoadPort.findByEmail(TEST_KEYWORD)).thenReturn(
+        `when`(userLoadPort.findActiveUserByEmailOrNull(TEST_KEYWORD)).thenReturn(
             testUser
         )
 
