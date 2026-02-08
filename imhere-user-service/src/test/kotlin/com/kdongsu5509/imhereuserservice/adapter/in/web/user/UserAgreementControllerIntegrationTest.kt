@@ -57,6 +57,8 @@ class UserAgreementControllerIntegrationTest {
     companion object {
         const val BASE_URL = "/api/v1/user/terms"
         const val TEST_USER = "test@kakao.com"
+        var TEST_DEF_ID1 = 0L
+        var TEST_DEF_ID2 = 0L
     }
 
     @BeforeEach
@@ -67,8 +69,11 @@ class UserAgreementControllerIntegrationTest {
 
         val testTermDef1 =
             termsDefinitionRepository.save(TermsDefinitionJpaEntity(termsTitle = "테스트 약관1", TermsTypes.LOCATION, true))
+        TEST_DEF_ID1 = testTermDef1.id!!
         val testTermDef2 =
             termsDefinitionRepository.save(TermsDefinitionJpaEntity(termsTitle = "테스트 약관2", TermsTypes.PRIVACY, true))
+        TEST_DEF_ID2 = testTermDef2.id!!
+
 
         createTestTermVersionEntity(testTermDef1)
         createTestTermVersionEntity(testTermDef2)
@@ -91,7 +96,10 @@ class UserAgreementControllerIntegrationTest {
     @DisplayName("전체 약관 동의 API가 정상적으로 호출된다")
     fun consentAll_success() {
         val request = UserTermsConsentRequest(
-            consents = listOf(ConsentDetail(1L, true), ConsentDetail(2L, true))
+            consents = listOf(
+                ConsentDetail(TEST_DEF_ID1, true),
+                ConsentDetail(TEST_DEF_ID2, true)
+            )
         )
 
         mockMvc.perform(
