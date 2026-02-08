@@ -2,15 +2,21 @@ package com.kdongsu5509.imhereuserservice.adapter.`in`.web.user
 
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.common.APIResponse
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto.UserSearchResponse
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.NicknameChangeRequest
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.ReadUserUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.user.UpdateUserUseCase
 import jakarta.validation.constraints.NotBlank
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/user/info")
-class UserController(private val readUserUseCase: ReadUserUseCase) {
+class UserController(
+    private val readUserUseCase: ReadUserUseCase,
+    private val updateUserUseCase: UpdateUserUseCase
+) {
 
     /**
      * 나의 정보 조회
@@ -32,9 +38,20 @@ class UserController(private val readUserUseCase: ReadUserUseCase) {
      * 나의 닉네임 변경
      */
     @PostMapping("/nickname")
-    fun changeNickName(): APIResponse<UserSearchResponse> {
+    fun changeNickName(
+        @AuthenticationPrincipal user: UserDetails,
+        @Validated @RequestBody newNicknameChangeRequest: NicknameChangeRequest
+    ): APIResponse<UserSearchResponse> {
+        val updatedMyInfo = updateUserUseCase.changeNickName(
+            user.username,
+            newNicknameChangeRequest.newNickname
+        )
 
-
+        return APIResponse.success(
+            UserSearchResponse(
+                updatedMyInfo.email, updatedMyInfo.nickname
+            )
+        )
     }
 
     /**
