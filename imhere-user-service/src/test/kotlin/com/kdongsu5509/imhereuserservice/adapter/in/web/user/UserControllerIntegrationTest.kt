@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-class UserControllerTest {
+class UserControllerIntegrationTest {
 
     @Autowired
     lateinit var objectMapper: ObjectMapper
