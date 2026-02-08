@@ -9,8 +9,8 @@ data class UserTermsConsentRequest(
 ) {
     data class ConsentDetail(
         @field:NotNull
-        val termDefinitionId: Long,
+        var termDefinitionId: Long,
         @field:NotNull
-        val isAgreed: Boolean
+        var isAgreed: Boolean
     )
 }
