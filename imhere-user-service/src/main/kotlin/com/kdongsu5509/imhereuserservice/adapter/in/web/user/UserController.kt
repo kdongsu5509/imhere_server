@@ -1,8 +1,8 @@
 package com.kdongsu5509.imhereuserservice.adapter.`in`.web.user
 
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.common.APIResponse
-import com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto.UserSearchResponse
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.NicknameChangeRequest
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.UserInfoResponse
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.ReadUserUseCase
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.UpdateUserUseCase
 import jakarta.validation.constraints.NotBlank
@@ -24,11 +24,11 @@ class UserController(
     @GetMapping("/me")
     fun searchMyInfo(
         @AuthenticationPrincipal user: UserDetails
-    ): APIResponse<UserSearchResponse> {
+    ): APIResponse<UserInfoResponse> {
         val myInfo = readUserUseCase.searchMe(user.username)
 
         return APIResponse.success(
-            UserSearchResponse(
+            UserInfoResponse(
                 myInfo.email, myInfo.nickname
             )
         )
@@ -41,14 +41,14 @@ class UserController(
     fun changeNickName(
         @AuthenticationPrincipal user: UserDetails,
         @Validated @RequestBody newNicknameChangeRequest: NicknameChangeRequest
-    ): APIResponse<UserSearchResponse> {
+    ): APIResponse<UserInfoResponse> {
         val updatedMyInfo = updateUserUseCase.changeNickName(
             user.username,
             newNicknameChangeRequest.newNickname
         )
 
         return APIResponse.success(
-            UserSearchResponse(
+            UserInfoResponse(
                 updatedMyInfo.email, updatedMyInfo.nickname
             )
         )
@@ -61,11 +61,11 @@ class UserController(
     fun searchUsers(
         @PathVariable @NotBlank(message = "이메일 혹은 사용자 닉네임을 입력하여야 합니다")
         keyword: String
-    ): APIResponse<List<UserSearchResponse>> {
+    ): APIResponse<List<UserInfoResponse>> {
         val findingUsers = readUserUseCase.searchUser(keyword)
 
-        val responseValue: List<UserSearchResponse> = findingUsers.map { user ->
-            UserSearchResponse(user.email, user.nickname)
+        val responseValue: List<UserInfoResponse> = findingUsers.map { user ->
+            UserInfoResponse(user.email, user.nickname)
         }
 
         return APIResponse.success(responseValue)

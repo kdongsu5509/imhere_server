@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,104 +35,127 @@ class SpringQueryDSLUserRepositoryTest @Autowired constructor(
     }
 
     @BeforeEach
-    @DisplayName("테스트 USER 주입")
-    fun setUpUser() {
-        val testUser1 =
-            UserJpaEntity("test1@kakao.com", "테스터1", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
-        val testUser2 =
-            UserJpaEntity("test2@kakao.com", "테스터2", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
-        val testUser3 =
-            UserJpaEntity("test3@kakao.com", "테스터3", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
+    fun setUp() {
+        val users = (1..3).map { createTestUser(it, UserStatus.ACTIVE) } +
+                (4..5).map { createTestUser(it, UserStatus.PENDING) }
+        saveAll(users)
+    }
 
-        val testUser4 =
-            UserJpaEntity("test4@kakao.com", "테스터4", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.PENDING)
-        val testUser5 =
-            UserJpaEntity("test5@kakao.com", "테스터5", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.PENDING)
+    /**
+     * findUserByEmail 테스트
+     */
+    @ParameterizedTest
+    @ValueSource(ints = [1, 2, 3, 4, 5])
+    @DisplayName("상태에 상관없이 email로 사용자를 조회한다")
+    fun findUserByEmail_success(idx: Int) {
 
-        val testUsers = listOf(testUser1, testUser2, testUser3, testUser4, testUser5)
-        saveTestUsers(testUsers)
+        val result = userRepository.findUserByEmail("test$idx@kakao.com")
+
+        Assertions.assertEquals(true, result.isPresent)
+        Assertions.assertEquals("test$idx@kakao.com", result.get().email)
+        Assertions.assertEquals("테스터$idx", result.get().nickname)
+    }
+
+    /**
+     * findActiveUserByEmail 테스트
+     */
+
+    @ParameterizedTest
+    @ValueSource(ints = [1, 2, 3])
+    @DisplayName("ACTIVE 상태인 사용자는 이메일로 검색된다")
+    fun findActiveUserByEmail_active(idx: Int) {
+        val result = userRepository.findActiveUserByEmail("test$idx@kakao.com")
+        Assertions.assertTrue(result.isPresent)
+        Assertions.assertEquals("test$idx@kakao.com", result.get().email)
+        Assertions.assertEquals("테스터$idx", result.get().nickname)
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["test999@kakao.com", "test1000@kakao.com"])
-    @DisplayName("없는 사용자들을 검색하면 조회되지 않는다")
-    fun findActiveUserByEmail_not_exist_user(testEmail: String) {
-        //when
-        val queryResult = userRepository.findActiveUserByEmail(testEmail)
-        //then
-        Assertions.assertEquals(true, queryResult.isEmpty)
+    @ValueSource(ints = [4, 5])
+    @DisplayName("PENDING 상태인 사용자는 이메일로 검색되지 않는다")
+    fun findActiveUserByEmail_pending(idx: Int) {
+        val result = userRepository.findActiveUserByEmail("test$idx@kakao.com")
+        Assertions.assertTrue(result.isEmpty)
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["test4@kakao.com", "test5@kakao.com"])
-    @DisplayName("비활성화 된 사용자들을 검색하면 조회되지 않는다")
-    fun findActiveUserByEmail_pending_user(testEmail: String) {
-        //when
-        val queryResult = userRepository.findActiveUserByEmail(testEmail)
-        //then
-        Assertions.assertEquals(true, queryResult.isEmpty)
+    @ValueSource(ints = [1001, 1002, 1003, 1004, 1005])
+    @DisplayName("존재하지 않는 사용자는 검색되지 않는다")
+    fun findActiveUserByEmail_not_exist(idx: Int) {
+        val result = userRepository.findActiveUserByEmail("test$idx@kakao.com")
+        Assertions.assertTrue(result.isEmpty)
     }
 
+    /**
+     * findActiveUserByKeyword 테스트
+     */
     @ParameterizedTest
     @ValueSource(strings = ["테스터1", "테스터2", "테스터3", "test1@kakao.com", "test2@kakao.com", "test3@kakao.com"])
-    @DisplayName("nickname혹은 email로 잘 찾는다")
-    fun findWithNickname(testKeyword: String) {
-        //when
-        val queryResult = userRepository.findUserByKeyword(testKeyword)
+    @DisplayName("키워드(닉네임/이메일)로 활성 사용자를 정확히 찾는다")
+    fun findActiveUserByKeyword_success(testKeyword: String) {
+        val result = userRepository.findActiveUserByKeyword(testKeyword)
 
-        //then
-        val expectSize = 1
-        val isMatchingWithNicknameOrEmail =
-            testKeyword.equals(queryResult[0].nickname) || testKeyword.equals(queryResult[0].email)
-        Assertions.assertEquals(expectSize, queryResult.size)
-        Assertions.assertTrue(isMatchingWithNicknameOrEmail)
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = ["unknown@kakao.com", "unknown2@kakao.com", "언노운", "몰라요"])
-    @DisplayName("존재하지 않는 이메일 혹은 닉네임인 경우 빈 List를 반환한다")
-    fun NotfindAnythingIfNotExistEmailOrNickname(testKeyword: String) {
-        //when
-        val queryResult = userRepository.findUserByKeyword(testKeyword)
-
-        //then
-        val expectSize = 0
-        Assertions.assertEquals(expectSize, queryResult.size)
+        Assertions.assertEquals(1, result.size)
+        Assertions.assertTrue(result.any { it.nickname == testKeyword || it.email == testKeyword })
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["테스터1", "테스터2", "테스터3"])
-    @DisplayName("nickname혹은 email로 잘 찾는다")
-    fun findWithDuplicatedNickname(testKeyword: String) {
-        //given
-        createAndSaveDuplicatedNicknameUsers()
+    @DisplayName("중복된 닉네임이 있는 경우 모두 조회된다")
+    fun findActiveUserByKeyword_duplication(testKeyword: String) {
+        // given
+        saveAll(
+            listOf(
+                createTestUser(100, UserStatus.ACTIVE, "테스터1"),
+                createTestUser(101, UserStatus.ACTIVE, "테스터2"),
+                createTestUser(102, UserStatus.ACTIVE, "테스터3")
+            )
+        )
 
-        //when
-        val queryResult = userRepository.findUserByKeyword(testKeyword)
+        // when
+        val result = userRepository.findActiveUserByKeyword(testKeyword)
 
-        //then
-        val expectSize = 2
-        Assertions.assertEquals(expectSize, queryResult.size)
-        Assertions.assertTrue(testKeyword.equals(queryResult[0].nickname))
+        // then
+        Assertions.assertEquals(2, result.size)
+        Assertions.assertTrue(result.all { it.nickname == testKeyword })
     }
 
-    private fun createAndSaveDuplicatedNicknameUsers() {
-        val duplicatedNameUser1 =
-            UserJpaEntity("test11@kakao.com", "테스터1", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
-        val duplicatedNameUser2 =
-            UserJpaEntity("test12@kakao.com", "테스터2", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
-        val duplicatedNameUser3 =
-            UserJpaEntity("test13@kakao.com", "테스터3", UserRole.NORMAL, OAuth2Provider.KAKAO, status = UserStatus.ACTIVE)
+    @Test
+    @DisplayName("키워드가 비어 있는 경우 빈 리스트가 반환된다")
+    fun findActiveUserByKeyword_empty_keyword() {
+        // when
+        val result = userRepository.findActiveUserByKeyword("")
 
-        val duplicatedNicknameUsers = listOf(duplicatedNameUser1, duplicatedNameUser2, duplicatedNameUser3)
-        saveTestUsers(duplicatedNicknameUsers)
+        // then
+        Assertions.assertEquals(0, result.size)
     }
 
-    private fun saveTestUsers(users: List<UserJpaEntity>) {
-        for (user in users) {
-            em.persist(user)
-        }
+    @Test
+    @DisplayName("키워드가 비어 있는 경우 빈 리스트가 반환된다")
+    fun findActiveUserByKeyword_zero_match_keyword() {
+        // when
+        val result = userRepository.findActiveUserByKeyword("테스트99999")
 
+        // then
+        Assertions.assertEquals(0, result.size)
+    }
+
+    private fun createTestUser(
+        idx: Int,
+        status: UserStatus,
+        nickname: String? = null
+    ): UserJpaEntity {
+        return UserJpaEntity(
+            email = "test$idx@kakao.com",
+            nickname = nickname ?: "테스터$idx",
+            role = UserRole.NORMAL,
+            provider = OAuth2Provider.KAKAO,
+            status = status
+        )
+    }
+
+    private fun saveAll(users: List<UserJpaEntity>) {
+        users.forEach { em.persist(it) }
         em.flush()
         em.clear()
     }
