@@ -2,6 +2,7 @@ package com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.adapter
 
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.mapper.UserMapper
 import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
 import com.kdongsu5509.imhereuserservice.domain.user.UserStatus
@@ -16,7 +17,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
 
 @DataJpaTest
-@Import(UserUpdatePersistenceAdapter::class)
+@Import(UserUpdatePersistenceAdapter::class, UserMapper::class)
 class UserUpdatePersistenceAdapterTest @Autowired constructor(
     private val userUpdatePersistenceAdapter: UserUpdatePersistenceAdapter,
     private val springDataUserRepository: SpringDataUserRepository
@@ -108,11 +109,4 @@ class UserUpdatePersistenceAdapterTest @Autowired constructor(
         role = UserRole.NORMAL,
         status = status
     )
-
-
-    ///override fun updateNickname(userEmail: String, newNickname: String) {
-    //        val queryResult = findUserJpaEntity(userEmail)
-    //        queryResult.changeNickname(newNickname)
-    //        springDataUserRepository.save(queryResult)
-    //    }
 }
