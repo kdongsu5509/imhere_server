@@ -59,6 +59,7 @@ class UserAgreementControllerIntegrationTest {
         const val TEST_USER = "test@kakao.com"
         var TEST_DEF_ID1 = 0L
         var TEST_DEF_ID2 = 0L
+        var TEST_DEF_ID3 = 0L
     }
 
     @BeforeEach
@@ -73,22 +74,20 @@ class UserAgreementControllerIntegrationTest {
         val testTermDef2 =
             termsDefinitionRepository.save(TermsDefinitionJpaEntity(termsTitle = "테스트 약관2", TermsTypes.PRIVACY, true))
         TEST_DEF_ID2 = testTermDef2.id!!
+        val testTermDef3 =
+            termsDefinitionRepository.save(
+                TermsDefinitionJpaEntity(
+                    termsTitle = "테스트 약관2",
+                    TermsTypes.MARKETING,
+                    false
+                )
+            )
+        TEST_DEF_ID3 = testTermDef3.id!!
 
 
         createTestTermVersionEntity(testTermDef1)
         createTestTermVersionEntity(testTermDef2)
-    }
-
-    private fun createTestTermVersionEntity(testTermDef: TermsDefinitionJpaEntity) {
-        termsVersionRepository.save(
-            TermsVersionJpaEntity(
-                version = "1.0",
-                content = "내용",
-                isActive = true,
-                effectiveDate = LocalDateTime.now().plusDays(1),
-                testTermDef
-            )
-        )
+        createTestTermVersionEntity(testTermDef3)
     }
 
     @Test
@@ -112,6 +111,16 @@ class UserAgreementControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = TEST_USER)
+    @DisplayName("단일 약관 동의 잘 처리한다")
+    fun consentSingle_success() {
+        mockMvc.perform(
+            post("$BASE_URL/consent/{termDefinitionId}", TEST_DEF_ID3)
+        )
+            .andExpect(status().isOk)
+    }
+
+    @Test
+    @WithMockUser(username = TEST_USER)
     @DisplayName("단일 약관 동의 시 존재하지 않는 ID 전달하면 400 에러가 발생한다")
     fun consentSingle_fail_validation() {
         val invalidId = 99999L
@@ -120,5 +129,17 @@ class UserAgreementControllerIntegrationTest {
             post("$BASE_URL/consent/{termDefinitionId}", invalidId)
         )
             .andExpect(status().isNotFound)
+    }
+
+    private fun createTestTermVersionEntity(testTermDef: TermsDefinitionJpaEntity) {
+        termsVersionRepository.save(
+            TermsVersionJpaEntity(
+                version = "1.0",
+                content = "내용",
+                isActive = true,
+                effectiveDate = LocalDateTime.now().plusDays(1),
+                testTermDef
+            )
+        )
     }
 }
