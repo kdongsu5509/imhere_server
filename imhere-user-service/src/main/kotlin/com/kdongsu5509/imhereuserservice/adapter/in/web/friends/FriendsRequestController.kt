@@ -4,6 +4,7 @@ import com.kdongsu5509.imhereuserservice.adapter.`in`.web.common.APIResponse
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto.CreateFriendRequest
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto.CreateFriendRequestResponse
 import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.CreateFriendRequestUseCase
+import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.ReadFriendRequestUseCase
 import jakarta.validation.constraints.NotBlank
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/user/friends/request")
 class FriendsRequestController(
-    private val createFriendRequestUseCase: CreateFriendRequestUseCase
+    private val createFriendRequestUseCase: CreateFriendRequestUseCase,
+    private val readFriendRequestUseCase: ReadFriendRequestUseCase
 ) {
     /**
      * 요청 생성
@@ -35,12 +37,14 @@ class FriendsRequestController(
         )
     }
 
-    @PostMapping("/accept/{id}")
-    fun acceptToRequest(
-        @PathVariable @NotBlank(message = "요청 id 는 필수입니다")
-        id: String
+    /**
+     * 요청 조회
+     */
+    @GetMapping
+    fun getReceivedRequest(
+        @AuthenticationPrincipal user: UserDetails,
     ) {
-        //TODO
+        readFriendRequestUseCase.queryReceived(user.username)
     }
 
     @PostMapping("/reject/{id}")

@@ -3,6 +3,7 @@ package com.kdongsu5509.imhereuserservice.adapter.`in`.web.user
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.common.APIResponse
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.NicknameChangeRequest
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.UserInfoResponse
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.UserSearchResponse
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.ReadUserUseCase
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.UpdateUserUseCase
 import jakarta.validation.constraints.NotBlank
@@ -61,13 +62,13 @@ class UserController(
     fun searchUsers(
         @PathVariable @NotBlank(message = "이메일 혹은 사용자 닉네임을 입력하여야 합니다")
         keyword: String
-    ): APIResponse<List<UserInfoResponse>> {
+    ): APIResponse<List<UserSearchResponse>> {
         val findingUsers = readUserUseCase.searchUser(keyword)
 
-        val responseValue: List<UserInfoResponse> = findingUsers.map { user ->
-            UserInfoResponse(user.email, user.nickname)
-        }
-
-        return APIResponse.success(responseValue)
+        return APIResponse.success(
+            findingUsers.map { user ->
+                UserSearchResponse(user.id, user.email, user.nickname)
+            }
+        )
     }
 }

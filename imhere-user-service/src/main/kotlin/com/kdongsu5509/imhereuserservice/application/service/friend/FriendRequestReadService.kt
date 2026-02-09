@@ -9,11 +9,8 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 @Transactional(readOnly = true)
 class FriendRequestReadService(private val friendRequestLoadPort: FriendRequestLoadPort) : ReadFriendRequestUseCase {
-    override fun queryMySent(email: String): List<Friend> {
-        TODO("Not yet implemented")
-    }
-
     override fun queryReceived(email: String): List<Friend> {
-        TODO("Not yet implemented")
+        friendRequestLoadPort.findReceived(email)
+        return listOf()
     }
 }

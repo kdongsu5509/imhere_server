@@ -12,12 +12,12 @@ class ReadUserService(private val userLoadPort: UserLoadPort) : ReadUserUseCase 
     override fun searchUser(keyword: String): List<UserInformation> {
         return userLoadPort.findByEmailAndNickname(keyword)
             .map { user ->
-                UserInformation(user.email, user.nickname)
+                UserInformation.convertToUserInformation(user)
             }
     }
 
     override fun searchMe(email: String): UserInformation {
         val me = userLoadPort.findActiveUserByEmailOrNull(email)
-        return UserInformation(me!!.email, me.nickname)
+        return UserInformation.convertToUserInformation(me!!)
     }
 }
