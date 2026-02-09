@@ -15,6 +15,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import java.util.*
 
 @ExtendWith(MockitoExtension::class)
 class ReadUserServiceTest {
@@ -31,7 +32,7 @@ class ReadUserServiceTest {
         val testOauthProvider = OAuth2Provider.KAKAO
         val testUserStatus = UserStatus.ACTIVE
         val testRole = UserRole.NORMAL
-        val testUser = User(TEST_EMAIL, TEST_NICKNAME, testOauthProvider, testRole, testUserStatus)
+        val testUser = User(UUID.randomUUID(), TEST_EMAIL, TEST_NICKNAME, testOauthProvider, testRole, testUserStatus)
     }
 
     @Test
