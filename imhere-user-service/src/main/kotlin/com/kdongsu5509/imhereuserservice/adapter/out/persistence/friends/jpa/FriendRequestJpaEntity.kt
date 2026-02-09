@@ -24,5 +24,5 @@ class FriendRequestJpaEntity(
     @Id
     @UuidGenerator
     @Column(columnDefinition = "BINARY(16)")
-    val id: UUID? = null
+    var id: UUID? = null
 }
