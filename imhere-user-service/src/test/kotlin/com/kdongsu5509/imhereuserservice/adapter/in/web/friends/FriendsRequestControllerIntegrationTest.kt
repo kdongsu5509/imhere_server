@@ -3,10 +3,12 @@ package com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.SpringDataFriendRequestRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
 import com.kdongsu5509.imhereuserservice.domain.user.UserStatus
+import com.kdongsu5509.imhereuserservice.support.config.QueryDslConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
@@ -26,15 +29,23 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class FriendsRequestIntegrationTest @Autowired constructor(
-    private val mockMvc: MockMvc,
-    private val objectMapper: ObjectMapper,
-    private val userRepository: SpringDataUserRepository,
-    private val friendRequestRepository: SpringDataFriendRequestRepository
-) {
+@Import(SpringQueryDSLUserRepository::class, QueryDslConfig::class)
+class FriendsRequestIntegrationTest {
 
     private lateinit var requester: UserJpaEntity
     private lateinit var receiver: UserJpaEntity
+
+    @Autowired
+    lateinit var mockMvc: MockMvc
+
+    @Autowired
+    lateinit var objectMapper: ObjectMapper
+
+    @Autowired
+    lateinit var userRepository: SpringDataUserRepository
+
+    @Autowired
+    lateinit var friendRequestRepository: SpringDataFriendRequestRepository
 
     @BeforeEach
     fun setUp() {
@@ -58,7 +69,7 @@ class FriendsRequestIntegrationTest @Autowired constructor(
 
         // when
         val resultActions = mockMvc.perform(
-            post("/api/v1/user/friends/requests")
+            post("/api/v1/user/friends/request")
                 .with(user(requester.email))
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
