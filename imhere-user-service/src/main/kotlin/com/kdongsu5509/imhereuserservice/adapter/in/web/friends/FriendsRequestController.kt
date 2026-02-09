@@ -11,11 +11,14 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/v1/user/friends")
+@RequestMapping("/api/v1/user/friends/request")
 class FriendsRequestController(
     private val createFriendRequestUseCase: CreateFriendRequestUseCase
 ) {
-    @PostMapping("/requests")
+    /**
+     * 요청 생성
+     */
+    @PostMapping
     fun requestFriendship(
         @AuthenticationPrincipal user: UserDetails,
         @Validated @RequestBody createFriendRequest: CreateFriendRequest
