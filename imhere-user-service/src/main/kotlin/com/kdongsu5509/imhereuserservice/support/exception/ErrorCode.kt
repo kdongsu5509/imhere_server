@@ -89,6 +89,12 @@ enum class ErrorCode(
         "사용자가 PENDING 상태입니다."
     ),
 
+    USER_ID_NULL(
+        HttpStatus.BAD_REQUEST,
+        "USER_003",
+        "사용자의 ID가 없습니다."
+    ),
+
     /**
      * TERM ERROR : 약관 관련 오류
      */

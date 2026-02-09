@@ -29,7 +29,7 @@ class UserController(
 
         return APIResponse.success(
             UserSearchResponse(
-                myInfo.email, myInfo.nickname
+                myInfo.id, myInfo.email, myInfo.nickname
             )
         )
     }
@@ -49,7 +49,7 @@ class UserController(
 
         return APIResponse.success(
             UserSearchResponse(
-                updatedMyInfo.email, updatedMyInfo.nickname
+                updatedMyInfo.id, updatedMyInfo.email, updatedMyInfo.nickname
             )
         )
     }
@@ -65,7 +65,7 @@ class UserController(
         val findingUsers = readUserUseCase.searchUser(keyword)
 
         val responseValue: List<UserSearchResponse> = findingUsers.map { user ->
-            UserSearchResponse(user.email, user.nickname)
+            UserSearchResponse(user.id, user.email, user.nickname)
         }
 
         return APIResponse.success(responseValue)
