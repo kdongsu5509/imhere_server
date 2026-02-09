@@ -6,8 +6,8 @@ import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import java.time.LocalDateTime
 import java.util.*
 
-class FriendRequest(
-    val id: UUID? = null,
+data class FriendRequest(
+    val friendRequestId: UUID? = null,
     val requester: FriendRequestUserInfo,
     val receiver: FriendRequestUserInfo,
     val message: String?,
