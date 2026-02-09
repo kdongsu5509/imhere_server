@@ -111,6 +111,22 @@ enum class ErrorCode(
     ),
 
     /**
+     * FRIEND ERROR : 친구 요청 관련 오류
+     */
+    SELF_FRIENDSHIP(
+        HttpStatus.BAD_REQUEST,
+        "FRIEND_REQUEST_001",
+        "자기 자신에게 친구 요청을 보낼 수 없습니다."
+    ),
+
+    FRIENDSHIP_REQUEST_MESSAGE_OVER(
+        HttpStatus.BAD_REQUEST,
+        "FRIEND_REQUEST_002",
+        "친구 요청 메시지의 길이는 최대 255자까지 가능합니다."
+    ),
+
+
+    /**
      * FCM ERRORS : FCM 토큰 관련 오류
      */
     FCM_TOKEN_NOT_FOUND(
