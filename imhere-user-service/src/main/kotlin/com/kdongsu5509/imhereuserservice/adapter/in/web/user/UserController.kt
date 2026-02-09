@@ -1,8 +1,8 @@
 package com.kdongsu5509.imhereuserservice.adapter.`in`.web.user
 
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.common.APIResponse
-import com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto.UserSearchResponse
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.NicknameChangeRequest
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.UserSearchResponse
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.ReadUserUseCase
 import com.kdongsu5509.imhereuserservice.application.port.`in`.user.UpdateUserUseCase
 import jakarta.validation.constraints.NotBlank

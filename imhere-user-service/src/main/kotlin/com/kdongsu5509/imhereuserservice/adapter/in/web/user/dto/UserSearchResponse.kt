@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto
+package com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto
 
 data class UserSearchResponse(
     val userEmail: String,
