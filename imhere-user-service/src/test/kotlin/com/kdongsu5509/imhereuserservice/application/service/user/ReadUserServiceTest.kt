@@ -1,19 +1,19 @@
-package com.kdongsu5509.imhereuserservice.application.service.friend
+package com.kdongsu5509.imhereuserservice.application.service.user
 
 import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
 import com.kdongsu5509.imhereuserservice.application.port.out.user.UserLoadPort
+import com.kdongsu5509.imhereuserservice.application.service.friend.ReadUserService
 import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.User
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
 import com.kdongsu5509.imhereuserservice.domain.user.UserStatus
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 import java.util.*
 
@@ -39,12 +39,12 @@ class ReadUserServiceTest {
     @DisplayName("찾은 사용자가 1명 이상이면 User 리스트로 잘 반환해서 나간다")
     fun searchUser_overThanOne() {
         //given
-        `when`(userLoadPort.findByEmailAndNickname(TEST_KEYWORD)).thenReturn(
+        Mockito.`when`(userLoadPort.findByEmailAndNickname(TEST_KEYWORD)).thenReturn(
             listOf(testUser)
         )
 
         //when, then
-        assertDoesNotThrow {
+        Assertions.assertDoesNotThrow {
             userSearchService.searchUser(TEST_KEYWORD)
         }
     }
@@ -54,7 +54,7 @@ class ReadUserServiceTest {
     fun searchUser_zero() {
         // given
         val testKeyword = "존재하지않음"
-        `when`(userLoadPort.findByEmailAndNickname(testKeyword)).thenReturn(
+        Mockito.`when`(userLoadPort.findByEmailAndNickname(testKeyword)).thenReturn(
             listOf()
         )
 
@@ -62,25 +62,25 @@ class ReadUserServiceTest {
         val result = userSearchService.searchUser(testKeyword)
 
         // then
-        Assertions.assertThat(result).isNotNull
-        Assertions.assertThat(result).isEmpty()
-        Assertions.assertThat(result).isInstanceOf(List::class.java)
+        org.assertj.core.api.Assertions.assertThat(result).isNotNull
+        org.assertj.core.api.Assertions.assertThat(result).isEmpty()
+        org.assertj.core.api.Assertions.assertThat(result).isInstanceOf(List::class.java)
     }
 
     @Test
     @DisplayName("사용자의 정보를 잘 찾아오면 변환해서 잘 나간다.")
     fun searchMe() {
         //given
-        `when`(userLoadPort.findActiveUserByEmailOrNull(TEST_KEYWORD)).thenReturn(
+        Mockito.`when`(userLoadPort.findActiveUserByEmailOrNull(TEST_KEYWORD)).thenReturn(
             testUser
         )
 
         //when, then
         var result: UserInformation? = null
-        assertDoesNotThrow {
+        Assertions.assertDoesNotThrow {
             result = userSearchService.searchMe(TEST_KEYWORD)
         }
-        Assertions.assertThat(result).isNotNull
-        Assertions.assertThat(result).isInstanceOf(UserInformation::class.java)
+        org.assertj.core.api.Assertions.assertThat(result).isNotNull
+        org.assertj.core.api.Assertions.assertThat(result).isInstanceOf(UserInformation::class.java)
     }
 }
