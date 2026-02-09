@@ -1,22 +1,26 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.mapper
 
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.FriendshipJpaEntity
-import com.kdongsu5509.imhereuserservice.domain.friend.Friend
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.FriendRequestJpaEntity
+import com.kdongsu5509.imhereuserservice.domain.friend.FriendRequest
+import com.kdongsu5509.imhereuserservice.domain.friend.FriendRequestUserInfo
 import org.springframework.stereotype.Component
 
 @Component
 class FriendRequestMapper {
 
-    fun mapToDomainEntity(entity: FriendshipJpaEntity, currentUserEmail: String): Friend {
-        val isRequester = entity.requester!!.email == currentUserEmail
-        val opponent = if (isRequester) entity.receiver!! else entity.requester!!
+    fun mapToDomainEntity(entity: FriendRequestJpaEntity): FriendRequest {
+        val requester = entity.requester
+        val receiver = entity.receiver
 
-        return Friend(
-            friendshipId = entity.id!!,
-            opponentId = opponent.id!!,
-            opponentEmail = opponent.email,
-            opponentNickname = opponent.nickname,
-            status = entity.friendshipStatus!!
+        val requestUserInfo = FriendRequestUserInfo(requester.id!!, requester.email, requester.nickname)
+        val receiverUserInfo = FriendRequestUserInfo(receiver.id!!, receiver.email, receiver.nickname)
+
+        return FriendRequest(
+            entity.id,
+            requestUserInfo,
+            receiverUserInfo,
+            entity.message,
+            entity.createdAt
         )
     }
 }
