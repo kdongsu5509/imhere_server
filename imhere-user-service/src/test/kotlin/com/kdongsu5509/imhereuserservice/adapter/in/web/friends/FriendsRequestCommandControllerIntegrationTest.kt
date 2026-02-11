@@ -30,9 +30,10 @@ import org.springframework.transaction.annotation.Transactional
 @AutoConfigureMockMvc
 @Transactional
 @Import(SpringQueryDSLUserRepository::class, QueryDslConfig::class)
-class FriendsRequestIntegrationTest {
+class FriendsRequestCommandControllerIntegrationTest {
 
-    private lateinit var requester: UserJpaEntity
+    private lateinit var requester1: UserJpaEntity
+    private lateinit var requester2: UserJpaEntity
     private lateinit var receiver: UserJpaEntity
 
     @Autowired
@@ -49,9 +50,13 @@ class FriendsRequestIntegrationTest {
 
     @BeforeEach
     fun setUp() {
-        requester = userRepository.save(
-            UserJpaEntity("requester@kakao.com", "요청자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
+        requester1 = userRepository.save(
+            UserJpaEntity("requester1@kakao.com", "요청자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
         )
+        requester2 = userRepository.save(
+            UserJpaEntity("requester2@kakao.com", "요청자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
+        )
+
         receiver = userRepository.save(
             UserJpaEntity("receiver@kakao.com", "수신자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
         )
@@ -70,7 +75,7 @@ class FriendsRequestIntegrationTest {
         // when
         val resultActions = mockMvc.perform(
             post("/api/v1/user/friends/request")
-                .with(user(requester.email))
+                .with(user(requester1.email))
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto))
@@ -86,7 +91,7 @@ class FriendsRequestIntegrationTest {
         assertThat(savedRequests).hasSize(1)
 
         val savedRequest = savedRequests[0]
-        assertThat(savedRequest.requester.id).isEqualTo(requester.id)
+        assertThat(savedRequest.requester.id).isEqualTo(requester1.id)
         assertThat(savedRequest.receiver.id).isEqualTo(receiver.id)
         assertThat(savedRequest.message).isEqualTo(message)
     }

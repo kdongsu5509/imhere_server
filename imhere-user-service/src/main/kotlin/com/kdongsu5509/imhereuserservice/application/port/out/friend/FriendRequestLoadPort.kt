@@ -1,7 +1,9 @@
 package com.kdongsu5509.imhereuserservice.application.port.out.friend
 
 import com.kdongsu5509.imhereuserservice.domain.friend.FriendRequest
+import java.util.*
 
 interface FriendRequestLoadPort {
-    fun findReceived(email: String): List<FriendRequest>
+    fun findReceivedAll(email: String): List<FriendRequest>
+    fun findReceived(requestId: UUID): FriendRequest
 }

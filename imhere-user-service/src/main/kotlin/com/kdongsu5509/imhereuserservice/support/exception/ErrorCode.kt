@@ -131,6 +131,12 @@ enum class ErrorCode(
         "친구 요청 메시지의 길이는 최대 255자까지 가능합니다."
     ),
 
+    FRIENDSHIP_REQUEST_NOT_FOUND(
+        HttpStatus.BAD_REQUEST,
+        "FRIEND_REQUEST_003",
+        "해당 친구 요청은 존재하지 않습니다."
+    ),
+
 
     /**
      * FCM ERRORS : FCM 토큰 관련 오류

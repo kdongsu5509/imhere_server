@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/user/friends/request")
-class FriendsRequestController(
+class FriendsRequestCommandController(
     private val createFriendRequestUseCase: CreateFriendRequestUseCase,
     private val readFriendRequestUseCase: ReadFriendRequestUseCase
 ) {
@@ -35,16 +35,6 @@ class FriendsRequestController(
         return APIResponse.success(
             CreateFriendRequestResponse(result.friendRequestId!!)
         )
-    }
-
-    /**
-     * 요청 조회
-     */
-    @GetMapping
-    fun getReceivedRequest(
-        @AuthenticationPrincipal user: UserDetails,
-    ) {
-        readFriendRequestUseCase.queryReceived(user.username)
     }
 
     @PostMapping("/reject/{id}")

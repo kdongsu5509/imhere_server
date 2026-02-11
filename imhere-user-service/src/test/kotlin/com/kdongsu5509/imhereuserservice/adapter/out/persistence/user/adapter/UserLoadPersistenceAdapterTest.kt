@@ -1,5 +1,6 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.adapter
 
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.mapper.UserMapper
@@ -24,6 +25,9 @@ import kotlin.test.Test
 class UserLoadPersistenceAdapterTest {
     @Mock
     lateinit var userMapper: UserMapper
+
+    @Mock
+    lateinit var springDataUserRepository: SpringDataUserRepository
 
     @Mock
     lateinit var springQueryDSLUserRepository: SpringQueryDSLUserRepository
