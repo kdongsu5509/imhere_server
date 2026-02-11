@@ -1,11 +1,9 @@
 package com.kdongsu5509.imhereuserservice.application.port.`in`.friend
 
-import com.kdongsu5509.imhereuserservice.domain.friend.Friend
+import com.kdongsu5509.imhereuserservice.domain.friend.FriendRequest
+import java.util.*
 
 interface ReadFriendRequestUseCase {
-    //내가 보낸 것
-    fun queryMySent(email: String): List<Friend>
-
-    //남이 나에게 보낸 것
-    fun queryReceived(email: String): List<Friend>
+    fun getReceivedAll(email: String): List<FriendRequest>
+    fun getReceivedDetail(requestId: UUID): FriendRequest
 }

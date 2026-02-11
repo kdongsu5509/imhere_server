@@ -29,6 +29,16 @@ class SpringQueryDSLUserRepository(private val queryFactory: JPAQueryFactory) {
         return Optional.ofNullable(result)
     }
 
+    fun findActiveUserByID(id: UUID): Optional<UserJpaEntity> {
+        val result = queryFactory.selectFrom(user)
+            .where(
+                isIdMatching(id), isActive()
+            )
+            .fetchOne()
+
+        return Optional.ofNullable(result)
+    }
+
     fun findActiveUserByKeyword(keyword: String): List<UserJpaEntity> {
         if (keyword.isBlank()) return emptyList()
 
@@ -40,6 +50,8 @@ class SpringQueryDSLUserRepository(private val queryFactory: JPAQueryFactory) {
             )
             .fetch()
     }
+
+    private fun isIdMatching(id: UUID): BooleanExpression = user.id.eq(id)
 
     private fun isEmailMatching(keyword: String): BooleanExpression = user.email.eq(keyword)
 

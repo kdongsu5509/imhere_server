@@ -3,8 +3,7 @@ package com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.adapte
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.FriendRequestJpaEntity
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.SpringDataFriendRequestRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.mapper.FriendRequestMapper
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import com.kdongsu5509.imhereuserservice.application.port.out.friend.FriendRequestSavePort
 import com.kdongsu5509.imhereuserservice.domain.friend.FriendRequest
 import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
@@ -14,14 +13,17 @@ import java.util.*
 
 @Component
 class FriendRequestSavePersistenceAdapter(
-    private val springDataUserRepository: SpringDataUserRepository,
     private val friendRequestMapper: FriendRequestMapper,
+    private val userRepository: SpringQueryDSLUserRepository,
     private val springDataFriendRequestRepository: SpringDataFriendRequestRepository,
 ) : FriendRequestSavePort {
     override fun createFriendshipRequest(myEmail: String, receiverId: UUID, message: String): FriendRequest {
-        val meEntity = springDataUserRepository.findByEmail(myEmail)
-            ?: let { throw BusinessException(ErrorCode.USER_NOT_FOUND) }
-        val receiver = findNotNullUserById(receiverId)
+        val meEntity = userRepository.findActiveUserByEmail(myEmail).orElseThrow {
+            BusinessException(ErrorCode.USER_NOT_FOUND)
+        }
+        val receiver = userRepository.findActiveUserByID(receiverId).orElseThrow {
+            BusinessException(ErrorCode.USER_NOT_FOUND)
+        }
 
         val newFriendRequest = FriendRequestJpaEntity(
             requester = meEntity,
@@ -31,13 +33,5 @@ class FriendRequestSavePersistenceAdapter(
 
         val commandResult = springDataFriendRequestRepository.save(newFriendRequest)
         return friendRequestMapper.mapToDomainEntity(commandResult)
-    }
-
-    private fun findNotNullUserById(receiverId: UUID): UserJpaEntity {
-        val receiver = springDataUserRepository.findById(receiverId)
-        if (receiver.isEmpty) {
-            throw BusinessException(ErrorCode.USER_NOT_FOUND)
-        }
-        return receiver.get()
     }
 }

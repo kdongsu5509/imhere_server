@@ -7,5 +7,4 @@ import java.util.*
 @Repository
 interface SpringDataUserRepository : JpaRepository<UserJpaEntity, UUID> {
     fun findByEmail(email: String): UserJpaEntity?
-    fun email(email: String): MutableList<UserJpaEntity>
 }

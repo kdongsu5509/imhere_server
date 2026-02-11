@@ -3,10 +3,12 @@ package com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.SpringDataFriendRequestRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
 import com.kdongsu5509.imhereuserservice.domain.user.UserStatus
+import com.kdongsu5509.imhereuserservice.support.config.QueryDslConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
@@ -26,21 +29,34 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class FriendsRequestIntegrationTest @Autowired constructor(
-    private val mockMvc: MockMvc,
-    private val objectMapper: ObjectMapper,
-    private val userRepository: SpringDataUserRepository,
-    private val friendRequestRepository: SpringDataFriendRequestRepository
-) {
+@Import(SpringQueryDSLUserRepository::class, QueryDslConfig::class)
+class FriendsRequestCommandControllerIntegrationTest {
 
-    private lateinit var requester: UserJpaEntity
+    private lateinit var requester1: UserJpaEntity
+    private lateinit var requester2: UserJpaEntity
     private lateinit var receiver: UserJpaEntity
+
+    @Autowired
+    lateinit var mockMvc: MockMvc
+
+    @Autowired
+    lateinit var objectMapper: ObjectMapper
+
+    @Autowired
+    lateinit var userRepository: SpringDataUserRepository
+
+    @Autowired
+    lateinit var friendRequestRepository: SpringDataFriendRequestRepository
 
     @BeforeEach
     fun setUp() {
-        requester = userRepository.save(
-            UserJpaEntity("requester@kakao.com", "요청자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
+        requester1 = userRepository.save(
+            UserJpaEntity("requester1@kakao.com", "요청자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
         )
+        requester2 = userRepository.save(
+            UserJpaEntity("requester2@kakao.com", "요청자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
+        )
+
         receiver = userRepository.save(
             UserJpaEntity("receiver@kakao.com", "수신자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
         )
@@ -58,8 +74,8 @@ class FriendsRequestIntegrationTest @Autowired constructor(
 
         // when
         val resultActions = mockMvc.perform(
-            post("/api/v1/user/friends/requests")
-                .with(user(requester.email))
+            post("/api/v1/user/friends/request")
+                .with(user(requester1.email))
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto))
@@ -75,7 +91,7 @@ class FriendsRequestIntegrationTest @Autowired constructor(
         assertThat(savedRequests).hasSize(1)
 
         val savedRequest = savedRequests[0]
-        assertThat(savedRequest.requester.id).isEqualTo(requester.id)
+        assertThat(savedRequest.requester.id).isEqualTo(requester1.id)
         assertThat(savedRequest.receiver.id).isEqualTo(receiver.id)
         assertThat(savedRequest.message).isEqualTo(message)
     }

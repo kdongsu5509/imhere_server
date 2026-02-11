@@ -3,10 +3,12 @@ package com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.adapte
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.SpringDataFriendRequestRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.mapper.FriendRequestMapper
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
 import com.kdongsu5509.imhereuserservice.domain.user.UserStatus
+import com.kdongsu5509.imhereuserservice.support.config.QueryDslConfig
 import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
 import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import org.assertj.core.api.Assertions
@@ -20,7 +22,12 @@ import org.springframework.context.annotation.Import
 import java.util.*
 
 @DataJpaTest
-@Import(FriendRequestSavePersistenceAdapter::class, FriendRequestMapper::class)
+@Import(
+    FriendRequestSavePersistenceAdapter::class,
+    FriendRequestMapper::class,
+    SpringQueryDSLUserRepository::class,
+    QueryDslConfig::class
+)
 class FriendRequestSavePersistenceAdapterTest @Autowired constructor(
     private val adapter: FriendRequestSavePersistenceAdapter,
     private val springDataUserRepository: SpringDataUserRepository,

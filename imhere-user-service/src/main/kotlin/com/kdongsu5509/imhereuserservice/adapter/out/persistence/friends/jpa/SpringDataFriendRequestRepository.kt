@@ -6,4 +6,5 @@ import java.util.*
 
 @Repository
 interface SpringDataFriendRequestRepository : JpaRepository<FriendRequestJpaEntity, UUID> {
+    fun findByReceiverEmail(receiverEmail: String): List<FriendRequestJpaEntity>
 }

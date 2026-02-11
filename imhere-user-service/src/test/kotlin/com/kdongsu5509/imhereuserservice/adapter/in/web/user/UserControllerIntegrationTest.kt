@@ -60,6 +60,7 @@ class UserControllerIntegrationTest {
         // when & then
         mockMvc.perform(get("$BASE_URL/${user.nickname}"))
             .andExpect(status().isOk)
+            .andExpect(jsonPath("$.data[0].userId").value(user.id.toString()))
             .andExpect(jsonPath("$.data[0].userEmail").value(user.email))
             .andExpect(jsonPath("$.data[0].userNickname").value(DS_KO))
     }
@@ -108,7 +109,6 @@ class UserControllerIntegrationTest {
                 .content(objectMapper.writeValueAsString(request))
         )
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.data.userId").value(saveEntity.id.toString()))
             .andExpect(jsonPath("$.data.userEmail").value(TEST_EMAIL))
             .andExpect(jsonPath("$.data.userNickname").value(newNickname))
     }
