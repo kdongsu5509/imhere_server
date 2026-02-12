@@ -49,12 +49,12 @@ class FriendRequestSavePersistenceAdapterTest @Autowired constructor(
 
     @Test
     @DisplayName("친구 요청을 DB에 잘 저장하고 도메인 엔티티를 반환한다")
-    fun createFriendshipRequest_success() {
+    fun save_success() {
         // given
         val message = "친하게 지내요!"
 
         // when
-        val result = adapter.createFriendshipRequest(requester.email, receiver.id!!, message)
+        val result = adapter.save(requester.email, receiver.id!!, message)
 
         // then
         assertThat(result).isNotNull
@@ -69,13 +69,13 @@ class FriendRequestSavePersistenceAdapterTest @Autowired constructor(
 
     @Test
     @DisplayName("잘못된 수신자 ID(없는 존재)는 오류 발생")
-    fun createFriendshipRequest_receiver_not_exist() {
+    fun save_receiver_not_exist() {
         // given
         val message = "친하게 지내요!"
 
         // when, then
         Assertions.assertThatThrownBy {
-            adapter.createFriendshipRequest(requester.email, UUID.randomUUID(), message)
+            adapter.save(requester.email, UUID.randomUUID(), message)
         }.isInstanceOf(BusinessException::class.java)
             .hasMessage(ErrorCode.USER_NOT_FOUND.message)
     }

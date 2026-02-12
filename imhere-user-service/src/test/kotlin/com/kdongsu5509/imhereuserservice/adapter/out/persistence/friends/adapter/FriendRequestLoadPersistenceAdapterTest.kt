@@ -63,9 +63,9 @@ class FriendRequestLoadPersistenceAdapterTest @Autowired constructor(
         // given
         val message = "친하게 지내요!"
 
-        saveAdapter.createFriendshipRequest(requester1.email, receiver.id!!, message)
-        saveAdapter.createFriendshipRequest(requester2.email, receiver.id!!, message)
-        saveAdapter.createFriendshipRequest(requester3.email, receiver.id!!, message)
+        saveAdapter.save(requester1.email, receiver.id!!, message)
+        saveAdapter.save(requester2.email, receiver.id!!, message)
+        saveAdapter.save(requester3.email, receiver.id!!, message)
 
         // when
         val result = loadAdapter.findReceivedRequestsAllByEmail(receiver.email)
@@ -98,7 +98,7 @@ class FriendRequestLoadPersistenceAdapterTest @Autowired constructor(
         // given
         val message = "친하게 지내요!"
 
-        val savedFriendRequest = saveAdapter.createFriendshipRequest(requester1.email, receiver.id!!, message)
+        val savedFriendRequest = saveAdapter.save(requester1.email, receiver.id!!, message)
 
         // when
         val result = loadAdapter.findReceivedRequestByRequestId(savedFriendRequest.friendRequestId!!)
