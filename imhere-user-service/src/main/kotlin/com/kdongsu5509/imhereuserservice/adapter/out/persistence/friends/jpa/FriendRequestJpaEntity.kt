@@ -18,7 +18,6 @@ class FriendRequestJpaEntity(
     @Column(nullable = false)
     var message: String? = null
 ) : BaseTimeEntity() {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
