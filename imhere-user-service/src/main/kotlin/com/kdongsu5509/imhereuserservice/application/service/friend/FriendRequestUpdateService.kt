@@ -45,7 +45,6 @@ class FriendRequestUpdateService(
     ): FriendRestriction {
         val friendRequestQueryResult = verifyAcceptRequest(friendRequestId, userEmail)
 
-        //TODO: `friend_restrictions` 을 만들어서 저장할 것.
         val rejectionResult = friendRestrictionSavePort.save(
             requester = friendRequestQueryResult.requester,
             receiver = friendRequestQueryResult.receiver,
