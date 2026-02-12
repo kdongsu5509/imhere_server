@@ -60,6 +60,15 @@ class SpringQueryDSLUserRepository(private val queryFactory: JPAQueryFactory) {
             .fetch()
     }
 
+    fun findUsersByEmailAndId(email: String, id: UUID): List<UserJpaEntity> {
+        return queryFactory.selectFrom(user)
+            .where(
+                (user.email.eq(email).or(user.id.eq(id))),
+                isActive()
+            )
+            .fetch()
+    }
+
     private fun isIdMatching(id: UUID): BooleanExpression = user.id.eq(id)
 
     private fun isEmailMatching(keyword: String): BooleanExpression = user.email.eq(keyword)
