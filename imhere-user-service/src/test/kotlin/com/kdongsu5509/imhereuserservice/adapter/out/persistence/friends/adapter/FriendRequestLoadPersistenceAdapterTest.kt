@@ -60,7 +60,7 @@ class FriendRequestLoadPersistenceAdapterTest @Autowired constructor(
 
     @Test
     @DisplayName("특정 이메일에 온 친구 요청들을 잘 찾는다.")
-    fun findReceivedAll_success() {
+    fun findReceivedRequestByRequestIdRequestsAll_ByEmail_success() {
         // given
         val message = "친하게 지내요!"
 
@@ -69,7 +69,7 @@ class FriendRequestLoadPersistenceAdapterTest @Autowired constructor(
         saveAdapter.createFriendshipRequest(requester3.email, receiver.id!!, message)
 
         // when
-        val result = loadAdapter.findReceivedAll(receiver.email)
+        val result = loadAdapter.findReceivedRequestsAllByEmail(receiver.email)
 
         // then
         assertThat(result).isNotEmpty
@@ -84,9 +84,9 @@ class FriendRequestLoadPersistenceAdapterTest @Autowired constructor(
 
     @Test
     @DisplayName("특정 이메일에 온 친구 요청이 없으면 빈 리스트를 반환한다.")
-    fun findReceivedAll_success_empty() {
+    fun findReceivedRequestByRequestIdRequestsAll_ByEmail_success_empty() {
         // when
-        val result = loadAdapter.findReceivedAll("none@kakao.com")
+        val result = loadAdapter.findReceivedRequestsAllByEmail("none@kakao.com")
 
         // then
         assertThat(result).isEmpty()
@@ -95,14 +95,14 @@ class FriendRequestLoadPersistenceAdapterTest @Autowired constructor(
 
     @Test
     @DisplayName("특정 친구 요청을 잘 찾는다.")
-    fun findReceived_success() {
+    fun findReceived_RequestByRequestId_success() {
         // given
         val message = "친하게 지내요!"
 
         val savedFriendRequest = saveAdapter.createFriendshipRequest(requester1.email, receiver.id!!, message)
 
         // when
-        val result = loadAdapter.findReceived(savedFriendRequest.friendRequestId!!)
+        val result = loadAdapter.findReceivedRequestByRequestId(savedFriendRequest.friendRequestId!!)
 
         // then
         assertThat(result.requester.email).isEqualTo(requester1.email)
@@ -113,10 +113,10 @@ class FriendRequestLoadPersistenceAdapterTest @Autowired constructor(
 
     @Test
     @DisplayName("특정 친구 요청의 ID 가 없으면 오류가 발생한다")
-    fun findReceived_fail_id_not_exist() {
+    fun findReceived_RequestByRequestId_fail_id_not_exist() {
         // when, then
         Assertions.assertThatThrownBy {
-            loadAdapter.findReceived(UUID.randomUUID())
+            loadAdapter.findReceivedRequestByRequestId(UUID.randomUUID())
         }.isInstanceOf(BusinessException::class.java)
             .hasMessage(ErrorCode.FRIENDSHIP_REQUEST_NOT_FOUND.message)
     }

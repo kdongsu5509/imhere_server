@@ -14,7 +14,7 @@ class FriendRequestLoadPersistenceAdapter(
     private val friendRequestMapper: FriendRequestMapper,
     private val springDataFriendRequestRepository: SpringDataFriendRequestRepository,
 ) : FriendRequestLoadPort {
-    override fun findReceivedAll(email: String): List<FriendRequest> {
+    override fun findReceivedRequestsAllByEmail(email: String): List<FriendRequest> {
         val queryResults = springDataFriendRequestRepository.findByReceiverEmail(email)
 
         if (queryResults.isEmpty()) return listOf()
@@ -24,7 +24,7 @@ class FriendRequestLoadPersistenceAdapter(
         }
     }
 
-    override fun findReceived(requestId: UUID): FriendRequest {
+    override fun findReceivedRequestByRequestId(requestId: UUID): FriendRequest {
         val queryResult = springDataFriendRequestRepository.findById(requestId).orElseThrow {
             throw BusinessException(ErrorCode.FRIENDSHIP_REQUEST_NOT_FOUND)
         }

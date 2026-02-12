@@ -13,10 +13,10 @@ class FriendRequestReadService(
     private val friendRequestLoadPort: FriendRequestLoadPort
 ) : ReadFriendRequestUseCase {
     override fun getReceivedAll(email: String): List<FriendRequest> {
-        return friendRequestLoadPort.findReceivedAll(email)
+        return friendRequestLoadPort.findReceivedRequestsAllByEmail(email)
     }
 
     override fun getReceivedDetail(requestId: UUID): FriendRequest {
-        return friendRequestLoadPort.findReceived(requestId)
+        return friendRequestLoadPort.findReceivedRequestByRequestId(requestId)
     }
 }
