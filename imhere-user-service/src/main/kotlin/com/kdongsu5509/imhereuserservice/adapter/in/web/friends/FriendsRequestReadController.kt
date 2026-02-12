@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/user/friends/request")
@@ -39,7 +38,7 @@ class FriendsRequestReadController(
         @Validated
         @NotNull
         @PathVariable
-        requestId: UUID
+        requestId: Long
     ): APIResponse<ReceivedFriendRequestResponseDetail> {
         val result = readFriendRequestUseCase.getReceivedDetail(requestId)
         return APIResponse.success(

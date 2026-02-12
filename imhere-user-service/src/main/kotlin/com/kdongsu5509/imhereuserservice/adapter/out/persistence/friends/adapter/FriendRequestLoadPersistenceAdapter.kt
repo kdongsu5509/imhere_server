@@ -7,7 +7,6 @@ import com.kdongsu5509.imhereuserservice.domain.friend.FriendRequest
 import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
 import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class FriendRequestLoadPersistenceAdapter(
@@ -24,7 +23,7 @@ class FriendRequestLoadPersistenceAdapter(
         }
     }
 
-    override fun findReceivedRequestByRequestId(requestId: UUID): FriendRequest {
+    override fun findReceivedRequestByRequestId(requestId: Long): FriendRequest {
         val queryResult = springDataFriendRequestRepository.findById(requestId).orElseThrow {
             throw BusinessException(ErrorCode.FRIENDSHIP_REQUEST_NOT_FOUND)
         }

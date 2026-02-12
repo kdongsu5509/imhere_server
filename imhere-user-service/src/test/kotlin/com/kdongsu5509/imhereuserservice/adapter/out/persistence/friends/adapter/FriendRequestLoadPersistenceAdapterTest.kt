@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
-import java.util.*
 
 @DataJpaTest
 @Import(
@@ -116,7 +115,7 @@ class FriendRequestLoadPersistenceAdapterTest @Autowired constructor(
     fun findReceived_RequestByRequestId_fail_id_not_exist() {
         // when, then
         Assertions.assertThatThrownBy {
-            loadAdapter.findReceivedRequestByRequestId(UUID.randomUUID())
+            loadAdapter.findReceivedRequestByRequestId(1L)
         }.isInstanceOf(BusinessException::class.java)
             .hasMessage(ErrorCode.FRIENDSHIP_REQUEST_NOT_FOUND.message)
     }

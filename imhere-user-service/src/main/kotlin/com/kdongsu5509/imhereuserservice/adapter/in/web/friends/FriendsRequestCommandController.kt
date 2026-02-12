@@ -10,7 +10,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/user/friends/request")
@@ -38,12 +37,12 @@ class FriendsRequestCommandController(
         )
     }
 
-    @PostMapping("/accept/{requestId}}")
+    @PostMapping("/accept/{requestId}")
     fun acceptToFriendRequest(
         @Validated
         @NotNull(message = "requestId는 필수입니다")
         @PathVariable
-        requestId: UUID,
+        requestId: Long,
         @AuthenticationPrincipal user: UserDetails,
     ) {
         updateFriendRequestUseCase.acceptRequest(user.username, requestId)

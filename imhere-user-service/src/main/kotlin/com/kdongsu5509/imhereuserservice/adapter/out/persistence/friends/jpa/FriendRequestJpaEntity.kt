@@ -3,8 +3,6 @@ package com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.common.BaseTimeEntity
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
 import jakarta.persistence.*
-import org.hibernate.annotations.UuidGenerator
-import java.util.*
 
 @Entity
 @Table(name = "friend_request")
@@ -22,7 +20,6 @@ class FriendRequestJpaEntity(
 ) : BaseTimeEntity() {
 
     @Id
-    @UuidGenerator
-    @Column(columnDefinition = "BINARY(16)")
-    var id: UUID? = null
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
 }

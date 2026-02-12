@@ -5,7 +5,6 @@ import com.kdongsu5509.imhereuserservice.application.port.out.friend.FriendReque
 import com.kdongsu5509.imhereuserservice.domain.friend.FriendRequest
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 @Component
 @Transactional(readOnly = true)
@@ -16,7 +15,7 @@ class FriendRequestReadService(
         return friendRequestLoadPort.findReceivedRequestsAllByEmail(email)
     }
 
-    override fun getReceivedDetail(requestId: UUID): FriendRequest {
+    override fun getReceivedDetail(requestId: Long): FriendRequest {
         return friendRequestLoadPort.findReceivedRequestByRequestId(requestId)
     }
 }

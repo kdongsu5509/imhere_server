@@ -63,7 +63,7 @@ class FriendRequestReadServiceTest {
     @DisplayName("특정 친구 요청 조회 요청을 loadPort 로 잘 전달한다.")
     fun getReceived_success() {
         // given
-        val testFriendRequestId = UUID.randomUUID()
+        val testFriendRequestId = 100L
         given(friendRequestLoadPort.findReceivedRequestByRequestId(testFriendRequestId)).willReturn(
             FriendRequest(
                 testFriendRequestId,
@@ -85,7 +85,7 @@ class FriendRequestReadServiceTest {
     @DisplayName("특정 친구 요청 조회 요청 시 loadPort의 오류를 잘 전파한다.")
     fun getReceived_fail() {
         // given
-        val testFriendRequestId = UUID.randomUUID()
+        val testFriendRequestId = 999L
         given(friendRequestLoadPort.findReceivedRequestByRequestId(testFriendRequestId)).willThrow(
             BusinessException(ErrorCode.FRIENDSHIP_REQUEST_NOT_FOUND)
         )
