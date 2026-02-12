@@ -29,29 +29,19 @@ class SpringQueryDSLUserRepository(private val queryFactory: JPAQueryFactory) {
         return Optional.ofNullable(result)
     }
 
-    fun findActiveUserByID(id: UUID): Optional<UserJpaEntity> {
-        val result = queryFactory.selectFrom(user)
-            .where(
-                isIdMatching(id), isActive()
-            )
-            .fetchOne()
-
-        return Optional.ofNullable(result)
-    }
-
-    fun findActiveUserByKeyword(keyword: String): List<UserJpaEntity> {
+    fun findActiveUsersByEmailOrNickname(keyword: String): List<UserJpaEntity> {
         if (keyword.isBlank()) return emptyList()
 
         return queryFactory.selectFrom(user)
             .where(
-                isNameMatching(keyword)
+                isNicknameMatching(keyword)
                     .or(isEmailMatching(keyword)),
                 isActive()
             )
             .fetch()
     }
 
-    fun findUsersByEmails(email1: String, email2: String): List<UserJpaEntity> {
+    fun findActiveUsersByEmails(email1: String, email2: String): List<UserJpaEntity> {
         return queryFactory.selectFrom(user)
             .where(
                 user.email.`in`(email1, email2),
@@ -60,10 +50,10 @@ class SpringQueryDSLUserRepository(private val queryFactory: JPAQueryFactory) {
             .fetch()
     }
 
-    fun findUsersByEmailAndId(email: String, id: UUID): List<UserJpaEntity> {
+    fun findActiveUsersByEmailAndId(email: String, id: UUID): List<UserJpaEntity> {
         return queryFactory.selectFrom(user)
             .where(
-                (user.email.eq(email).or(user.id.eq(id))),
+                (isEmailMatching(email).or(isIdMatching(id))),
                 isActive()
             )
             .fetch()
@@ -73,7 +63,7 @@ class SpringQueryDSLUserRepository(private val queryFactory: JPAQueryFactory) {
 
     private fun isEmailMatching(keyword: String): BooleanExpression = user.email.eq(keyword)
 
-    private fun isNameMatching(keyword: String): BooleanExpression = user.nickname.eq(keyword)
+    private fun isNicknameMatching(keyword: String): BooleanExpression = user.nickname.eq(keyword)
 
     private fun isActive(): BooleanExpression = user.status.eq(UserStatus.ACTIVE)
 }

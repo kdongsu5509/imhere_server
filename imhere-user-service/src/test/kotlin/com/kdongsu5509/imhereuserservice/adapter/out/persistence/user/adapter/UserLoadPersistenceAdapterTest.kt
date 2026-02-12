@@ -117,7 +117,11 @@ class UserLoadPersistenceAdapterTest {
     @DisplayName("키워드(이메일 또는 닉네임)로 검색 시 해당 사용자 리스트를 반환한다")
     fun findUserByKeyword_success(testKeyword: String) {
         // given
-        `when`(springQueryDSLUserRepository.findActiveUserByKeyword(testKeyword)).thenReturn(listOf(testUserEntity))
+        `when`(springQueryDSLUserRepository.findActiveUsersByEmailOrNickname(testKeyword)).thenReturn(
+            listOf(
+                testUserEntity
+            )
+        )
         `when`(userMapper.mapToDomainEntity(testUserEntity)).thenReturn(testUser)
 
         // when
@@ -126,7 +130,7 @@ class UserLoadPersistenceAdapterTest {
         // then
         Assertions.assertThat(result).hasSize(1)
         Assertions.assertThat(result[0].email).isEqualTo(testEmail)
-        verify(springQueryDSLUserRepository).findActiveUserByKeyword(testKeyword)
+        verify(springQueryDSLUserRepository).findActiveUsersByEmailOrNickname(testKeyword)
     }
 
     @Test
@@ -134,7 +138,7 @@ class UserLoadPersistenceAdapterTest {
     fun findUserByKeyword_empty() {
         // given
         val keyword = "not_found"
-        `when`(springQueryDSLUserRepository.findActiveUserByKeyword(keyword)).thenReturn(emptyList())
+        `when`(springQueryDSLUserRepository.findActiveUsersByEmailOrNickname(keyword)).thenReturn(emptyList())
 
         // when
         val result = userLoadPersistenceAdapter.findByEmailAndNickname(keyword)

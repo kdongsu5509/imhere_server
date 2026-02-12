@@ -46,7 +46,7 @@ class FriendRestrictionSavePersistenceAdapter(
     }
 
     private fun fetchRequiredUsers(vararg emails: String): List<UserJpaEntity> {
-        val users = userRepository.findUsersByEmails(emails[0], emails[1])
+        val users = userRepository.findActiveUsersByEmails(emails[0], emails[1])
         if (users.size != emails.size) {
             throw BusinessException(ErrorCode.USER_NOT_FOUND)
         }
