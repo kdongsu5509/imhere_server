@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
+import java.util.*
 
 @DataJpaTest
 @Import(SpringQueryDSLUserRepositoryTest.TestConfig::class)
@@ -84,15 +85,15 @@ class SpringQueryDSLUserRepositoryTest @Autowired constructor(
      */
     @ParameterizedTest
     @DisplayName("키워드(닉네임/이메일)로 활성 사용자를 정확히 찾는다")
-    @ValueSource(strings = ["테스터1", "test2@kakao.com"]) // 상수 함수를 쓸 수 없어 문자열 직접 입력
-    fun findActiveUserByKeyword_success(testKeyword: String) {
-        val result = userRepository.findActiveUserByKeyword(testKeyword)
+    @ValueSource(strings = ["테스터1", "test2@kakao.com"])
+    fun findActiveUsersByEmailOrNickname_success(testKeyword: String) {
+        val result = userRepository.findActiveUsersByEmailOrNickname(testKeyword)
         Assertions.assertEquals(1, result.size)
     }
 
     @Test
     @DisplayName("중복된 닉네임이 있는 경우 모두 조회된다")
-    fun findActiveUserByKeyword_duplication() {
+    fun findActiveUsersByEmailOrNickname_duplication() {
         val dupNickname = "중복닉네임"
         saveAll(
             listOf(
@@ -101,30 +102,53 @@ class SpringQueryDSLUserRepositoryTest @Autowired constructor(
             )
         )
 
-        val result = userRepository.findActiveUserByKeyword(dupNickname)
+        val result = userRepository.findActiveUsersByEmailOrNickname(dupNickname)
         Assertions.assertEquals(2, result.size)
     }
 
     @Test
-    @DisplayName("키워드가 비어 있거나 일치하는게 없으면 빈 리스트가 반환된다")
-    fun findActiveUserByKeyword_empty_or_zero_match() {
-        Assertions.assertTrue(userRepository.findActiveUserByKeyword("").isEmpty())
-        Assertions.assertTrue(userRepository.findActiveUserByKeyword("존재하지않음").isEmpty())
+    @DisplayName("키워드(이메일/닉네임)가 비어 있거나 일치하는게 없으면 빈 리스트가 반환된다")
+    fun findActiveUsersByEmailOrNickname_empty_or_zero_match() {
+        Assertions.assertTrue(userRepository.findActiveUsersByEmailOrNickname("").isEmpty())
+        Assertions.assertTrue(userRepository.findActiveUsersByEmailOrNickname("존재하지않음").isEmpty())
     }
 
     /**
-     * findUsersByEmails: 다중 조회
+     * findUsersByEmails: 이메일 기반 다중 조회
      */
     @Test
     @DisplayName("활성 유저와 비활성 유저 혼합 조회 시 활성 유저만 결과에 포함된다")
-    fun findUsersByEmails_logic_check() {
+    fun findActiveUsersByEmails_logic_check() {
         val (activeIdx, pendingIdx) = 300 to 301
         saveAll(listOf(createTestUser(activeIdx, UserStatus.ACTIVE), createTestUser(pendingIdx, UserStatus.PENDING)))
 
-        val testResult = userRepository.findUsersByEmails(email(activeIdx), email(pendingIdx))
+        val testResult = userRepository.findActiveUsersByEmails(email(activeIdx), email(pendingIdx))
 
         Assertions.assertEquals(1, testResult.size)
         Assertions.assertEquals(email(activeIdx), testResult[0].email)
+    }
+
+    /**
+     * findUsersByEmailAndId : 이메일과 ID 를 바탕으로 혼합 조회
+     * 해당 테스트의 경우 ID 주입이 어려워 UUID.randomUUID() 을 통해 존재하지 않는 유저를 조회합니다.
+     */
+    @Test
+    @DisplayName("Email과 ID로도 타겟 User를 잘 조회한다 - 해당하는 경우에만.")
+    fun findActiveUsersByEmailAndId_logic_check() {
+        val (idx1, idx2) = 300 to 301
+        var userOfIdx2: UserJpaEntity?
+        saveAll(
+            listOf(
+                createTestUser(idx1, UserStatus.ACTIVE)
+            )
+        )
+
+        val testResult = userRepository.findActiveUsersByEmailAndId(
+            email(idx1), UUID.randomUUID()
+        )
+
+        Assertions.assertEquals(1, testResult.size)
+        Assertions.assertEquals(email(idx1), testResult[0].email)
     }
 
     private fun createTestUser(idx: Int, status: UserStatus, customNickname: String? = null) = UserJpaEntity(
