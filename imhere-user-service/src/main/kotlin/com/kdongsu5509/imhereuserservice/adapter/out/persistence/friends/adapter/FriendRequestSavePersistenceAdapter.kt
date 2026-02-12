@@ -4,8 +4,11 @@ import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.Fri
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.SpringDataFriendRequestRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.mapper.FriendRequestMapper
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.imhereuserservice.application.port.out.friend.FriendRequestSavePort
 import com.kdongsu5509.imhereuserservice.domain.friend.FriendRequest
+import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
+import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -16,7 +19,7 @@ class FriendRequestSavePersistenceAdapter(
     private val springDataFriendRequestRepository: SpringDataFriendRequestRepository,
 ) : FriendRequestSavePort {
     override fun save(requesterEmail: String, receiverId: UUID, message: String): FriendRequest {
-        val queryResult = userRepository.findActiveUsersByEmailAndId(requesterEmail, receiverId)
+        val queryResult = fetchRequiredUsers(requesterEmail, receiverId)
 
         val requester = queryResult.first { it.email == requesterEmail }
         val receiver = queryResult.first { it.id == receiverId }
@@ -29,5 +32,17 @@ class FriendRequestSavePersistenceAdapter(
 
         val commandResult = springDataFriendRequestRepository.save(newFriendRequest)
         return friendRequestMapper.mapToDomainEntity(commandResult)
+    }
+
+    private fun fetchRequiredUsers(
+        requesterEmail: String,
+        receiverId: UUID
+    ): List<UserJpaEntity> {
+        val queryResult = userRepository.findActiveUsersByEmailAndId(requesterEmail, receiverId)
+
+        if (queryResult.size != 2) {
+            throw BusinessException(ErrorCode.USER_NOT_FOUND)
+        }
+        return queryResult
     }
 }
