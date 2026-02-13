@@ -26,16 +26,12 @@ class FriendRequestUpdateService(
     override fun acceptFriendRequest(userEmail: String, friendRequestId: Long): FriendRelationship {
         val friendRequestQueryResult = verifyAcceptRequest(friendRequestId, userEmail)
 
-        //2-a. 요청 정보를 로드
-        //2-b. 요청을 바탕으로 `friend_relationships` 생성
         val acceptanceResult = friendRelationshipSavePort.save(
             requester = friendRequestQueryResult.requester,
             receiver = friendRequestQueryResult.receiver
         )
 
-        //3. 요청 삭제.
         friendRequestUpdatePort.delete(friendRequestQueryResult.friendRequestId!!)
-
         return acceptanceResult
     }
 
