@@ -67,7 +67,4 @@ class FriendsRequestCommandController(
             FriendRestrictionResponse.fromDomain(createdRestriction)
         )
     }
-
-    //TODO : [FEAT/ISSUE42] 친구 차단, 거절 리스트 -> 친구 검색 시 안보이도록.
-    //TODO : [FEAT/ISSUE42] 친구 요청 한 친구 -> 친구 검색 시 안보이도록.
 }

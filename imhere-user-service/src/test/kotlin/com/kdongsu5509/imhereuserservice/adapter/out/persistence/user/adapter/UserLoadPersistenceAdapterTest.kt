@@ -36,12 +36,13 @@ class UserLoadPersistenceAdapterTest {
     lateinit var userLoadPersistenceAdapter: UserLoadPersistenceAdapter
 
     companion object {
-        const val testEmail = "test@test.com"
-        const val testNickname = "고동수"
+        const val TEST_OWNER_EMAIL = "owner@owner.com"
+        const val TEST_EMAIL = "test@test.com"
+        const val TEST_NICKNAME = "테스터"
         val testUser = User(
             UUID.randomUUID(),
-            testEmail,
-            testNickname,
+            TEST_EMAIL,
+            TEST_NICKNAME,
             OAuth2Provider.KAKAO,
             UserRole.NORMAL,
             status = UserStatus.ACTIVE
@@ -59,16 +60,16 @@ class UserLoadPersistenceAdapterTest {
     @DisplayName("이메일로 사용자를 조회하면 성공적으로 도메인 모델을 반환한다")
     fun findUserByEmailOrNull_success() {
         // given
-        `when`(springQueryDSLUserRepository.findUserByEmail(testEmail)).thenReturn(Optional.of(testUserEntity))
+        `when`(springQueryDSLUserRepository.findUserByEmail(TEST_EMAIL)).thenReturn(Optional.of(testUserEntity))
         `when`(userMapper.mapToDomainEntity(testUserEntity)).thenReturn(testUser)
 
         // when
-        val result = userLoadPersistenceAdapter.findUserByEmailOrNull(testEmail)
+        val result = userLoadPersistenceAdapter.findUserByEmailOrNull(TEST_EMAIL)
 
         // then
         Assertions.assertThat(result).isNotNull
-        Assertions.assertThat(result?.email).isEqualTo(testEmail)
-        verify(springQueryDSLUserRepository).findUserByEmail(testEmail)
+        Assertions.assertThat(result?.email).isEqualTo(TEST_EMAIL)
+        verify(springQueryDSLUserRepository).findUserByEmail(TEST_EMAIL)
     }
 
     @Test
@@ -88,36 +89,36 @@ class UserLoadPersistenceAdapterTest {
     @DisplayName("사용자가 존재하고 활성 상태이면 성공적으로 반환한다")
     fun findActiveUserByEmailOrNull_success() {
         // given
-        `when`(springQueryDSLUserRepository.findActiveUserByEmail(testEmail)).thenReturn(Optional.of(testUserEntity))
+        `when`(springQueryDSLUserRepository.findActiveUserByEmail(TEST_EMAIL)).thenReturn(Optional.of(testUserEntity))
         `when`(userMapper.mapToDomainEntity(testUserEntity)).thenReturn(testUser)
 
         // when
-        val result = userLoadPersistenceAdapter.findActiveUserByEmailOrNull(testEmail)
+        val result = userLoadPersistenceAdapter.findActiveUserByEmailOrNull(TEST_EMAIL)
 
         // then
         Assertions.assertThat(result).isNotNull
-        Assertions.assertThat(result?.email).isEqualTo(testEmail)
+        Assertions.assertThat(result?.email).isEqualTo(TEST_EMAIL)
     }
 
     @Test
     @DisplayName("활성 사용자가 존재하지 않으면 null을 반환한다")
     fun findActiveUserByEmailOrNull_fail() {
         // given
-        `when`(springQueryDSLUserRepository.findActiveUserByEmail(testEmail)).thenReturn(Optional.empty())
+        `when`(springQueryDSLUserRepository.findActiveUserByEmail(TEST_EMAIL)).thenReturn(Optional.empty())
 
         // when
-        val result = userLoadPersistenceAdapter.findActiveUserByEmailOrNull(testEmail)
+        val result = userLoadPersistenceAdapter.findActiveUserByEmailOrNull(TEST_EMAIL)
 
         // then
         Assertions.assertThat(result).isNull()
     }
 
     @ParameterizedTest
-    @ValueSource(strings = [testNickname, testEmail])
+    @ValueSource(strings = [TEST_NICKNAME, TEST_EMAIL])
     @DisplayName("키워드(이메일 또는 닉네임)로 검색 시 해당 사용자 리스트를 반환한다")
     fun findUserByKeyword_success(testKeyword: String) {
         // given
-        `when`(springQueryDSLUserRepository.findActiveUsersByEmailOrNickname(testKeyword)).thenReturn(
+        `when`(springQueryDSLUserRepository.searchNewFriendCandidates(TEST_OWNER_EMAIL, testKeyword)).thenReturn(
             listOf(
                 testUserEntity
             )
@@ -125,12 +126,12 @@ class UserLoadPersistenceAdapterTest {
         `when`(userMapper.mapToDomainEntity(testUserEntity)).thenReturn(testUser)
 
         // when
-        val result = userLoadPersistenceAdapter.findByEmailAndNickname(testKeyword)
+        val result = userLoadPersistenceAdapter.findPotentialFriendsByEmailAndNickname(TEST_OWNER_EMAIL, testKeyword)
 
         // then
         Assertions.assertThat(result).hasSize(1)
-        Assertions.assertThat(result[0].email).isEqualTo(testEmail)
-        verify(springQueryDSLUserRepository).findActiveUsersByEmailOrNickname(testKeyword)
+        Assertions.assertThat(result[0].email).isEqualTo(TEST_EMAIL)
+        verify(springQueryDSLUserRepository).searchNewFriendCandidates(TEST_OWNER_EMAIL, testKeyword)
     }
 
     @Test
@@ -138,10 +139,15 @@ class UserLoadPersistenceAdapterTest {
     fun findUserByKeyword_empty() {
         // given
         val keyword = "not_found"
-        `when`(springQueryDSLUserRepository.findActiveUsersByEmailOrNickname(keyword)).thenReturn(emptyList())
+        `when`(
+            springQueryDSLUserRepository.searchNewFriendCandidates(
+                TEST_OWNER_EMAIL,
+                keyword
+            )
+        ).thenReturn(emptyList())
 
         // when
-        val result = userLoadPersistenceAdapter.findByEmailAndNickname(keyword)
+        val result = userLoadPersistenceAdapter.findPotentialFriendsByEmailAndNickname(TEST_OWNER_EMAIL, keyword)
 
         // then
         Assertions.assertThat(result).isEmpty()
