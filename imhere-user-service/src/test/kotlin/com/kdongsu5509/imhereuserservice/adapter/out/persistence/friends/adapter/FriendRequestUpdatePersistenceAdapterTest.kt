@@ -1,7 +1,7 @@
 package com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.adapter
 
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.FriendRequestJpaEntity
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.SpringDataFriendRequestRepository
-import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.mapper.FriendRequestMapper
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
@@ -9,33 +9,29 @@ import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
 import com.kdongsu5509.imhereuserservice.domain.user.UserStatus
 import com.kdongsu5509.imhereuserservice.support.config.QueryDslConfig
-import com.kdongsu5509.imhereuserservice.support.exception.BusinessException
-import com.kdongsu5509.imhereuserservice.support.exception.ErrorCode
 import org.assertj.core.api.Assertions
-import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
-import java.util.*
 
 @DataJpaTest
 @Import(
-    FriendRequestSavePersistenceAdapter::class,
-    FriendRequestMapper::class,
+    FriendRequestUpdatePersistenceAdapter::class,
     SpringQueryDSLUserRepository::class,
     QueryDslConfig::class
 )
-class FriendRequestSavePersistenceAdapterTest @Autowired constructor(
-    private val adapter: FriendRequestSavePersistenceAdapter,
+class FriendRequestUpdatePersistenceAdapterTest @Autowired constructor(
     private val springDataUserRepository: SpringDataUserRepository,
-    private val springDataFriendRequestRepository: SpringDataFriendRequestRepository
+    private val springDataFriendRequestRepository: SpringDataFriendRequestRepository,
+    private val friendRequestUpdatePersistenceAdapter: FriendRequestUpdatePersistenceAdapter,
 ) {
-
     private lateinit var requester: UserJpaEntity
     private lateinit var receiver: UserJpaEntity
+    private lateinit var friendRequest: FriendRequestJpaEntity
 
     @BeforeEach
     fun setUp() {
@@ -45,38 +41,34 @@ class FriendRequestSavePersistenceAdapterTest @Autowired constructor(
         receiver = springDataUserRepository.save(
             UserJpaEntity("receiver@kakao.com", "수신자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
         )
+        friendRequest = springDataFriendRequestRepository.save(
+            FriendRequestJpaEntity(
+                requester, receiver, "친하게 지내요"
+            )
+        )
     }
 
     @Test
-    @DisplayName("친구 요청을 DB에 잘 저장하고 도메인 엔티티를 반환한다")
-    fun save_success() {
-        // given
-        val message = "친하게 지내요!"
+    @DisplayName("친구 요청을 잘 지운다")
+    fun delete_success() {
+        //when
+        friendRequestUpdatePersistenceAdapter.delete(friendRequest.id!!)
 
-        // when
-        val result = adapter.save(requester.email, receiver.id!!, message)
-
-        // then
-        assertThat(result).isNotNull
-        assertThat(result.message).isEqualTo(message)
-
-        val savedRequests = springDataFriendRequestRepository.findAll()
-        assertThat(savedRequests).hasSize(1)
-        assertThat(savedRequests[0].requester.id).isEqualTo(requester.id)
-        assertThat(savedRequests[0].receiver.id).isEqualTo(receiver.id)
-        assertThat(savedRequests[0].message).isEqualTo(message)
+        //then
+        Assertions.assertThat(
+            springDataFriendRequestRepository.findById(friendRequest.id!!).isEmpty
+        ).isTrue
     }
 
     @Test
-    @DisplayName("잘못된 수신자 ID(없는 존재)는 오류 발생")
-    fun save_receiver_not_exist() {
-        // given
-        val message = "친하게 지내요!"
+    @DisplayName("요청 시 존재하지 않는 친구 요청 ID를 전달해도 오류가 발생하지 않는다")
+    fun delete_success_even_though_not_exist() {
+        //given
+        val notExistRequestId = 10000L
 
-        // when, then
-        Assertions.assertThatThrownBy {
-            adapter.save(requester.email, UUID.randomUUID(), message)
-        }.isInstanceOf(BusinessException::class.java)
-            .hasMessage(ErrorCode.USER_NOT_FOUND.message)
+        //when, then
+        assertDoesNotThrow {
+            friendRequestUpdatePersistenceAdapter.delete(notExistRequestId)
+        }
     }
 }

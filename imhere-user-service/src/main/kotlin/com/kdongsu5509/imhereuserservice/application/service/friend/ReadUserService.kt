@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 @Transactional(readOnly = true)
 class ReadUserService(private val userLoadPort: UserLoadPort) : ReadUserUseCase {
-    override fun searchUser(keyword: String): List<UserInformation> {
-        return userLoadPort.findByEmailAndNickname(keyword)
+    override fun searchPotentialFriendsUser(userEmail: String, keyword: String): List<UserInformation> {
+        return userLoadPort.findPotentialFriendsByEmailAndNickname(userEmail, keyword)
             .map { user ->
                 UserInformation.convertToUserInformation(user)
             }

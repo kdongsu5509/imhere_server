@@ -1,6 +1,7 @@
 package com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.FriendRequestJpaEntity
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.friends.jpa.SpringDataFriendRequestRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
@@ -32,8 +33,12 @@ import org.springframework.transaction.annotation.Transactional
 @Import(SpringQueryDSLUserRepository::class, QueryDslConfig::class)
 class FriendsRequestCommandControllerIntegrationTest {
 
+    companion object {
+        const val BASE_FRIEND_REQUEST_URL = "/api/v1/user/friends/request"
+        const val FRIEND_REQUEST_MESSAGE = "친하게 지내요!"
+    }
+
     private lateinit var requester1: UserJpaEntity
-    private lateinit var requester2: UserJpaEntity
     private lateinit var receiver: UserJpaEntity
 
     @Autowired
@@ -50,49 +55,61 @@ class FriendsRequestCommandControllerIntegrationTest {
 
     @BeforeEach
     fun setUp() {
-        requester1 = userRepository.save(
-            UserJpaEntity("requester1@kakao.com", "요청자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
-        )
-        requester2 = userRepository.save(
-            UserJpaEntity("requester2@kakao.com", "요청자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
-        )
-
-        receiver = userRepository.save(
-            UserJpaEntity("receiver@kakao.com", "수신자", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
-        )
+        requester1 = createUser("requester1@kakao.com", "요청자")
+        receiver = createUser("receiver@kakao.com", "수신자")
+        // requester2는 사용되지 않는다면 제거하거나 필요한 테스트에서만 생성하는 것이 좋습니다.
     }
 
     @Test
     @DisplayName("친구 요청 API 호출 시 DB 저장까지 성공한다")
     fun requestFriendship_IntegrationSuccess() {
-        // given
-        val message = "친하게 지내요!"
-        val requestDto = mapOf(
-            "receiverId" to receiver.id.toString(),
-            "message" to message
-        )
+        val requestDto = mapOf("receiverId" to receiver.id.toString(), "message" to FRIEND_REQUEST_MESSAGE)
 
-        // when
-        val resultActions = mockMvc.perform(
-            post("/api/v1/user/friends/request")
-                .with(user(requester1.email))
-                .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto))
-        )
-
-        // then
-        resultActions
+        performPost(BASE_FRIEND_REQUEST_URL, requester1.email, requestDto)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.code").value(200))
             .andExpect(jsonPath("$.data.friendRequestId").exists())
 
         val savedRequests = friendRequestRepository.findAll()
         assertThat(savedRequests).hasSize(1)
-
-        val savedRequest = savedRequests[0]
-        assertThat(savedRequest.requester.id).isEqualTo(requester1.id)
-        assertThat(savedRequest.receiver.id).isEqualTo(receiver.id)
-        assertThat(savedRequest.message).isEqualTo(message)
+            .first()
+            .extracting("requester.id", "receiver.id")
+            .containsExactly(requester1.id, receiver.id)
     }
+
+    @Test
+    @DisplayName("친구 요청 수락 API 호출 시 친구 요청은 DB 삭제, 친구는 DB 저장까지 성공한다")
+    fun acceptToFriendRequest() {
+        val requestId = createFriendRequest(requester1, receiver)
+
+        performPost("$BASE_FRIEND_REQUEST_URL/accept/$requestId", receiver.email)
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.data.friendEmail").value(requester1.email))
+    }
+
+    @Test
+    @DisplayName("친구 요청 거절 API 호출 시 친구 요청은 DB 삭제, 친구는 거절 DB에 저장까지 성공한다")
+    fun rejectToFriendRequest() {
+        val requestId = createFriendRequest(requester1, receiver)
+
+        performPost("$BASE_FRIEND_REQUEST_URL/reject/$requestId", receiver.email)
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.data.targetEmail").value(requester1.email))
+    }
+
+    private fun createUser(email: String, nickname: String) = userRepository.save(
+        UserJpaEntity(email, nickname, UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.ACTIVE)
+    )
+
+    private fun createFriendRequest(from: UserJpaEntity, to: UserJpaEntity): Long? {
+        return friendRequestRepository.save(FriendRequestJpaEntity(from, to, FRIEND_REQUEST_MESSAGE)).id
+    }
+
+    private fun performPost(url: String, userEmail: String, content: Any? = null) = mockMvc.perform(
+        post(url)
+            .with(user(userEmail))
+            .with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .apply { if (content != null) content(objectMapper.writeValueAsString(content)) }
+    )
 }

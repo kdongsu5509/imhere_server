@@ -14,8 +14,8 @@ class FriendRequestCreateService(
 ) : CreateFriendRequestUseCase {
 
     override fun request(myEmail: String, receiverId: UUID, message: String): FriendRequest {
-        return friendRequestSavePort.createFriendshipRequest(
-            myEmail = myEmail,
+        return friendRequestSavePort.save(
+            requesterEmail = myEmail,
             receiverId = receiverId,
             message = message
         )

@@ -39,7 +39,7 @@ class FriendRequestMapperTest {
         val testFriendRequestJpaEntity = FriendRequestJpaEntity(
             meEntity, receiverEntity, "테스트용 메시지"
         )
-        testFriendRequestJpaEntity.id = UUID.randomUUID()
+        testFriendRequestJpaEntity.id = 1L
 
         //when
         val result = mapper.mapToDomainEntity(testFriendRequestJpaEntity)

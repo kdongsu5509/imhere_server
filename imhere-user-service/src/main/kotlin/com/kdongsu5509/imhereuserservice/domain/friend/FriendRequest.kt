@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 data class FriendRequest(
-    val friendRequestId: UUID? = null,
+    val friendRequestId: Long? = null,
     val requester: FriendRequestUserInfo,
     val receiver: FriendRequestUserInfo,
     val message: String?,

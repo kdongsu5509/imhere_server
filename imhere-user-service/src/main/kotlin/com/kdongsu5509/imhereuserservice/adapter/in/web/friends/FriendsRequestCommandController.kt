@@ -3,9 +3,11 @@ package com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.common.APIResponse
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto.CreateFriendRequest
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto.CreateFriendRequestResponse
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto.FriendRelationshipResponse
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto.FriendRestrictionResponse
 import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.CreateFriendRequestUseCase
-import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.ReadFriendRequestUseCase
-import jakarta.validation.constraints.NotBlank
+import com.kdongsu5509.imhereuserservice.application.port.`in`.friend.UpdateFriendRequestUseCase
+import jakarta.validation.constraints.NotNull
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.validation.annotation.Validated
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/v1/user/friends/request")
 class FriendsRequestCommandController(
     private val createFriendRequestUseCase: CreateFriendRequestUseCase,
-    private val readFriendRequestUseCase: ReadFriendRequestUseCase
+    private val updateFriendRequestUseCase: UpdateFriendRequestUseCase
 ) {
     /**
      * 요청 생성
@@ -37,13 +39,32 @@ class FriendsRequestCommandController(
         )
     }
 
-    @PostMapping("/reject/{id}")
-    fun rejectToRequest(
-        @PathVariable @NotBlank(message = "요청 id 는 필수입니다")
-        id: String
-    ) {
-        //TODO
+    @PostMapping("/accept/{requestId}")
+    fun acceptToFriendRequest(
+        @Validated
+        @NotNull(message = "requestId는 필수입니다")
+        @PathVariable
+        requestId: Long,
+        @AuthenticationPrincipal user: UserDetails,
+    ): APIResponse<FriendRelationshipResponse> {
+        val createdFriendRelationship = updateFriendRequestUseCase.acceptFriendRequest(user.username, requestId)
+
+        return APIResponse.success(
+            FriendRelationshipResponse.fromDomain(createdFriendRelationship)
+        )
     }
-    //친구 목록 조회	GET	    /api/v1/user/friends
-    //친구 삭제	    DELETE	/api/v1/user/friends/{friendId}
+
+    @PostMapping("/reject/{requestId}")
+    fun rejectToFriendRequest(
+        @Validated
+        @NotNull(message = "requestId는 필수입니다")
+        @PathVariable
+        requestId: Long,
+        @AuthenticationPrincipal user: UserDetails,
+    ): APIResponse<FriendRestrictionResponse> {
+        val createdRestriction = updateFriendRequestUseCase.rejectFriendRequest(user.username, requestId)
+        return APIResponse.success(
+            FriendRestrictionResponse.fromDomain(createdRestriction)
+        )
+    }
 }

@@ -26,6 +26,7 @@ class ReadUserServiceTest {
     lateinit var userSearchService: ReadUserService
 
     companion object {
+        const val SEARCH_USER_EMAIL = "search@search.com"
         const val TEST_KEYWORD = "테스트"
         const val TEST_EMAIL = "test@test.com"
         const val TEST_NICKNAME = "테스트"
@@ -37,29 +38,29 @@ class ReadUserServiceTest {
 
     @Test
     @DisplayName("찾은 사용자가 1명 이상이면 User 리스트로 잘 반환해서 나간다")
-    fun searchUser_overThanOne() {
+    fun searchPotentialFriendsUser_overThanOne() {
         //given
-        Mockito.`when`(userLoadPort.findByEmailAndNickname(TEST_KEYWORD)).thenReturn(
+        Mockito.`when`(userLoadPort.findPotentialFriendsByEmailAndNickname(SEARCH_USER_EMAIL, TEST_KEYWORD)).thenReturn(
             listOf(testUser)
         )
 
         //when, then
         Assertions.assertDoesNotThrow {
-            userSearchService.searchUser(TEST_KEYWORD)
+            userSearchService.searchPotentialFriendsUser(SEARCH_USER_EMAIL, TEST_KEYWORD)
         }
     }
 
     @Test
     @DisplayName("찾은 사용자가 0명 이어도 User 리스트로 잘 반환해서 나간다")
-    fun searchUser_zero() {
+    fun searchPotentialFriendsUser_zero() {
         // given
         val testKeyword = "존재하지않음"
-        Mockito.`when`(userLoadPort.findByEmailAndNickname(testKeyword)).thenReturn(
+        Mockito.`when`(userLoadPort.findPotentialFriendsByEmailAndNickname(SEARCH_USER_EMAIL, testKeyword)).thenReturn(
             listOf()
         )
 
         // when
-        val result = userSearchService.searchUser(testKeyword)
+        val result = userSearchService.searchPotentialFriendsUser(SEARCH_USER_EMAIL, testKeyword)
 
         // then
         org.assertj.core.api.Assertions.assertThat(result).isNotNull
