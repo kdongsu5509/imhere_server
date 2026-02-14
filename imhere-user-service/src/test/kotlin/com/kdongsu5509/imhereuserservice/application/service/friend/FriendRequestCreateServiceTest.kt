@@ -43,7 +43,7 @@ class FriendRequestCreateServiceTest {
             message = testMsg
         )
 
-        given(friendRequestSavePort.createFriendshipRequest(testEmail, testReceiverId, testMsg))
+        given(friendRequestSavePort.save(testEmail, testReceiverId, testMsg))
             .willReturn(expectedFriendRequest)
 
         // when
@@ -54,7 +54,7 @@ class FriendRequestCreateServiceTest {
         assertThat(result.requester.email).isEqualTo(testEmail)
         assertThat(result.message).isEqualTo(testMsg)
 
-        then(friendRequestSavePort).should().createFriendshipRequest(testEmail, testReceiverId, testMsg)
+        then(friendRequestSavePort).should().save(testEmail, testReceiverId, testMsg)
     }
 
     @Test
@@ -65,7 +65,7 @@ class FriendRequestCreateServiceTest {
         val testReceiverId = UUID.randomUUID()
         val testMsg = "친하게 지내요!"
 
-        given(friendRequestSavePort.createFriendshipRequest(testEmail, testReceiverId, testMsg))
+        given(friendRequestSavePort.save(testEmail, testReceiverId, testMsg))
             .willThrow(BusinessException(ErrorCode.USER_NOT_FOUND))
 
         // when
@@ -74,6 +74,6 @@ class FriendRequestCreateServiceTest {
         }.isInstanceOf(BusinessException::class.java)
             .hasMessage(ErrorCode.USER_NOT_FOUND.message)
 
-        then(friendRequestSavePort).should().createFriendshipRequest(testEmail, testReceiverId, testMsg)
+        then(friendRequestSavePort).should().save(testEmail, testReceiverId, testMsg)
     }
 }

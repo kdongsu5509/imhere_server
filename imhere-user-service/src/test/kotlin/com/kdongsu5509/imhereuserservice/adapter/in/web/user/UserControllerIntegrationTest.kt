@@ -1,6 +1,7 @@
 package com.kdongsu5509.imhereuserservice.adapter.`in`.web.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.UserControllerIntegrationTest.Companion.TEST_OWNER_EMAIL
 import com.kdongsu5509.imhereuserservice.adapter.`in`.web.user.dto.NicknameChangeRequest
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.imhereuserservice.adapter.out.persistence.user.jpa.UserJpaEntity
@@ -8,6 +9,7 @@ import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
 import com.kdongsu5509.imhereuserservice.domain.user.UserStatus
 import org.hamcrest.Matchers.hasSize
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,6 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 
 @ActiveProfiles("test")
+@WithMockUser(username = TEST_OWNER_EMAIL)
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
@@ -40,8 +43,15 @@ class UserControllerIntegrationTest {
 
     companion object {
         const val BASE_URL = "/api/v1/user/info"
-        const val DS_KO = "고동수"
         const val TEST_EMAIL = "test@test.com"
+        const val TEST_NICKNAME = "tester"
+        const val TEST_OWNER_EMAIL = "owner@owner.com"
+        const val TEST_OWNER_NICKNAME = "owner"
+    }
+
+    @BeforeEach
+    fun setUp() {
+        saveUser(TEST_OWNER_EMAIL, TEST_OWNER_NICKNAME)
     }
 
     @Test
@@ -55,14 +65,14 @@ class UserControllerIntegrationTest {
     @DisplayName("존재하는 닉네임으로 조회 시 유저 정보 반환")
     fun searchUsers_success() {
         // given
-        val user = saveUser(email = "exist@test.com", nickname = DS_KO)
+        val user = saveUser(email = "exist@test.com", nickname = TEST_NICKNAME)
 
         // when & then
         mockMvc.perform(get("$BASE_URL/${user.nickname}"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data[0].userId").value(user.id.toString()))
             .andExpect(jsonPath("$.data[0].userEmail").value(user.email))
-            .andExpect(jsonPath("$.data[0].userNickname").value(DS_KO))
+            .andExpect(jsonPath("$.data[0].userNickname").value(TEST_NICKNAME))
     }
 
     @Test
@@ -72,33 +82,27 @@ class UserControllerIntegrationTest {
         repeat(10) { i -> saveUser(email = "test$i@test.com") }
 
         // when & then
-        mockMvc.perform(get("$BASE_URL/$DS_KO"))
+        mockMvc.perform(get("$BASE_URL/$TEST_NICKNAME"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data", hasSize<Any>(10)))
-            .andExpect(jsonPath("$.data[0].userNickname").value(DS_KO))
+            .andExpect(jsonPath("$.data[0].userNickname").value(TEST_NICKNAME))
     }
 
     @Test
-    @WithMockUser(username = TEST_EMAIL)
     @DisplayName("내 정보 조회 성공")
     fun searchMe_success() {
-        // given
-        saveUser(email = TEST_EMAIL)
-
         // when & then
         mockMvc.perform(get("$BASE_URL/me"))
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.data.userEmail").value(TEST_EMAIL))
-            .andExpect(jsonPath("$.data.userNickname").value(DS_KO))
+            .andExpect(jsonPath("$.data.userEmail").value(TEST_OWNER_EMAIL))
+            .andExpect(jsonPath("$.data.userNickname").value(TEST_OWNER_NICKNAME))
     }
 
 
     @Test
-    @WithMockUser(username = TEST_EMAIL)
     @DisplayName("내 닉네임 변경")
     fun changeNickname_success() {
         // given
-        val saveEntity = saveUser(email = TEST_EMAIL)
         val newNickname = "dongsuKo"
         val request = NicknameChangeRequest(newNickname)
 
@@ -109,13 +113,13 @@ class UserControllerIntegrationTest {
                 .content(objectMapper.writeValueAsString(request))
         )
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.data.userEmail").value(TEST_EMAIL))
+            .andExpect(jsonPath("$.data.userEmail").value(TEST_OWNER_EMAIL))
             .andExpect(jsonPath("$.data.userNickname").value(newNickname))
     }
 
     private fun saveUser(
         email: String = TEST_EMAIL,
-        nickname: String = DS_KO,
+        nickname: String = TEST_NICKNAME,
         role: UserRole = UserRole.NORMAL,
         provider: OAuth2Provider = OAuth2Provider.KAKAO,
         status: UserStatus = UserStatus.ACTIVE

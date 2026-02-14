@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
+import java.util.*
 
 @DataJpaTest
 @Import(SpringQueryDSLUserRepositoryTest.TestConfig::class)
@@ -23,11 +24,19 @@ class SpringQueryDSLUserRepositoryTest @Autowired constructor(
     private val em: EntityManager,
     private val userRepository: SpringQueryDSLUserRepository
 ) {
+    companion object {
+        private const val TEST_OWNER_EMAIL = "owner@owner.com"
+        private const val TEST_DOMAIN = "kakao.com"
+        private const val DEFAULT_NICKNAME_PREFIX = "테스터"
+
+        fun email(idx: Any) = "test$idx@$TEST_DOMAIN"
+        fun nickname(idx: Any) = "$DEFAULT_NICKNAME_PREFIX$idx"
+    }
 
     @TestConfiguration
     class TestConfig(private val em: EntityManager) {
         @Bean
-        fun jpaQueryFactory(): JPAQueryFactory = JPAQueryFactory(em)
+        fun jpaQueryFactory() = JPAQueryFactory(em)
 
         @Bean
         fun springQueryDSLUserRepository(jpaQueryFactory: JPAQueryFactory) =
@@ -36,126 +45,138 @@ class SpringQueryDSLUserRepositoryTest @Autowired constructor(
 
     @BeforeEach
     fun setUp() {
-        val users = (1..3).map { createTestUser(it, UserStatus.ACTIVE) } +
-                (4..5).map { createTestUser(it, UserStatus.PENDING) }
-        saveAll(users)
+        createTestOwner()
+        val activeUsers = (1..3).map { createTestUser(it, UserStatus.ACTIVE) }
+        val pendingUsers = (4..5).map { createTestUser(it, UserStatus.PENDING) }
+        saveAll(activeUsers + pendingUsers)
     }
 
     /**
-     * findUserByEmail 테스트
+     * findUserByEmail
      */
     @ParameterizedTest
     @ValueSource(ints = [1, 2, 3, 4, 5])
     @DisplayName("상태에 상관없이 email로 사용자를 조회한다")
     fun findUserByEmail_success(idx: Int) {
+        val targetEmail = email(idx)
+        val result = userRepository.findUserByEmail(targetEmail)
 
-        val result = userRepository.findUserByEmail("test$idx@kakao.com")
-
-        Assertions.assertEquals(true, result.isPresent)
-        Assertions.assertEquals("test$idx@kakao.com", result.get().email)
-        Assertions.assertEquals("테스터$idx", result.get().nickname)
+        Assertions.assertTrue(result.isPresent)
+        Assertions.assertEquals(targetEmail, result.get().email)
     }
 
     /**
-     * findActiveUserByEmail 테스트
+     * findActiveUserByEmail
      */
-
     @ParameterizedTest
     @ValueSource(ints = [1, 2, 3])
     @DisplayName("ACTIVE 상태인 사용자는 이메일로 검색된다")
     fun findActiveUserByEmail_active(idx: Int) {
-        val result = userRepository.findActiveUserByEmail("test$idx@kakao.com")
-        Assertions.assertTrue(result.isPresent)
-        Assertions.assertEquals("test$idx@kakao.com", result.get().email)
-        Assertions.assertEquals("테스터$idx", result.get().nickname)
+        Assertions.assertTrue(userRepository.findActiveUserByEmail(email(idx)).isPresent)
     }
 
     @ParameterizedTest
-    @ValueSource(ints = [4, 5])
-    @DisplayName("PENDING 상태인 사용자는 이메일로 검색되지 않는다")
-    fun findActiveUserByEmail_pending(idx: Int) {
-        val result = userRepository.findActiveUserByEmail("test$idx@kakao.com")
-        Assertions.assertTrue(result.isEmpty)
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = [1001, 1002, 1003, 1004, 1005])
-    @DisplayName("존재하지 않는 사용자는 검색되지 않는다")
-    fun findActiveUserByEmail_not_exist(idx: Int) {
-        val result = userRepository.findActiveUserByEmail("test$idx@kakao.com")
-        Assertions.assertTrue(result.isEmpty)
+    @ValueSource(ints = [4, 5, 999])
+    @DisplayName("ACTIVE가 아니거나 존재하지 않으면 검색되지 않는다")
+    fun findActiveUserByEmail_fail(idx: Int) {
+        Assertions.assertTrue(userRepository.findActiveUserByEmail(email(idx)).isEmpty)
     }
 
     /**
-     * findActiveUserByKeyword 테스트
+     * searchNewFriendCandidates
      */
     @ParameterizedTest
-    @ValueSource(strings = ["테스터1", "테스터2", "테스터3", "test1@kakao.com", "test2@kakao.com", "test3@kakao.com"])
     @DisplayName("키워드(닉네임/이메일)로 활성 사용자를 정확히 찾는다")
-    fun findActiveUserByKeyword_success(testKeyword: String) {
-        val result = userRepository.findActiveUserByKeyword(testKeyword)
-
+    @ValueSource(strings = ["테스터1", "test2@kakao.com"])
+    fun searchNewFriendCandidates_success(testKeyword: String) {
+        val result = userRepository.searchNewFriendCandidates(TEST_OWNER_EMAIL, testKeyword)
         Assertions.assertEquals(1, result.size)
-        Assertions.assertTrue(result.any { it.nickname == testKeyword || it.email == testKeyword })
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = ["테스터1", "테스터2", "테스터3"])
+    @Test
     @DisplayName("중복된 닉네임이 있는 경우 모두 조회된다")
-    fun findActiveUserByKeyword_duplication(testKeyword: String) {
-        // given
+    fun searchNewFriendCandidates_duplication() {
+        val dupNickname = "중복닉네임"
         saveAll(
             listOf(
-                createTestUser(100, UserStatus.ACTIVE, "테스터1"),
-                createTestUser(101, UserStatus.ACTIVE, "테스터2"),
-                createTestUser(102, UserStatus.ACTIVE, "테스터3")
+                createTestUser(100, UserStatus.ACTIVE, dupNickname),
+                createTestUser(101, UserStatus.ACTIVE, dupNickname)
             )
         )
 
-        // when
-        val result = userRepository.findActiveUserByKeyword(testKeyword)
-
-        // then
+        val result = userRepository.searchNewFriendCandidates(TEST_OWNER_EMAIL, dupNickname)
         Assertions.assertEquals(2, result.size)
-        Assertions.assertTrue(result.all { it.nickname == testKeyword })
     }
 
     @Test
-    @DisplayName("키워드가 비어 있는 경우 빈 리스트가 반환된다")
-    fun findActiveUserByKeyword_empty_keyword() {
-        // when
-        val result = userRepository.findActiveUserByKeyword("")
-
-        // then
-        Assertions.assertEquals(0, result.size)
+    @DisplayName("키워드(이메일/닉네임)가 비어 있거나 일치하는게 없으면 빈 리스트가 반환된다")
+    fun findActiveUsersByEmailOrNickname_empty_or_zero_match() {
+        Assertions.assertTrue(userRepository.searchNewFriendCandidates(TEST_OWNER_EMAIL, "").isEmpty())
+        Assertions.assertTrue(userRepository.searchNewFriendCandidates(TEST_OWNER_EMAIL, "존재하지않음").isEmpty())
     }
 
+    /**
+     * findUsersByEmails: 이메일 기반 다중 조회
+     */
     @Test
-    @DisplayName("키워드가 비어 있는 경우 빈 리스트가 반환된다")
-    fun findActiveUserByKeyword_zero_match_keyword() {
-        // when
-        val result = userRepository.findActiveUserByKeyword("테스트99999")
+    @DisplayName("활성 유저와 비활성 유저 혼합 조회 시 활성 유저만 결과에 포함된다")
+    fun findActiveUsersByEmails_logic_check() {
+        val (activeIdx, pendingIdx) = 300 to 301
+        saveAll(listOf(createTestUser(activeIdx, UserStatus.ACTIVE), createTestUser(pendingIdx, UserStatus.PENDING)))
 
-        // then
-        Assertions.assertEquals(0, result.size)
+        val testResult = userRepository.findActiveUsersByEmails(email(activeIdx), email(pendingIdx))
+
+        Assertions.assertEquals(1, testResult.size)
+        Assertions.assertEquals(email(activeIdx), testResult[0].email)
     }
 
-    private fun createTestUser(
-        idx: Int,
-        status: UserStatus,
-        nickname: String? = null
-    ): UserJpaEntity {
-        return UserJpaEntity(
-            email = "test$idx@kakao.com",
-            nickname = nickname ?: "테스터$idx",
-            role = UserRole.NORMAL,
-            provider = OAuth2Provider.KAKAO,
-            status = status
+    /**
+     * findUsersByEmailAndId : 이메일과 ID 를 바탕으로 혼합 조회
+     * 해당 테스트의 경우 ID 주입이 어려워 UUID.randomUUID() 을 통해 존재하지 않는 유저를 조회합니다.
+     */
+    @Test
+    @DisplayName("Email과 ID로도 타겟 User를 잘 조회한다 - 해당하는 경우에만.")
+    fun findActiveUsersByEmailAndId_logic_check() {
+        val idx1 = 300
+        saveAll(
+            listOf(
+                createTestUser(idx1, UserStatus.ACTIVE)
+            )
         )
+
+        val testResult = userRepository.findActiveUsersByEmailAndId(
+            email(idx1), UUID.randomUUID()
+        )
+
+        Assertions.assertEquals(1, testResult.size)
+        Assertions.assertEquals(email(idx1), testResult[0].email)
+    }
+
+    private fun createTestUser(idx: Int, status: UserStatus, customNickname: String? = null) = UserJpaEntity(
+        email = email(idx),
+        nickname = customNickname ?: nickname(idx),
+        role = UserRole.NORMAL,
+        provider = OAuth2Provider.KAKAO,
+        status = status
+    )
+
+    private fun createTestOwner() {
+        em.persist(
+            UserJpaEntity(
+                email = TEST_OWNER_EMAIL,
+                nickname = "나",
+                role = UserRole.NORMAL,
+                provider = OAuth2Provider.KAKAO,
+                status = UserStatus.ACTIVE
+            )
+        )
+
+        em.flush()
+        em.clear()
     }
 
     private fun saveAll(users: List<UserJpaEntity>) {
-        users.forEach { em.persist(it) }
+        users.forEach(em::persist)
         em.flush()
         em.clear()
     }

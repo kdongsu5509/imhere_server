@@ -136,6 +136,11 @@ enum class ErrorCode(
         "FRIEND_REQUEST_003",
         "해당 친구 요청은 존재하지 않습니다."
     ),
+    FRIENDSHIP_REQUEST_RECEIVER_MISSMATCH(
+        HttpStatus.BAD_REQUEST,
+        "FRIEND_REQUEST_004",
+        "해당 친구 요청은 나에게 온 요청이 아닙니다."
+    ),
 
 
     /**

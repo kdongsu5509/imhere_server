@@ -28,8 +28,8 @@ class UserLoadPersistenceAdapter(
         return userMapper.mapToDomainEntity(queryResult.get())
     }
 
-    override fun findByEmailAndNickname(keyword: String): List<User> {
-        val findJpaEntities = springQueryDSLUserRepository.findActiveUserByKeyword(keyword)
+    override fun findPotentialFriendsByEmailAndNickname(userEmail: String, keyword: String): List<User> {
+        val findJpaEntities = springQueryDSLUserRepository.searchNewFriendCandidates(userEmail, keyword)
         if (findJpaEntities.isEmpty()) return listOf()
         return findJpaEntities.stream()
             .map { entity -> userMapper.mapToDomainEntity(entity) }

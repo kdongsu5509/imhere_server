@@ -60,10 +60,11 @@ class UserController(
      */
     @GetMapping("/{keyword}")
     fun searchUsers(
+        @AuthenticationPrincipal user: UserDetails,
         @PathVariable @NotBlank(message = "이메일 혹은 사용자 닉네임을 입력하여야 합니다")
         keyword: String
     ): APIResponse<List<UserSearchResponse>> {
-        val findingUsers = readUserUseCase.searchUser(keyword)
+        val findingUsers = readUserUseCase.searchPotentialFriendsUser(user.username, keyword)
 
         return APIResponse.success(
             findingUsers.map { user ->
