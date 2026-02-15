@@ -6,5 +6,6 @@ data class FriendRestriction(
     val friendRestrictionId: Long,
     val targetEmail: String,
     val targetNickname: String,
+    val restrictionType: FriendRestrictionType,
     val createdAt: LocalDateTime
 )
