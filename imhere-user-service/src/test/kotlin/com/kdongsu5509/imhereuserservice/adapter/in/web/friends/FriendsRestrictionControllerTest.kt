@@ -10,6 +10,7 @@ import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
 import com.kdongsu5509.imhereuserservice.domain.user.UserStatus
 import com.kdongsu5509.imhereuserservice.support.config.QueryDslConfig
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -83,6 +84,49 @@ class FriendsRestrictionControllerTest @Autowired constructor(
                 createdTestFriendRestriction(owner, friend, idx)
             )
         }
+    }
+
+    @Test
+    @DisplayName("친구 제한을 삭제하면 삭제된 정보와 함께 201 응답을 받는다")
+    @WithMockUser(username = TEST_OWNER_EMAIL)
+    fun unrestrict_success() {
+        // given
+        val restriction = friendRestrictionRepository.findAll()
+            .first { it.actor.email == TEST_OWNER_EMAIL }
+        val targetId = restriction.id!!
+        val targetEmail = restriction.target.email
+
+        // when & then
+        mockMvc.perform(
+            org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                .delete("/api/v1/user/friends/restriction/$targetId")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.code").value(201))
+            .andExpect(jsonPath("$.data.targetEmail").value(targetEmail))
+
+        val isExists = friendRestrictionRepository.findById(targetId).isPresent
+        assertThat(isExists).isFalse()
+    }
+
+    @Test
+    @DisplayName("본인의 것이 아닌 제한 내역을 삭제하려 하면 예외가 발생한다")
+    @WithMockUser(username = "other@test.com")
+    fun unrestrict_fail_forbidden() {
+        // given -> TEST_OWNER_EMAIL 소유의 데이터
+        val restriction = friendRestrictionRepository.findAll()
+            .first { it.actor.email == TEST_OWNER_EMAIL }
+        val targetId = restriction.id!!
+
+        // when & then
+        mockMvc.perform(
+            org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                .delete("/api/v1/user/friends/restriction/$targetId")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isBadRequest) // BusinessException (ErrorCode 확인)
+            .andExpect(jsonPath("$.message").exists())
     }
 
     private fun createTestFriend(idx: Int): UserJpaEntity = UserJpaEntity(
