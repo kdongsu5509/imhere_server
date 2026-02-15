@@ -28,6 +28,14 @@ class FriendRestrictionLoadPersistenceAdapter(
         }
     }
 
+    override fun loadById(friendRestrictionId: Long): FriendRestriction {
+        val queryResult = springDataFriendRestrictionRepository.findById(friendRestrictionId).orElseThrow {
+            throw BusinessException(ErrorCode.FRIEND_RESTRICTION_NOT_FOUND)
+        }
+
+        return friendRestrictionMapper.mapToDomainEntity(queryResult)
+    }
+
     private fun fetchRequiredUser(email: String): UserJpaEntity {
         return userRepository.findActiveUserByEmail(email).orElseThrow {
             throw BusinessException(ErrorCode.USER_NOT_FOUND)

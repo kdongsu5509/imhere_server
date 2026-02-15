@@ -44,7 +44,7 @@ class FriendRestrictionLoadPersistenceAdapterTest @Autowired constructor(
     @DisplayName("Email를 통해서 차단/거절한 친구를 잘 찾아온다.")
     fun loadAll_success() {
         //given
-        createTenTestUserAsFriendWithTestUser()
+        createNTestUserAsFriendWithTestUser(10)
         testUser = userRepository.findByEmail("test0@test.com")!!
 
         //when
@@ -86,8 +86,38 @@ class FriendRestrictionLoadPersistenceAdapterTest @Autowired constructor(
         Assertions.assertThat(testResult.size).isEqualTo(0)
     }
 
-    private fun createTenTestUserAsFriendWithTestUser() {
-        (1..10).forEach { idx ->
+    @Test
+    @DisplayName("id를 통해 friendRestriction을 잘 찾아온다.")
+    fun loadById_success() {
+        //given
+        val friend = createUserEntity(1)
+        val friendRestrictionJpaEntity = createFriendRestrictionJpaEntity(1, friend)
+        em.persist(friend)
+        em.persist(friendRestrictionJpaEntity)
+        em.flush()
+        em.clear()
+
+        //when
+        val testResult = friendRestrictionLoadPersistenceAdapter.loadById(friendRestrictionJpaEntity.id!!)
+
+        //then
+        Assertions.assertThat(testResult.actorEmail).isEqualTo(testUser.email)
+        Assertions.assertThat(testResult.targetEmail).isEqualTo(friend.email)
+        Assertions.assertThat(testResult.targetNickname).isEqualTo(friend.nickname)
+    }
+
+    @Test
+    @DisplayName("id가 없으면 오류가 발생한다.- ErrorCode.FRIEND_RESTRICTION_NOT_FOUND")
+    fun loadById_fail_not_exist() {
+        //when, then
+        Assertions.assertThatThrownBy {
+            friendRestrictionLoadPersistenceAdapter.loadById(999L)
+        }.isInstanceOf(BusinessException::class.java)
+            .hasMessage(ErrorCode.FRIEND_RESTRICTION_NOT_FOUND.message)
+    }
+
+    private fun createNTestUserAsFriendWithTestUser(n: Int) {
+        (1..n).forEach { idx ->
             val friend = createUserEntity(idx)
             em.persist(friend)
 
