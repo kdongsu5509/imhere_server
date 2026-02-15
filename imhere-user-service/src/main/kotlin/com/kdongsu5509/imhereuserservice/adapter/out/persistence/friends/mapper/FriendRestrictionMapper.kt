@@ -11,6 +11,7 @@ class FriendRestrictionMapper {
             friendRestrictionId = entity.id!!,
             targetEmail = entity.target.email,
             targetNickname = entity.target.nickname,
+            restrictionType = entity.type,
             createdAt = entity.createdAt
         )
     }
