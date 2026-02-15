@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class FriendsControllerTest @Autowired constructor(
+class FriendsReadControllerTest @Autowired constructor(
     private val mockMvc: MockMvc,
     private val userRepository: SpringDataUserRepository,
     private val friendRelationshipRepository: SpringDataFriendRelationshipsRepository

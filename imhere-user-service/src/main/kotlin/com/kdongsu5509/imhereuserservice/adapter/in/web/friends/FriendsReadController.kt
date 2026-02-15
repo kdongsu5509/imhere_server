@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/user/friends")
-class FriendsController(
+class FriendsReadController(
     private val readFriendsUseCase: ReadFriendsUseCase
 ) {
     @GetMapping
