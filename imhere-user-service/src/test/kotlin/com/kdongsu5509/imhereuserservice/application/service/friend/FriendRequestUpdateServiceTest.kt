@@ -111,6 +111,7 @@ class FriendRequestUpdateServiceTest {
             100L,
             friendRequest.requester.email,
             friendRequest.requester.nickname,
+            FriendRestrictionType.REJECT,
             LocalDateTime.now().minusHours(1)
         )
 
