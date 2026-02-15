@@ -136,10 +136,24 @@ enum class ErrorCode(
         "FRIEND_REQUEST_003",
         "해당 친구 요청은 존재하지 않습니다."
     ),
-    FRIENDSHIP_REQUEST_RECEIVER_MISSMATCH(
+    FRIENDSHIP_REQUEST_RECEIVER_MISS_MATCH(
         HttpStatus.BAD_REQUEST,
         "FRIEND_REQUEST_004",
         "해당 친구 요청은 나에게 온 요청이 아닙니다."
+    ),
+
+    /**
+     * FRIEND_RESTRICTION ERROR : 차단/제한 친구 관련 오류
+     */
+    FRIEND_RESTRICTION_NOT_FOUND(
+        HttpStatus.BAD_REQUEST,
+        "FRIEND_RESTRICTION_001",
+        "해당 거절/차단 관계를 찾을 수 없습니다."
+    ),
+    FRIEND_RESTRICTION_ACTOR_MISS_MATCH(
+        HttpStatus.BAD_REQUEST,
+        "FRIEND_RESTRICTION_002",
+        "해당 거절/차단 관계의 처리 권한이 없습니다."
     ),
 
 
