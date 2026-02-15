@@ -1,12 +1,14 @@
 package com.kdongsu5509.imhereuserservice.adapter.`in`.web.friends.dto
 
 import com.kdongsu5509.imhereuserservice.domain.friend.FriendRestriction
+import com.kdongsu5509.imhereuserservice.domain.friend.FriendRestrictionType
 import java.time.LocalDateTime
 
 data class FriendRestrictionResponse(
     val friendRestrictionId: Long,
     val targetEmail: String,
     val targetNickname: String,
+    val restrictionType: FriendRestrictionType,
     val createdAt: LocalDateTime,
 ) {
     companion object {
@@ -15,6 +17,7 @@ data class FriendRestrictionResponse(
                 domain.friendRestrictionId,
                 domain.targetEmail,
                 domain.targetNickname,
+                domain.restrictionType,
                 domain.createdAt
             )
         }
