@@ -9,6 +9,7 @@ class FriendRestrictionMapper {
     fun mapToDomainEntity(entity: FriendRestrictionJpaEntity): FriendRestriction {
         return FriendRestriction(
             friendRestrictionId = entity.id!!,
+            actorEmail = entity.actor.email,
             targetEmail = entity.target.email,
             targetNickname = entity.target.nickname,
             restrictionType = entity.type,

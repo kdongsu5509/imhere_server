@@ -58,7 +58,7 @@ class FriendRequestUpdateService(
         val friendRequestQueryResult = friendRequestLoadPort.findReceivedRequestByRequestId(friendRequestId)
 
         if (friendRequestQueryResult.receiver.email != userEmail) {
-            throw BusinessException(ErrorCode.FRIENDSHIP_REQUEST_RECEIVER_MISSMATCH)
+            throw BusinessException(ErrorCode.FRIENDSHIP_REQUEST_RECEIVER_MISS_MATCH)
         }
 
         return friendRequestQueryResult

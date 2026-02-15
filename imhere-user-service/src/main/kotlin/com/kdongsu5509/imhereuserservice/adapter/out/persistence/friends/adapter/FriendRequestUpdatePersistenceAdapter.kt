@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class FriendRequestUpdatePersistenceAdapter(
     private val springDataFriendRequestRepository: SpringDataFriendRequestRepository,
 ) : FriendRequestUpdatePort {
-    override fun delete(friendRequestQueryResult: Long) {
-        springDataFriendRequestRepository.deleteById(friendRequestQueryResult)
+    override fun delete(friendRequestId: Long) {
+        springDataFriendRequestRepository.deleteById(friendRequestId)
     }
 }

@@ -31,6 +31,7 @@ class FriendRestrictionReadServiceTest {
         val testFriendRestrictions = listOf(
             FriendRestriction(
                 friendRestrictionId = 100L,
+                actorEmail = "actor@actor.com",
                 targetEmail = "target@target.com",
                 targetNickname = "차단혹은거절자",
                 restrictionType = FriendRestrictionType.REJECT,

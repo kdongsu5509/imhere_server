@@ -99,7 +99,7 @@ class FriendRequestUpdateServiceTest {
         Assertions.assertThatThrownBy {
             service.acceptFriendRequest(wrongEmail, requestId)
         }.isInstanceOf(BusinessException::class.java)
-            .hasMessage(ErrorCode.FRIENDSHIP_REQUEST_RECEIVER_MISSMATCH.message)
+            .hasMessage(ErrorCode.FRIENDSHIP_REQUEST_RECEIVER_MISS_MATCH.message)
     }
 
     @Test
@@ -109,6 +109,7 @@ class FriendRequestUpdateServiceTest {
         val friendRequest = createFriendRequest()
         val expectedRestriction = FriendRestriction(
             100L,
+            friendRequest.receiver.email,
             friendRequest.requester.email,
             friendRequest.requester.nickname,
             FriendRestrictionType.REJECT,
