@@ -2,7 +2,6 @@ package com.kdongsu5509.imhereuserservice.application.service.user
 
 import com.kdongsu5509.imhereuserservice.application.dto.UserInformation
 import com.kdongsu5509.imhereuserservice.application.port.out.user.UserLoadPort
-import com.kdongsu5509.imhereuserservice.application.service.friend.ReadUserService
 import com.kdongsu5509.imhereuserservice.domain.user.OAuth2Provider
 import com.kdongsu5509.imhereuserservice.domain.user.User
 import com.kdongsu5509.imhereuserservice.domain.user.UserRole
@@ -18,12 +17,12 @@ import org.mockito.junit.jupiter.MockitoExtension
 import java.util.*
 
 @ExtendWith(MockitoExtension::class)
-class ReadUserServiceTest {
+class UserReadServiceTest {
     @Mock
     lateinit var userLoadPort: UserLoadPort
 
     @InjectMocks
-    lateinit var userSearchService: ReadUserService
+    lateinit var userSearchService: UserReadService
 
     companion object {
         const val SEARCH_USER_EMAIL = "search@search.com"
