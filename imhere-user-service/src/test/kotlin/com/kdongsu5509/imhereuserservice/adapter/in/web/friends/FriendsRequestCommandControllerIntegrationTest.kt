@@ -57,7 +57,6 @@ class FriendsRequestCommandControllerIntegrationTest {
     fun setUp() {
         requester1 = createUser("requester1@kakao.com", "요청자")
         receiver = createUser("receiver@kakao.com", "수신자")
-        // requester2는 사용되지 않는다면 제거하거나 필요한 테스트에서만 생성하는 것이 좋습니다.
     }
 
     @Test
