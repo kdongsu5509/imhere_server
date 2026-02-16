@@ -59,8 +59,8 @@ class FriendRelationshipSavePersistenceAdapter(
         receiver: UserJpaEntity
     ): List<FriendRelationshipsJpaEntity> {
         return listOf(
-            FriendRelationshipsJpaEntity.createFromAcceptance(owner = requester, friend = receiver),
-            FriendRelationshipsJpaEntity.createFromAcceptance(owner = receiver, friend = requester)
+            FriendRelationshipsJpaEntity.create(owner = requester, friend = receiver),
+            FriendRelationshipsJpaEntity.create(owner = receiver, friend = requester)
         )
     }
 }

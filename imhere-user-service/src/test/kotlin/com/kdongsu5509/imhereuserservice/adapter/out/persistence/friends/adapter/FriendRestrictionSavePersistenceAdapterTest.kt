@@ -79,7 +79,7 @@ class FriendRestrictionSavePersistenceAdapterTest @Autowired constructor(
         // when
         val resultDomain = adapter.save(requesterInfo, receiverInfo, type)
 
-        // then: DB에 실제 저장되었는지 확인
+        // then
         val savedEntities = springDataFriendRestrictionRepository.findAll()
         assertEquals(1, savedEntities.size)
 

@@ -32,5 +32,15 @@ class FriendRestrictionJpaEntity(
                 actor, target, FriendRestrictionType.REJECT
             )
         }
+
+        fun create(
+            actor: UserJpaEntity,
+            target: UserJpaEntity,
+            type: FriendRestrictionType
+        ): FriendRestrictionJpaEntity {
+            return FriendRestrictionJpaEntity(
+                actor, target, type
+            )
+        }
     }
 }
