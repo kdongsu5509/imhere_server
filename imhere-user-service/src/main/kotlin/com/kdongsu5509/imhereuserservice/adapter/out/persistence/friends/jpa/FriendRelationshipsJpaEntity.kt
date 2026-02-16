@@ -7,7 +7,12 @@ import org.hibernate.annotations.UuidGenerator
 import java.util.*
 
 @Entity
-@Table(name = "friend_relationships")
+@Table(
+    name = "friend_relationships",
+    uniqueConstraints = [
+        UniqueConstraint(name = "uk_owner_friend", columnNames = ["owner_user_id", "friend_user_id"])
+    ]
+)
 class FriendRelationshipsJpaEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_user_id", nullable = false)
@@ -17,21 +22,27 @@ class FriendRelationshipsJpaEntity(
     @JoinColumn(name = "friend_user_id", nullable = false)
     val friendUser: UserJpaEntity,
 
-    @Column(name = "friend_alias", nullable = false)
+    @Column(name = "friend_alias", nullable = false, length = 20)
     var friendAlias: String
-
 ) : BaseTimeEntity() {
+
     @Id
     @GeneratedValue
     @UuidGenerator
+    @Column(name = "friend_relationship_id", columnDefinition = "BINARY(16)")
     val id: UUID? = null
 
-    fun changeFriendAlias(newFriendAlias: String) {
-        this.friendAlias = newFriendAlias
+    init {
+        require(ownerUser.id != friendUser.id) { "자기 자신을 친구로 등록할 수 없습니다." }
+    }
+
+    fun updateAlias(newAlias: String) {
+        require(newAlias.isNotBlank()) { "별칭은 공백일 수 없습니다." }
+        this.friendAlias = newAlias
     }
 
     companion object {
-        fun createFromAcceptance(
+        fun create(
             owner: UserJpaEntity,
             friend: UserJpaEntity,
             alias: String? = null
