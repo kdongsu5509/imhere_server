@@ -42,13 +42,13 @@ class FriendRelationshipLoadPersistenceAdapterTest @Autowired constructor(
 
     @Test
     @DisplayName("Email를 통해서 친구를 잘 찾아온다.")
-    fun findFriendsByUserEmail_success() {
+    fun findFriendsRelationshipsByUserEmail_success() {
         //given
         createTenTestUserAsFriendWithTestUser()
         testUser = userRepository.findByEmail("test0@test.com")!!
 
         //when
-        val testResult = friendRelationshipAdapter.findFriendsByUserEmail(testUser.email)
+        val testResult = friendRelationshipAdapter.findFriendsRelationshipsByUserEmail(testUser.email)
 
         //then
         Assertions.assertThat(testResult.size).isEqualTo(10)
@@ -57,26 +57,26 @@ class FriendRelationshipLoadPersistenceAdapterTest @Autowired constructor(
 
     @Test
     @DisplayName("사용자를 Email를 통해 찾지 못하면 오류가 터진다.")
-    fun findFriendsByUserEmail_fail_not_found() {
+    fun findFriendsRelationshipsByUserEmail_fail_not_found() {
         //given
         val noExistEmail = "nonono@nonono.com"
 
         //when, then
         Assertions.assertThatThrownBy {
-            friendRelationshipAdapter.findFriendsByUserEmail(noExistEmail)
+            friendRelationshipAdapter.findFriendsRelationshipsByUserEmail(noExistEmail)
         }.isInstanceOf(BusinessException::class.java)
             .hasMessage(ErrorCode.USER_NOT_FOUND.message)
     }
 
     @Test
     @DisplayName("친구가 없으면 빈 리스트가 반환된다.")
-    fun findFriendsByUserEmail_no_friends() {
+    fun findFriendsByUserEmail_no_friendsRelationships() {
         //given
         val noFriendUser = createUserEntity(999)
         userRepository.save(noFriendUser)
 
         //when
-        val testResult = friendRelationshipAdapter.findFriendsByUserEmail(noFriendUser.email)
+        val testResult = friendRelationshipAdapter.findFriendsRelationshipsByUserEmail(noFriendUser.email)
 
         //then
         Assertions.assertThat(testResult.size).isEqualTo(0)
