@@ -13,6 +13,6 @@ class FriendRelationshipReadService(
 ) : ReadFriendsUseCase {
 
     override fun getMyFriends(email: String): List<FriendRelationship> {
-        return friendRelationshipLoadPort.findFriendsByUserEmail(email)
+        return friendRelationshipLoadPort.findFriendsRelationshipsByUserEmail(email)
     }
 }
