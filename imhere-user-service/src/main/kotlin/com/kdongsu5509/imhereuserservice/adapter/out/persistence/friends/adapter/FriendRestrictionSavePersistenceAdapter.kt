@@ -25,7 +25,9 @@ class FriendRestrictionSavePersistenceAdapter(
         receiver: FriendRequestUserInfo,
         type: FriendRestrictionType
     ): FriendRestriction {
-        val newFriendRestrictionEntity = createNewFriendRelationshipEntities(requester.email, receiver.email)
+        val newFriendRestrictionEntity = createNewFriendRelationshipEntities(
+            requester.email, receiver.email, type
+        )
         val result = springDataFriendRestrictionRepository.save(
             newFriendRestrictionEntity
         )
@@ -36,13 +38,14 @@ class FriendRestrictionSavePersistenceAdapter(
     private fun createNewFriendRelationshipEntities(
         requesterEmail: String,
         receiverEmail: String,
+        type: FriendRestrictionType
     ): FriendRestrictionJpaEntity {
         val users = fetchRequiredUsers(requesterEmail, receiverEmail)
 
         val requester = users.first { it.email == requesterEmail }
         val receiver = users.first { it.email == receiverEmail }
 
-        return FriendRestrictionJpaEntity.createFromRejection(receiver, requester)
+        return FriendRestrictionJpaEntity.create(receiver, requester, type)
     }
 
     private fun fetchRequiredUsers(vararg emails: String): List<UserJpaEntity> {

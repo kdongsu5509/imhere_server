@@ -28,14 +28,14 @@ class FriendRelationshipReadServiceTest {
         //given
         val testEmail = "test@test.com"
         val testFriendRelationships = (1..5).map { idx -> createFriendRelationship(idx) }
-        given(friendRelationshipLoadPort.findFriendsByUserEmail(testEmail))
+        given(friendRelationshipLoadPort.findFriendsRelationshipsByUserEmail(testEmail))
             .willReturn(testFriendRelationships)
 
         //when
         friendRelationshipReadService.getMyFriends(testEmail)
 
         //then
-        verify(friendRelationshipLoadPort, times(1)).findFriendsByUserEmail(testEmail)
+        verify(friendRelationshipLoadPort, times(1)).findFriendsRelationshipsByUserEmail(testEmail)
     }
 
     private fun createFriendRelationship(idx: Int): FriendRelationship {
