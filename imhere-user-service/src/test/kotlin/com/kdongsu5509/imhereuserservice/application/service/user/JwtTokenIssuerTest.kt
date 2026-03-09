@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.*
 
 class JwtTokenIssuerTest {
 
@@ -33,7 +34,7 @@ class JwtTokenIssuerTest {
         val role = "USER"
 
         // when
-        val accessToken = jwtTokenIssuer.createAccessToken(userName, role)
+        val accessToken = jwtTokenIssuer.createAccessToken(UUID.randomUUID(), userName, role)
 
         // then
         assertThat(accessToken).isNotEmpty()
@@ -66,7 +67,7 @@ class JwtTokenIssuerTest {
         val role = "USER"
 
         // when
-        val refreshToken = jwtTokenIssuer.createRefreshToken(userName, role)
+        val refreshToken = jwtTokenIssuer.createRefreshToken(UUID.randomUUID(), userName, role)
 
         // then
         assertThat(refreshToken).isNotEmpty()
@@ -99,8 +100,8 @@ class JwtTokenIssuerTest {
         val role = "USER"
 
         // when
-        val accessToken = jwtTokenIssuer.createAccessToken(userName, role)
-        val refreshToken = jwtTokenIssuer.createRefreshToken(userName, role)
+        val accessToken = jwtTokenIssuer.createAccessToken(UUID.randomUUID(), userName, role)
+        val refreshToken = jwtTokenIssuer.createRefreshToken(UUID.randomUUID(), userName, role)
 
         // then
         val secretKey = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray(StandardCharsets.UTF_8))
@@ -132,8 +133,8 @@ class JwtTokenIssuerTest {
         val role = "USER"
 
         // when
-        val token1 = jwtTokenIssuer.createAccessToken(userName, role)
-        val token2 = jwtTokenIssuer.createAccessToken(userName, role)
+        val token1 = jwtTokenIssuer.createAccessToken(UUID.randomUUID(), userName, role)
+        val token2 = jwtTokenIssuer.createAccessToken(UUID.randomUUID(), userName, role)
 
         // then
         val secretKey = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray(StandardCharsets.UTF_8))
