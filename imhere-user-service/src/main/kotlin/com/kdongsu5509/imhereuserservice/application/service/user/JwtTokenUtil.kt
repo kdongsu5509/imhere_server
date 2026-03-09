@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.*
 import javax.crypto.SecretKey
 
 @Component
@@ -38,6 +39,21 @@ class JwtTokenUtil(private val jwtProperties: JwtProperties) {
 
     fun getJwtIdFromToken(token: String): String {
         return parseClaims(token).id
+    }
+
+    fun getUIDFromToken(token: String): UUID {
+        val claims = parseClaims(token)
+
+        // 1. "uid" 값이 아예 없는 경우에 대한 방어 로직
+        val uidValue = claims["uid"]?.toString()
+            ?: throw IllegalArgumentException("토큰에 UID 정보가 존재하지 않습니다.")
+
+        // 2. 문자열을 UUID로 변환
+        return try {
+            UUID.fromString(uidValue)
+        } catch (e: Exception) {
+            throw IllegalArgumentException("유효하지 않은 UUID 형식입니다: $uidValue")
+        }
     }
 
     fun getUsernameFromToken(token: String): String {

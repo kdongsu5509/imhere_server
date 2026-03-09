@@ -19,11 +19,12 @@ class JwtTokenIssuer(private val jwtProperties: JwtProperties) {
         Keys.hmacShaKeyFor(keyBytes)
     }
 
-    fun createAccessToken(userName: String, role: String): String {
+    fun createAccessToken(id: UUID, userName: String, role: String): String {
         val expiredTime = LocalDateTime.now().plusMinutes(jwtProperties.accessExpirationMinutes)
         return Jwts.builder()
             .setId(UUID.randomUUID().toString())
-            .claim("category", "access")         // claim 메서드는 동일
+            .claim("category", "access")
+            .claim("uid", id)
             .claim("username", userName)
             .claim("role", "ROLE_${role}")
             .setIssuedAt(Date.from(Instant.now()))
@@ -32,11 +33,12 @@ class JwtTokenIssuer(private val jwtProperties: JwtProperties) {
             .compact()
     }
 
-    fun createRefreshToken(userName: String, role: String): String {
+    fun createRefreshToken(id: UUID, userName: String, role: String): String {
         val expiredTime = LocalDateTime.now().plusDays(jwtProperties.refreshExpirationDays);
         return Jwts.builder()
             .setId(UUID.randomUUID().toString())
-            .claim("category", "refresh")         // claim 메서드는 동일
+            .claim("category", "refresh")
+            .claim("uid", id)
             .claim("username", userName)
             .claim("role", "ROLE_${role}")
             .setIssuedAt(Date.from(Instant.now()))
@@ -44,5 +46,4 @@ class JwtTokenIssuer(private val jwtProperties: JwtProperties) {
             .signWith(secretKey)
             .compact()
     }
-
 }

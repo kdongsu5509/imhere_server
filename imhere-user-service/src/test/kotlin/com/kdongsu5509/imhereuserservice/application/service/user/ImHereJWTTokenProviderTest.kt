@@ -15,6 +15,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import java.time.Duration
 import java.time.LocalDateTime
+import java.util.*
 
 @ExtendWith(MockitoExtension::class)
 class ImHereJWTTokenProviderTest {
@@ -31,6 +32,7 @@ class ImHereJWTTokenProviderTest {
         const val NEW_ACCESS_TOKEN = "new-access-token"
         const val NEW_REFRESH_TOKEN = "new-refresh-token"
 
+        var TEST_UUID = UUID.randomUUID()
         var EXP_DATE = LocalDateTime.now().plusDays(7)!!
         const val REDIS_KEY = "refresh:$USERNAME"
     }
@@ -55,20 +57,20 @@ class ImHereJWTTokenProviderTest {
     @DisplayName("JWT 인증 토큰을 성공적으로 발급한다")
     fun issueJwtAuth_success() {
         // given
-        `when`(jwtTokenIssuer.createAccessToken(USERNAME, ROLE)).thenReturn(ACCESS_TOKEN)
-        `when`(jwtTokenIssuer.createRefreshToken(USERNAME, ROLE)).thenReturn(REFRESH_TOKEN)
+        `when`(jwtTokenIssuer.createAccessToken(TEST_UUID, USERNAME, ROLE)).thenReturn(ACCESS_TOKEN)
+        `when`(jwtTokenIssuer.createRefreshToken(TEST_UUID, USERNAME, ROLE)).thenReturn(REFRESH_TOKEN)
         `when`(jwtTokenUtil.getExpirationDateFromToken(REFRESH_TOKEN)).thenReturn(EXP_DATE)
 
         // when
-        val result = imHereJWTTokenProvider.issueJwtToken(USERNAME, ROLE)
+        val result = imHereJWTTokenProvider.issueJwtToken(TEST_UUID, USERNAME, ROLE)
 
         // then
         assertThat(result).isNotNull()
         assertThat(result.accessToken).isEqualTo(ACCESS_TOKEN)
         assertThat(result.refreshToken).isEqualTo(REFRESH_TOKEN)
 
-        verify(jwtTokenIssuer).createAccessToken(USERNAME, ROLE)
-        verify(jwtTokenIssuer).createRefreshToken(USERNAME, ROLE)
+        verify(jwtTokenIssuer).createAccessToken(TEST_UUID, USERNAME, ROLE)
+        verify(jwtTokenIssuer).createRefreshToken(TEST_UUID, USERNAME, ROLE)
         verify(jwtTokenUtil).getExpirationDateFromToken(REFRESH_TOKEN)
     }
 
@@ -78,10 +80,11 @@ class ImHereJWTTokenProviderTest {
         // given
         `when`(jwtTokenUtil.getUsernameFromToken(REFRESH_TOKEN)).thenReturn(USERNAME)
         `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(TOKEN_INFO_ROLE)
+        `when`(jwtTokenUtil.getUIDFromToken(REFRESH_TOKEN)).thenReturn(TEST_UUID)
         `when`(jwtTokenUtil.validateToken(REFRESH_TOKEN)).thenReturn(true)
         `when`(cachePort.find(REDIS_KEY)).thenReturn(REFRESH_TOKEN)
-        `when`(jwtTokenIssuer.createAccessToken(USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_ACCESS_TOKEN)
-        `when`(jwtTokenIssuer.createRefreshToken(USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_REFRESH_TOKEN)
+        `when`(jwtTokenIssuer.createAccessToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_ACCESS_TOKEN)
+        `when`(jwtTokenIssuer.createRefreshToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_REFRESH_TOKEN)
         `when`(jwtTokenUtil.getExpirationDateFromToken(NEW_REFRESH_TOKEN)).thenReturn(EXP_DATE)
 
         // when
@@ -96,8 +99,8 @@ class ImHereJWTTokenProviderTest {
         verify(jwtTokenUtil).getRoleFromToken(REFRESH_TOKEN)
         verify(jwtTokenUtil).validateToken(REFRESH_TOKEN)
         verify(cachePort).find(REDIS_KEY)
-        verify(jwtTokenIssuer).createAccessToken(USERNAME, TOKEN_INFO_ROLE)
-        verify(jwtTokenIssuer).createRefreshToken(USERNAME, TOKEN_INFO_ROLE)
+        verify(jwtTokenIssuer).createAccessToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)
+        verify(jwtTokenIssuer).createRefreshToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)
         verify(jwtTokenUtil).getExpirationDateFromToken(NEW_REFRESH_TOKEN)
 
         val keyCaptor: ArgumentCaptor<String> = ArgumentCaptor.forClass(String::class.java)
@@ -204,10 +207,11 @@ class ImHereJWTTokenProviderTest {
 
         `when`(jwtTokenUtil.getUsernameFromToken(REFRESH_TOKEN)).thenReturn(USERNAME)
         `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(TOKEN_INFO_ROLE)
+        `when`(jwtTokenUtil.getUIDFromToken(REFRESH_TOKEN)).thenReturn(Companion.TEST_UUID)
         `when`(jwtTokenUtil.validateToken(REFRESH_TOKEN)).thenReturn(true)
         `when`(cachePort.find(REDIS_KEY)).thenReturn(REFRESH_TOKEN)
-        `when`(jwtTokenIssuer.createAccessToken(USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_ACCESS_TOKEN)
-        `when`(jwtTokenIssuer.createRefreshToken(USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_REFRESH_TOKEN)
+        `when`(jwtTokenIssuer.createAccessToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_ACCESS_TOKEN)
+        `when`(jwtTokenIssuer.createRefreshToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_REFRESH_TOKEN)
         `when`(jwtTokenUtil.getExpirationDateFromToken(NEW_REFRESH_TOKEN)).thenReturn(expirationDate)
 
         // when
@@ -217,8 +221,8 @@ class ImHereJWTTokenProviderTest {
         assertThat(result).isNotNull()
         assertThat(result.accessToken).isEqualTo(NEW_ACCESS_TOKEN)
         assertThat(result.refreshToken).isEqualTo(NEW_REFRESH_TOKEN)
-        verify(jwtTokenIssuer).createAccessToken(USERNAME, TOKEN_INFO_ROLE)
-        verify(jwtTokenIssuer).createRefreshToken(USERNAME, TOKEN_INFO_ROLE)
+        verify(jwtTokenIssuer).createAccessToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)
+        verify(jwtTokenIssuer).createRefreshToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)
         verify(jwtTokenUtil).getExpirationDateFromToken(NEW_REFRESH_TOKEN)
     }
 }

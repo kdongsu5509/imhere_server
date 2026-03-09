@@ -55,7 +55,7 @@ class OIDCLoginFacade(
     private fun convertToAuthenticationResult(user: User): AuthenticationProcessResult {
         val statusCode = decideStatusCode(user)
 
-        val jwtToken = jwtTokenProvider.issueJwtToken(user.email, user.role.toString())
+        val jwtToken = jwtTokenProvider.issueJwtToken(user.id!!, user.email, user.role.toString())
 
         return AuthenticationProcessResult(
             statusCode = statusCode,

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
+import java.util.*
 
 @Component
 class ImHereJWTTokenProvider(
@@ -15,9 +16,13 @@ class ImHereJWTTokenProvider(
     private val jwtTokenUtil: JwtTokenUtil,
     private val cachePort: CachePort,
 ) : JwtTokenProvider {
-    override fun issueJwtToken(email: String, role: String): ImHereJwt {
-        val accessToken = jwtTokenIssuer.createAccessToken(email, role)
-        val refreshToken = jwtTokenIssuer.createRefreshToken(email, role)
+    override fun issueJwtToken(
+        id: UUID,
+        email: String,
+        role: String
+    ): ImHereJwt {
+        val accessToken = jwtTokenIssuer.createAccessToken(id, email, role)
+        val refreshToken = jwtTokenIssuer.createRefreshToken(id, email, role)
 
         val expiredDateTime = jwtTokenUtil.getExpirationDateFromToken(refreshToken).atZone(ZoneId.systemDefault())
         val duration: Duration = Duration.between(Instant.now(), expiredDateTime.toInstant())
@@ -31,6 +36,7 @@ class ImHereJWTTokenProvider(
     override fun reissueJwtToken(refreshToken: String): ImHereJwt {
         val username = jwtTokenUtil.getUsernameFromToken(refreshToken)
         val role = jwtTokenUtil.getRoleFromToken(refreshToken)
+        val uid = jwtTokenUtil.getUIDFromToken(refreshToken)
 
         // 토큰 유효성 검사 (만료 시간 포함)
         if (!jwtTokenUtil.validateToken(refreshToken)) {
@@ -40,7 +46,7 @@ class ImHereJWTTokenProvider(
         val refreshTokenFromRedis = cachePort.find("refresh:$username") as String?
 
         if (refreshTokenFromRedis != null && refreshTokenFromRedis == refreshToken) {
-            return issueJwtToken(username, role)
+            return issueJwtToken(uid, username, role)
         }
 
         throw IllegalArgumentException("일치하지 않는 리프레시 토큰")
