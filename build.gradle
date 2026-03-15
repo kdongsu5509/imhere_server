@@ -1,41 +1,137 @@
-// 플러그인 정의 - apply false -> 자동 적용 방지
 plugins {
-    id 'org.springframework.boot' version '3.5.7' apply false
-    id 'org.jetbrains.kotlin.jvm' version '2.2.21' apply false
-    id 'org.jetbrains.kotlin.plugin.spring' version '2.2.21' apply false
-    id 'io.spring.dependency-management' version '1.1.7' apply false
-    id 'org.jetbrains.kotlin.plugin.jpa' version '2.2.21' apply false
+    id 'org.springframework.boot' version '3.4.3' // 안정화 버전 권장
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.25'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
+    id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.25'
+    id 'org.jetbrains.kotlin.kapt' version '1.9.25'
+    id 'jacoco'
+    id 'com.epages.restdocs-api-spec' version '0.19.2'
 }
 
 group = 'com.kdongsu5509'
 version = '0.0.1-SNAPSHOT'
-description = 'ImHere Multi-Module Project'
+description = 'ImHere Integrated Project'
 
-ext {
-    set('springCloudVersion', "2025.0.1")
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'io.spring.dependency-management'
+repositories {
+    mavenCentral()
+}
 
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
-        }
+// Spring Cloud 버전 정의 (필요한 것만 선택적으로 사용)
+ext {
+    set('springCloudVersion', "2024.0.0")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    // KOTLIN
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+
+    // JWT & SECURITY
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    testImplementation 'org.testcontainers:postgresql'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // DATA (JPA, Redis, H2)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+    implementation 'org.postgresql:postgresql'
+
+    // SOLAPI (Java SDK용)
+    implementation 'net.nurigo:sdk:4.3.0'
+
+    // WEB & VALIDATION
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // QUERY DSL
+    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+    kapt 'com.querydsl:querydsl-apt:5.1.0:jakarta'
+    kapt 'jakarta.annotation:jakarta.annotation-api'
+    kapt 'jakarta.persistence:jakarta.persistence-api'
+
+    // LOMBOK (Java 코드 호환용)
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // TEST
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:testcontainers'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.2'
+    testImplementation 'com.h2database:h2'
+}
+
+// --- 기타 설정 유지 ---
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll '-Xjsr305=strict'
+    }
+}
+
+allOpen {
+    annotation 'jakarta.persistence.Entity'
+    annotation 'jakarta.persistence.MappedSuperclass'
+    annotation 'jakarta.persistence.Embeddable'
+}
+
+openapi3 {
+    setServer("http://localhost:8080")
+    title = "ImHere Integrated API"
+    description = "User & Notification 통합 API 문서"
+    version = "0.0.1"
+    format = "yaml"
+}
+
+tasks.register("copyOasToSwagger", Copy) {
+    dependsOn "openapi3"
+    from "build/api-spec/openapi3.yaml"
+    into "src/main/resources/static/docs"
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+    reports {
+        html.required = true
+        xml.required = false
+        csv.required = false
     }
 
-    repositories {
-        mavenCentral()
-    }
-
-    dependencyManagement {
-        imports {
-            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-        }
-    }
-
-    tasks.named('test') {
-        useJUnitPlatform()
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "**/dto/**", "**/config/**", "**/exception/**",
+                    "**/common/**", "**/domain/**", "**/*Entity*",
+                    "**/port/**", "**/Q*", "**/*Application*"
+            ])
+        }))
     }
 }
