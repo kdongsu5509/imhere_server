@@ -87,11 +87,6 @@ logs/
 /src/main/resources/application*.properties
 /src/main/resources/application*.yml
 /src/main/resources/imhereFirebaseKey.json
-# MSA 도입 이후 민감 파일
-**/application-private.yaml
-
-# imhere-config의 민감 파일
-/imhere-config/src/main/resources/application-git.yaml
 
 # 암호화 키 파일
 *.jks
