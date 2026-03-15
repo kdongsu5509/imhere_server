@@ -1,0 +1,23 @@
+package com.kdongsu5509.user.application.service.friend
+
+import com.kdongsu5509.user.application.port.`in`.friend.CreateFriendRequestUseCase
+import com.kdongsu5509.user.application.port.out.friend.FriendRequestSavePort
+import com.kdongsu5509.user.domain.friend.FriendRequest
+import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
+import java.util.*
+
+@Component
+@Transactional
+class FriendRequestCreateService(
+    private val friendRequestSavePort: FriendRequestSavePort
+) : CreateFriendRequestUseCase {
+
+    override fun request(myEmail: String, receiverId: UUID, message: String): FriendRequest {
+        return friendRequestSavePort.save(
+            requesterEmail = myEmail,
+            receiverId = receiverId,
+            message = message
+        )
+    }
+}
