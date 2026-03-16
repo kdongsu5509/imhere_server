@@ -1,11 +1,11 @@
-package com.kdongsu5509.imhere.message.adapter.dto
+package com.kdongsu5509.notifications.adapter.`in`.dto
 
 import org.jetbrains.annotations.NotNull
 
 data class MessageSendRequest(
-    @NotNull
+    @param:NotNull
     val message: String,
 
-    @NotNull
+    @param:NotNull
     val receiverNumber: String
 )

@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.application.service.term
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.TermErrorCode
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.NewTermDefinitionRequest
 import com.kdongsu5509.user.application.port.out.term.TermsDefinitionLoadPort
 import com.kdongsu5509.user.application.port.out.term.TermsDefinitionSavePort
@@ -71,7 +71,7 @@ class TermsDefinitionCreateServiceTest {
         assertThrows<BusinessException> {
             termsDefinitionCreateService.createNewTermsDefinition(testReq)
         }.also {
-            assertThat(it.errorCode).isEqualTo(ErrorCode.TERM_DEFINITION_ALREADY_EXIST)
+            assertThat(it.errorCode).isEqualTo(TermErrorCode.TERM_DEFINITION_ALREADY_EXIST)
         }
     }
 }

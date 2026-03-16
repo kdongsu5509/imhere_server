@@ -2,7 +2,7 @@ package com.kdongsu5509.user.adapter.out.persistence.friends.adapter
 
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.UserErrorCode
 import com.kdongsu5509.user.adapter.out.persistence.friends.adapter.FriendRelationshipSavePersistenceAdapterTest.TestConfig
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRelationshipsRepository
 import com.kdongsu5509.user.adapter.out.persistence.friends.mapper.FriendRelationshipMapper
@@ -96,7 +96,7 @@ class FriendRelationshipSavePersistenceAdapterTest @Autowired constructor(
         assertThrows<BusinessException> {
             adapter.save(invalidInfo, receiverInfo)
         }.also {
-            assertEquals(ErrorCode.USER_NOT_FOUND, it.errorCode)
+            assertEquals(UserErrorCode.USER_NOT_FOUND, it.errorCode)
         }
     }
 

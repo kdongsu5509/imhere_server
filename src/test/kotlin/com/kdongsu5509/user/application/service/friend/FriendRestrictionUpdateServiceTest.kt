@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.application.service.friend
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.FriendErrorCode
 import com.kdongsu5509.user.application.port.out.friend.FriendRestrictionLoadPort
 import com.kdongsu5509.user.application.port.out.friend.FriendRestrictionUpdatePort
 import com.kdongsu5509.user.domain.friend.FriendRestriction
@@ -75,7 +75,7 @@ class FriendRestrictionUpdateServiceTest {
             friendRestrictionUpdateService.deleteRestriction(wrongEmail, TEST_RESTRICTION_ID)
         }
             .isInstanceOf(BusinessException::class.java)
-            .hasMessage(ErrorCode.FRIEND_RESTRICTION_ACTOR_MISS_MATCH.message)
+            .hasMessage(FriendErrorCode.FRIEND_RESTRICTION_ACTOR_MISS_MATCH.message)
         verify(friendRestrictionUpdatePort, never()).delete(anyLong())
     }
 

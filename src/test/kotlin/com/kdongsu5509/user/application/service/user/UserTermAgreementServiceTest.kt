@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.application.service.user
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.TermErrorCode
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserTermsConsentRequest
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserTermsConsentRequest.ConsentDetail
 import com.kdongsu5509.user.application.port.out.term.TermsDefinitionLoadPort
@@ -81,7 +81,7 @@ class UserTermAgreementServiceTest {
         assertThatThrownBy {
             service.consentAll(username, request)
         }.isInstanceOf(BusinessException::class.java)
-            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.OBLIGATORY_TERM_NOT_AGREED)
+            .hasFieldOrPropertyWithValue("errorCode", TermErrorCode.OBLIGATORY_TERM_NOT_AGREED)
     }
 
     @Test

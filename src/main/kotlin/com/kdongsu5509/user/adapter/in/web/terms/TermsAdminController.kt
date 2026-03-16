@@ -1,10 +1,10 @@
 package com.kdongsu5509.user.adapter.`in`.web.terms
 
+import com.kdongsu5509.support.common.dto.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.NewTermDefinitionRequest
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.NewTermVersionRequest
 import com.kdongsu5509.user.application.port.`in`.terms.CreateTermVersionUseCase
 import com.kdongsu5509.user.application.port.`in`.terms.CreateTermsDefinitionUseCase
-import com.kdongsu5509.user.adapter.`in`.web.common.APIResponse
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,7 +22,7 @@ class TermsAdminController(
     /**
      * Create
      */
-    // ?½ê? ì¢…ë¥˜
+    // ?ï¿½ï¿½? ì¢…ë¥˜
     @PostMapping("/definition")
     fun createNewTermDefinition(
         @Validated @RequestBody newTermDefinitionRequest: NewTermDefinitionRequest
@@ -31,7 +31,7 @@ class TermsAdminController(
         return APIResponse.success()
     }
 
-    // ?½ê? ?¸ë? ?´ìš©
+    // ?ï¿½ï¿½? ?ï¿½ï¿½? ?ï¿½ìš©
     @PostMapping("/version")
     fun createNewTermVersion(
         @Validated @RequestBody newTermVersionRequest: NewTermVersionRequest

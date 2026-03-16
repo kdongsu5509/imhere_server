@@ -1,11 +1,11 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
+import com.kdongsu5509.support.common.dto.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.NicknameChangeRequest
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserInfoResponse
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserSearchResponse
 import com.kdongsu5509.user.application.port.`in`.user.ReadUserUseCase
 import com.kdongsu5509.user.application.port.`in`.user.UpdateUserUseCase
-import com.kdongsu5509.user.adapter.`in`.web.common.APIResponse
 import jakarta.validation.constraints.NotBlank
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
@@ -20,7 +20,7 @@ class UserController(
 ) {
 
     /**
-     * ?�의 ?�보 조회
+     * 개인 정보 조회
      */
     @GetMapping("/me")
     fun searchMyInfo(
@@ -36,7 +36,7 @@ class UserController(
     }
 
     /**
-     * ?�의 ?�네??변�?
+     * 개인 닉네임 변경
      */
     @PostMapping("/nickname")
     fun changeNickName(
@@ -56,12 +56,12 @@ class UserController(
     }
 
     /**
-     * ?�용??조회
+     * 사용자 조회
      */
     @GetMapping("/{keyword}")
     fun searchUsers(
         @AuthenticationPrincipal user: UserDetails,
-        @PathVariable @NotBlank(message = "?�메???��? ?�용???�네?�을 ?�력?�여???�니??)
+        @PathVariable @NotBlank(message = "이메일 또는 사용자 닉네임을 입력하여야 합니다")
         keyword: String
     ): APIResponse<List<UserSearchResponse>> {
         val findingUsers = readUserUseCase.searchPotentialFriendsUser(user.username, keyword)

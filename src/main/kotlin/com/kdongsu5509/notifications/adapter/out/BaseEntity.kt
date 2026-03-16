@@ -1,30 +1,30 @@
-package com.kdongsu5509.notifications.adapter.out;
+package com.kdongsu5509.notifications.adapter.out
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
-import java.time.LocalDateTime;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import jakarta.persistence.Column
+import jakarta.persistence.EntityListeners
+import jakarta.persistence.MappedSuperclass
+import org.springframework.data.annotation.CreatedBy
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedBy
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import java.time.LocalDateTime
 
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditingEntityListener::class)
 abstract class BaseEntity {
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    LocalDateTime createdAt = LocalDateTime.now();
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
     @LastModifiedDate
     @Column(nullable = false)
-    LocalDateTime updatedAt = LocalDateTime.now();
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 
     @CreatedBy
     @Column(updatable = false)
-    String createdBy;
+    var createdBy: String? = null
 
     @LastModifiedBy
-    String updatedBy;
+    var updatedBy: String? = null
 }

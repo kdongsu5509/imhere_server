@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.AuthErrorCode
 import com.kdongsu5509.user.adapter.out.auth.oauth.KakaoOauthClient
 import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKey
 import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKeyResponse
@@ -120,7 +120,7 @@ class AuthControllerIntegrationTest : TestRedisContainer() {
         performLogin(invalidToken)
             .andExpect(status().is4xxClientError)
             .andExpect(jsonPath("$.code").value(400)) // APIResponse의 code 필드 확인
-            .andExpect(jsonPath("$.data.message").value(ErrorCode.OIDC_INVALID.message))
+            .andExpect(jsonPath("$.data.message").value(AuthErrorCode.OIDC_INVALID.message))
     }
 
     @Test

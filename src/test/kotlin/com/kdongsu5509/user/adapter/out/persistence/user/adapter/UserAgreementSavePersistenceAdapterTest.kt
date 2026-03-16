@@ -1,7 +1,8 @@
 package com.kdongsu5509.user.adapter.out.persistence.user.adapter
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.TermErrorCode
+import com.kdongsu5509.support.exception.UserErrorCode
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsDefinitionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsVersionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.TermsDefinitionJpaEntity
@@ -103,7 +104,7 @@ class UserAgreementSavePersistenceAdapterTest @Autowired constructor(
         assertThatThrownBy {
             adapter.saveAgreement("wrong@kakao.com", termDefId1)
         }.isInstanceOf(BusinessException::class.java)
-            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND)
+            .hasFieldOrPropertyWithValue("errorCode", UserErrorCode.USER_NOT_FOUND)
     }
 
     @Test
@@ -114,6 +115,6 @@ class UserAgreementSavePersistenceAdapterTest @Autowired constructor(
         assertThatThrownBy {
             adapter.saveAgreements(testUser.email, invalidTermIds)
         }.isInstanceOf(BusinessException::class.java)
-            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.TERM_DEFINITION_NOT_FOUND)
+            .hasFieldOrPropertyWithValue("errorCode", TermErrorCode.TERM_DEFINITION_NOT_FOUND)
     }
 }

@@ -1,9 +1,9 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.kdongsu5509.user.application.port.`in`.friend.ReadFriendRequestUseCase
-import com.kdongsu5509.user.adapter.`in`.web.common.APIResponse
+import com.kdongsu5509.support.common.dto.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.ReceivedFriendRequestResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.ReceivedFriendRequestResponseDetail
+import com.kdongsu5509.user.application.port.`in`.friend.ReadFriendRequestUseCase
 import jakarta.validation.constraints.NotNull
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails

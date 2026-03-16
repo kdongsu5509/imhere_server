@@ -1,10 +1,10 @@
 package com.kdongsu5509.user.adapter.`in`.web.terms
 
+import com.kdongsu5509.support.common.dto.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.TermDefinitionResponse
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.TermVersionResponse
 import com.kdongsu5509.user.application.port.`in`.terms.ReadTermsDefinitionUseCase
 import com.kdongsu5509.user.application.port.`in`.terms.ReadTermsVersionUseCase
-import com.kdongsu5509.user.adapter.`in`.web.common.APIResponse
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -22,7 +22,7 @@ class TermsController(
     /**
      * READ
      */
-    // ?�재 ?��? 종류 ?�체 조회
+    // ?�재 ?��? 종류 ?�체 조회
     @GetMapping
     fun readAllTermsDefinitions(
         @PageableDefault(size = 10) pageable: Pageable
@@ -31,7 +31,7 @@ class TermsController(
         return APIResponse.success(response)
     }
 
-    //?��? 버전 ?��? ?�용 조회
+    //?��? 버전 ?��? ?�용 조회
     @GetMapping("/version/{termDefinitionId}")
     fun readTermsVersion(
         @PathVariable termDefinitionId: Long

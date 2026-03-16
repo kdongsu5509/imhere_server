@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.application.service.user
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.UserErrorCode
 import com.kdongsu5509.user.application.port.out.user.UserUpdatePort
 import com.kdongsu5509.user.domain.user.OAuth2Provider
 import com.kdongsu5509.user.domain.user.User
@@ -60,12 +60,12 @@ class UserNicknameUpdateServiceTest {
                 testEmail,
                 testNewNickname
             )
-        ).thenThrow(BusinessException(ErrorCode.USER_NOT_FOUND))
+        ).thenThrow(BusinessException(UserErrorCode.USER_NOT_FOUND))
 
         //when, then
         Assertions.assertThatThrownBy {
             userNicknameUpdateService.changeNickName(testEmail, testNewNickname)
         }.isInstanceOf(BusinessException::class.java)
-            .hasMessage(ErrorCode.USER_NOT_FOUND.message)
+            .hasMessage(UserErrorCode.USER_NOT_FOUND.message)
     }
 }

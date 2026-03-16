@@ -1,9 +1,9 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.kdongsu5509.user.application.port.`in`.friend.UpdateFriendsUseCase
-import com.kdongsu5509.user.adapter.`in`.web.common.APIResponse
+import com.kdongsu5509.support.common.dto.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.FriendRelationshipResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.UpdateFriendAliasRequest
+import com.kdongsu5509.user.application.port.`in`.friend.UpdateFriendsUseCase
 import org.jetbrains.annotations.NotNull
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails

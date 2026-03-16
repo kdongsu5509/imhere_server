@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.application.service.term
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.TermErrorCode
 import com.kdongsu5509.user.application.port.out.term.TermsVersionLoadPort
 import com.kdongsu5509.user.domain.terms.TermVersion
 import org.assertj.core.api.Assertions.assertThat
@@ -58,7 +58,7 @@ class TermsVersionReadServiceTest {
         given(termsVersionLoadPort.loadSpecificActiveTermVersion(invalidId))
             .willThrow(
                 BusinessException(
-                    ErrorCode.TERM_DEFINITION_NOT_FOUND
+                    TermErrorCode.TERM_DEFINITION_NOT_FOUND
                 )
             )
 

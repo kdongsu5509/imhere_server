@@ -1,6 +1,6 @@
-package com.kdongsu5509.notifications.domain;
+package com.kdongsu5509.notifications.domain
 
-public enum DeviceType {
+enum class DeviceType {
     AOS,
     IOS,
     WEB,

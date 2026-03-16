@@ -41,7 +41,7 @@ class FriendRequestSavePersistenceAdapter(
         val queryResult = userRepository.findActiveUsersByEmailAndId(requesterEmail, receiverId)
 
         if (queryResult.size != 2) {
-            throw BusinessException(UserErrorCode.USER_NOT_FOUND)
+            throw BusinessException(UserErrorCode.USER_NOT_FOUND) as Throwable
         }
         return queryResult
     }

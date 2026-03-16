@@ -2,7 +2,7 @@ package com.kdongsu5509.user.adapter.out.persistence.friends.adapter
 
 import com.kdongsu5509.support.config.QueryDslConfig
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.FriendErrorCode
 import com.kdongsu5509.user.adapter.out.persistence.friends.mapper.FriendRequestMapper
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
@@ -117,7 +117,7 @@ class FriendRequestLoadPersistenceAdapterTest @Autowired constructor(
         Assertions.assertThatThrownBy {
             loadAdapter.findReceivedRequestByRequestId(1L)
         }.isInstanceOf(BusinessException::class.java)
-            .hasMessage(ErrorCode.FRIENDSHIP_REQUEST_NOT_FOUND.message)
+            .hasMessage(FriendErrorCode.FRIENDSHIP_REQUEST_NOT_FOUND.message)
     }
 
     private fun saveUserInDatabase(email: String, nickname: String): UserJpaEntity = springDataUserRepository.save(

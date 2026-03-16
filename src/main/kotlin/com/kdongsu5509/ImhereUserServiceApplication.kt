@@ -1,4 +1,4 @@
-package com.kdongsu5509.user
+package com.kdongsu5509
 
 import jakarta.annotation.PostConstruct
 import org.springframework.boot.autoconfigure.SpringBootApplication

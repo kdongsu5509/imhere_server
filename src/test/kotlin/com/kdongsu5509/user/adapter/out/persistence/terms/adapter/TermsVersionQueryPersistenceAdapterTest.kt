@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.adapter.out.persistence.terms.adapter
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.TermErrorCode
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsVersionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.TermsDefinitionJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.TermsVersionJpaEntity
@@ -87,6 +87,6 @@ class TermsVersionQueryPersistenceAdapterTest {
             adapter.loadSpecificActiveTermVersion(invalidTermDefinitionId)
         }
             .isInstanceOf(BusinessException::class.java)
-            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.TERM_DEFINITION_NOT_FOUND)
+            .hasFieldOrPropertyWithValue("errorCode", TermErrorCode.TERM_DEFINITION_NOT_FOUND)
     }
 }

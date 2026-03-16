@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.adapter.out.persistence.terms.adapter
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.TermErrorCode
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsDefinitionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.TermsDefinitionJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.terms.mapper.TermDefinitionMapper
@@ -105,7 +105,7 @@ class TermsDefinitionQueryPersistenceAdapterTest {
         assertThrows<BusinessException> {
             adapter.loadTermDefinition(id)
         }.also {
-            assertThat(it.errorCode).isEqualTo(ErrorCode.TERM_DEFINITION_NOT_FOUND)
+            assertThat(it.errorCode).isEqualTo(TermErrorCode.TERM_DEFINITION_NOT_FOUND)
         }
     }
 

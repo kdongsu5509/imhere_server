@@ -1,8 +1,8 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
+import com.kdongsu5509.support.common.dto.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserTermsConsentRequest
 import com.kdongsu5509.user.application.port.`in`.user.AgreementTermUseCase
-import com.kdongsu5509.user.adapter.`in`.web.common.APIResponse
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Positive
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -16,7 +16,7 @@ class UserAgreementController(
     private val agreementTermUseCase: AgreementTermUseCase
 ) {
     /**
-     * ?¬ìš©?ê? ?Œì› ?•ë³´ë¥??™ì˜?˜ëŠ” ê²ƒì„ ë°›ëŠ” `API` ?¬ì¸?¸ì…?ˆë‹¤.
+     * ?ï¿½ìš©?ï¿½ï¿½? ?ï¿½ì› ?ï¿½ë³´ï¿½??ï¿½ì˜?ï¿½ëŠ” ê²ƒì„ ë°›ëŠ” `API` ?ï¿½ì¸?ï¿½ì…?ï¿½ë‹¤.
      */
     @PostMapping("/consent")
     fun consentAll(
@@ -30,7 +30,7 @@ class UserAgreementController(
     @PostMapping("/consent/{termDefinitionId}")
     fun consentSingle(
         @AuthenticationPrincipal userDetail: UserDetails,
-        @PathVariable @Validated @NotNull @Positive(message = "?¬ë°”ë¥??½ê? IDê°€ ?„ë‹™?ˆë‹¤") termDefinitionId: Long
+        @PathVariable @Validated @NotNull @Positive(message = "?ï¿½ë°”ï¿½??ï¿½ï¿½? IDê°€ ?ï¿½ë‹™?ï¿½ë‹¤") termDefinitionId: Long
     ): APIResponse<Unit> {
         agreementTermUseCase.consent(userDetail.username, termDefinitionId)
         return APIResponse.success()

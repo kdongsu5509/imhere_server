@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.common.config
+package com.kdongsu5509.notifications.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component

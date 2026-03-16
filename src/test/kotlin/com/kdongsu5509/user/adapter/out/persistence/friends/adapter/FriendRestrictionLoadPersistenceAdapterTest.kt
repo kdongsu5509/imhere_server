@@ -2,7 +2,8 @@ package com.kdongsu5509.user.adapter.out.persistence.friends.adapter
 
 import com.kdongsu5509.support.config.QueryDslConfig
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.FriendErrorCode
+import com.kdongsu5509.support.exception.UserErrorCode
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRestrictionJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.mapper.FriendRestrictionMapper
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
@@ -69,7 +70,7 @@ class FriendRestrictionLoadPersistenceAdapterTest @Autowired constructor(
         Assertions.assertThatThrownBy {
             friendRestrictionLoadPersistenceAdapter.loadAll(noExistEmail)
         }.isInstanceOf(BusinessException::class.java)
-            .hasMessage(ErrorCode.USER_NOT_FOUND.message)
+            .hasMessage(UserErrorCode.USER_NOT_FOUND.message)
     }
 
     @Test
@@ -113,7 +114,7 @@ class FriendRestrictionLoadPersistenceAdapterTest @Autowired constructor(
         Assertions.assertThatThrownBy {
             friendRestrictionLoadPersistenceAdapter.loadById(999L)
         }.isInstanceOf(BusinessException::class.java)
-            .hasMessage(ErrorCode.FRIEND_RESTRICTION_NOT_FOUND.message)
+            .hasMessage(FriendErrorCode.FRIEND_RESTRICTION_NOT_FOUND.message)
     }
 
     private fun createNTestUserAsFriendWithTestUser(n: Int) {

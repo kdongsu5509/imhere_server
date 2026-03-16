@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/kotlin/com/kdongsu5509/support/config/RedisConfig.kt
 package com.kdongsu5509.support.config
-========
-package com.kdongsu5509.user.support.config
->>>>>>>> d7b9cc0345ce1535419ec55566096c1a808887e4:src/main/kotlin/com/kdongsu5509/user/support/config/RedisConfig.kt
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -39,11 +35,7 @@ class RedisConfig {
 
         // BasicPolymorphicTypeValidator를 사용하여 특정 패키지만 허용
         val ptv = BasicPolymorphicTypeValidator.builder()
-<<<<<<<< HEAD:src/main/kotlin/com/kdongsu5509/support/config/RedisConfig.kt
-            .allowIfBaseType("com.kdongsu5509.support.")
-========
             .allowIfBaseType("com.kdongsu5509.user.")
->>>>>>>> d7b9cc0345ce1535419ec55566096c1a808887e4:src/main/kotlin/com/kdongsu5509/user/support/config/RedisConfig.kt
             .allowIfBaseType("java.util.")
             .build()
 

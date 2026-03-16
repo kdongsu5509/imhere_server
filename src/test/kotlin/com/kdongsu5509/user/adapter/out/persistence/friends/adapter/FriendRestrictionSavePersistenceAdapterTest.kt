@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.adapter.out.persistence.friends.adapter
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.UserErrorCode
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRestrictionRepository
 import com.kdongsu5509.user.adapter.out.persistence.friends.mapper.FriendRestrictionMapper
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
@@ -101,7 +101,7 @@ class FriendRestrictionSavePersistenceAdapterTest @Autowired constructor(
         assertThrows<BusinessException> {
             adapter.save(invalidInfo, receiverInfo, FriendRestrictionType.REJECT)
         }.also {
-            assertEquals(ErrorCode.USER_NOT_FOUND, it.errorCode)
+            assertEquals(UserErrorCode.USER_NOT_FOUND, it.errorCode)
         }
     }
 

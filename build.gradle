@@ -79,6 +79,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:testcontainers'
+
+    //TEST Docs
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.2'
     testImplementation 'com.h2database:h2'
@@ -92,6 +94,10 @@ kotlin {
     }
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
 allOpen {
     annotation 'jakarta.persistence.Entity'
     annotation 'jakarta.persistence.MappedSuperclass'
@@ -100,7 +106,7 @@ allOpen {
 
 openapi3 {
     setServer("http://localhost:8080")
-    title = "ImHere Integrated API"
+    title = "ImHere API 문서"
     description = "User & Notification 통합 API 문서"
     version = "0.0.1"
     format = "yaml"

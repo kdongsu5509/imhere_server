@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.application.service.user
 
+import com.kdongsu5509.support.exception.AuthErrorCode
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
 import com.kdongsu5509.user.application.dto.ImHereJwt
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -43,7 +43,7 @@ class JwtReissueServiceTest {
     @DisplayName("jwtTokenProvider에서 오류가 발생하면 그 오류를 다시 반환한다")
     fun thorw_exception_of_sub_class() {
         val mockRefreshToken = "prevRefreshToken"
-        val mockException = BusinessException(ErrorCode.IMHERE_INVALID_TOKEN)
+        val mockException = BusinessException(AuthErrorCode.IMHERE_INVALID_TOKEN)
         `when`(jwtTokenProvider.reissueJwtToken(mockRefreshToken)).thenThrow(mockException)
 
         assertThrows<BusinessException> {

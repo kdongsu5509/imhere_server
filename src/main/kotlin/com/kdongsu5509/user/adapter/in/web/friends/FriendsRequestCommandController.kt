@@ -1,12 +1,12 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.kdongsu5509.user.application.port.`in`.friend.CreateFriendRequestUseCase
-import com.kdongsu5509.user.application.port.`in`.friend.UpdateFriendRequestUseCase
-import com.kdongsu5509.user.adapter.`in`.web.common.APIResponse
+import com.kdongsu5509.support.common.dto.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.CreateFriendRequest
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.CreateFriendRequestResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.FriendRelationshipResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.FriendRestrictionResponse
+import com.kdongsu5509.user.application.port.`in`.friend.CreateFriendRequestUseCase
+import com.kdongsu5509.user.application.port.`in`.friend.UpdateFriendRequestUseCase
 import jakarta.validation.constraints.NotNull
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
@@ -20,7 +20,7 @@ class FriendsRequestCommandController(
     private val updateFriendRequestUseCase: UpdateFriendRequestUseCase
 ) {
     /**
-     * ?�청 ?�성
+     * 요청 생성
      */
     @PostMapping
     fun requestFriendship(
@@ -42,7 +42,7 @@ class FriendsRequestCommandController(
     @PostMapping("/accept/{requestId}")
     fun acceptToFriendRequest(
         @Validated
-        @NotNull(message = "requestId???�수?�니??)
+        @NotNull(message = "requestId는 필수입니다")
         @PathVariable
         requestId: Long,
         @AuthenticationPrincipal user: UserDetails,
@@ -57,7 +57,7 @@ class FriendsRequestCommandController(
     @PostMapping("/reject/{requestId}")
     fun rejectToFriendRequest(
         @Validated
-        @NotNull(message = "requestId???�수?�니??)
+        @NotNull(message = "requestId는 필수입니다")
         @PathVariable
         requestId: Long,
         @AuthenticationPrincipal user: UserDetails,

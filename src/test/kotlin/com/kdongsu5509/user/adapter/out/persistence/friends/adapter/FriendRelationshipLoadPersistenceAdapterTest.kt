@@ -2,7 +2,7 @@ package com.kdongsu5509.user.adapter.out.persistence.friends.adapter
 
 import com.kdongsu5509.support.config.QueryDslConfig
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.UserErrorCode
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRelationshipsJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.mapper.FriendRelationshipMapper
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
@@ -65,7 +65,7 @@ class FriendRelationshipLoadPersistenceAdapterTest @Autowired constructor(
         Assertions.assertThatThrownBy {
             friendRelationshipAdapter.findFriendsRelationshipsByUserEmail(noExistEmail)
         }.isInstanceOf(BusinessException::class.java)
-            .hasMessage(ErrorCode.USER_NOT_FOUND.message)
+            .hasMessage(UserErrorCode.USER_NOT_FOUND.message)
     }
 
     @Test

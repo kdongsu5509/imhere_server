@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.application.service.friend
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.FriendErrorCode
 import com.kdongsu5509.user.application.port.out.friend.FriendRequestLoadPort
 import com.kdongsu5509.user.domain.friend.FriendRequest
 import com.kdongsu5509.user.domain.friend.FriendRequestUserInfo
@@ -87,13 +87,13 @@ class FriendRequestReadServiceTest {
         // given
         val testFriendRequestId = 999L
         given(friendRequestLoadPort.findReceivedRequestByRequestId(testFriendRequestId)).willThrow(
-            BusinessException(ErrorCode.FRIENDSHIP_REQUEST_NOT_FOUND)
+            BusinessException(FriendErrorCode.FRIENDSHIP_REQUEST_NOT_FOUND)
         )
 
         // when,then
         Assertions.assertThatThrownBy {
             friendRequestReadService.getReceivedDetail(testFriendRequestId)
         }.isInstanceOf(BusinessException::class.java)
-            .hasMessage(ErrorCode.FRIENDSHIP_REQUEST_NOT_FOUND.message)
+            .hasMessage(FriendErrorCode.FRIENDSHIP_REQUEST_NOT_FOUND.message)
     }
 }

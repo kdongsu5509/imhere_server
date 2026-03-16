@@ -1,11 +1,11 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
+import com.kdongsu5509.support.common.dto.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.AuthenticationRequest
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.AuthenticationResponse
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.ReAuthenticationResponse
 import com.kdongsu5509.user.application.port.`in`.user.AuthenticateWithOidcUseCase
 import com.kdongsu5509.user.application.port.`in`.user.ReissueJWTUseCase
-import com.kdongsu5509.user.adapter.`in`.web.common.APIResponse
 import lombok.extern.slf4j.Slf4j
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated

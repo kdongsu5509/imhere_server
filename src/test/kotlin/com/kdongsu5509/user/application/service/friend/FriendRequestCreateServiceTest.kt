@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.application.service.friend
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.UserErrorCode
 import com.kdongsu5509.user.application.port.out.friend.FriendRequestSavePort
 import com.kdongsu5509.user.domain.friend.FriendRequest
 import com.kdongsu5509.user.domain.friend.FriendRequestUserInfo
@@ -66,13 +66,13 @@ class FriendRequestCreateServiceTest {
         val testMsg = "친하게 지내요!"
 
         given(friendRequestSavePort.save(testEmail, testReceiverId, testMsg))
-            .willThrow(BusinessException(ErrorCode.USER_NOT_FOUND))
+            .willThrow(BusinessException(UserErrorCode.USER_NOT_FOUND))
 
         // when
         Assertions.assertThatThrownBy {
             friendRequestCreateService.request(testEmail, testReceiverId, testMsg)
         }.isInstanceOf(BusinessException::class.java)
-            .hasMessage(ErrorCode.USER_NOT_FOUND.message)
+            .hasMessage(UserErrorCode.USER_NOT_FOUND.message)
 
         then(friendRequestSavePort).should().save(testEmail, testReceiverId, testMsg)
     }

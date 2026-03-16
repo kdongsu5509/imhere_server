@@ -1,5 +1,5 @@
-package com.kdongsu5509.imhere.message.adapter.dto
+package com.kdongsu5509.notifications.adapter.`in`.dto
 
 data class MultipleMessageSendRequest(
-    val requests : List<MessageSendRequest>
+    val requests: List<MessageSendRequest>
 )

@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere
+package com.kdongsu5509.notification
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging

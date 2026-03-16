@@ -1,5 +1,7 @@
-package com.kdongsu5509.imhere.notification.application.port.out
+package com.kdongsu5509.notifications.application.port.out
+
+import com.kdongsu5509.notifications.domain.DeviceType
 
 interface SaveTokenPersistencePort {
-    fun save(fcmToken: String, userEmail: String)
+    fun save(fcmToken: String, userEmail: String, deviceType: DeviceType)
 }

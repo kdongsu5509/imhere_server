@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.notification.application.port.out
+package com.kdongsu5509.notifications.application.port.out
 
 interface FirebasePort {
     fun send(fcmToken: String)

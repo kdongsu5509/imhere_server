@@ -1,6 +1,8 @@
 package com.kdongsu5509.imhere.notification.application.service
 
-import com.kdongsu5509.imhere.notification.application.port.out.SaveTokenPersistencePort
+import com.kdongsu5509.notifications.application.port.out.SaveTokenPersistencePort
+import com.kdongsu5509.notifications.application.serivce.SaveFcmTokenService
+import com.kdongsu5509.notifications.domain.DeviceType
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -24,10 +26,11 @@ class SaveFcmTokenServiceTest {
         //given
         val userEmail = "dongsu@test.com"
         val fcmToken = "testFcmToken"
+        val testDeviceType = DeviceType.AOS
 
         //when, then
         assertDoesNotThrow {
-            saveFcmTokenService.save(fcmToken, userEmail)
+            saveFcmTokenService.save(fcmToken, userEmail, testDeviceType)
         }
     }
 }

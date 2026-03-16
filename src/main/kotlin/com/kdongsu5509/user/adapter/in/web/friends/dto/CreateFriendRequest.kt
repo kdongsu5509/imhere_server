@@ -6,10 +6,10 @@ import org.hibernate.validator.constraints.Length
 import java.util.*
 
 data class CreateFriendRequest(
-    @field:NotNull(message = "?��?�?ID???�수?�니??")
-    val receiverId: UUID,
+    @field:NotNull(message = "수신자 ID는 필수입니다")
+    var receiverId: UUID,
 
-    @field:NotBlank(message = "?�청 메시지???�수?�니??")
-    @field:Length(min = 1, max = 255, message = "?�청 메시지??1 ~ 255???�이�??�력?�여???�니??)
+    @field:NotBlank(message = "공백은 허용되지 않습니다")
+    @field:Length(min = 10, max = 255, message = "요청 메시지는 10 ~ 255자 사이여야 합니다")
     val message: String
 )

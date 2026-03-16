@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.adapter.out.persistence.user.adapter
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.UserErrorCode
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.user.mapper.UserMapper
@@ -67,7 +67,7 @@ class UserUpdatePersistenceAdapterTest @Autowired constructor(
             userUpdatePersistenceAdapter.activate(notUserEmail)
         }.isInstanceOf(BusinessException::class.java)
             .extracting("errorCode")
-            .isEqualTo(ErrorCode.USER_NOT_FOUND)
+            .isEqualTo(UserErrorCode.USER_NOT_FOUND)
     }
 
     @Test
@@ -99,7 +99,7 @@ class UserUpdatePersistenceAdapterTest @Autowired constructor(
             userUpdatePersistenceAdapter.updateNickname(notUserEmail, notNewUserNickname)
         }.isInstanceOf(BusinessException::class.java)
             .extracting("errorCode")
-            .isEqualTo(ErrorCode.USER_NOT_FOUND)
+            .isEqualTo(UserErrorCode.USER_NOT_FOUND)
     }
 
     private fun createUserJpaEntity(email: String, status: UserStatus): UserJpaEntity = UserJpaEntity(

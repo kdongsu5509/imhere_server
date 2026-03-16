@@ -1,9 +1,13 @@
-package com.kdongsu5509.notifications.adapter.in.dto;
+package com.kdongsu5509.notifications.adapter.`in`.dto
 
-import jakarta.validation.constraints.NotBlank;
+import com.kdongsu5509.notifications.domain.DeviceType
+import jakarta.validation.constraints.NotBlank
 
-public record FcmTokenInfo(
-        @NotBlank(message = "FCM 토큰은 필수 항목입니다.")
-        String fcmToken
+data class FcmTokenInfo(
+    val fcmToken: String,
+    val deviceType: DeviceType
 ) {
+    init {
+        require(fcmToken.isNotBlank()) { "FCM 토큰은 필수 항목입니다." }
+    }
 }

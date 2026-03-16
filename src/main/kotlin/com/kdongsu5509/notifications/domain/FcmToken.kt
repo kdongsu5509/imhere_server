@@ -1,13 +1,11 @@
-package com.kdongsu5509.notifications.domain;
+package com.kdongsu5509.notifications.domain
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.time.LocalDateTime
 
-public record FcmToken(
-        Long id,
-        UUID userId,
-        String fcmToken,
-        DeviceType deviceType,
-        LocalDateTime updatedAt
-) {
-}
+data class FcmToken(
+    var id: Long?,
+    var userEmail: String,
+    var fcmToken: String,
+    var deviceType: DeviceType,
+    var updatedAt: LocalDateTime?
+)

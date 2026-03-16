@@ -1,10 +1,10 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.kdongsu5509.user.application.port.`in`.friend.ReadFriendsRestrictionUseCase
-import com.kdongsu5509.user.application.port.`in`.friend.UpdateFriendRestrictionUseCase
-import com.kdongsu5509.user.adapter.`in`.web.common.APIResponse
+import com.kdongsu5509.support.common.dto.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.FriendRestrictionDeletedResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.FriendRestrictionResponse
+import com.kdongsu5509.user.application.port.`in`.friend.ReadFriendsRestrictionUseCase
+import com.kdongsu5509.user.application.port.`in`.friend.UpdateFriendRestrictionUseCase
 import org.jetbrains.annotations.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal

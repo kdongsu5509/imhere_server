@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.adapter.out.auth
 
+import com.kdongsu5509.support.exception.AuthErrorCode
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
 import com.kdongsu5509.user.adapter.out.auth.oauth.KakaoOIDCProperties
 import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKey
 import com.kdongsu5509.user.application.port.out.user.JwtVerificationPort
@@ -111,7 +111,7 @@ class JjwtParserAdapterTest {
         assertThrows<BusinessException> {
             jjwtParserAdapter.getKidFromOriginTokenHeader(invalidToken)
         }.also { exception ->
-            assertThat(exception.message).contains(ErrorCode.OIDC_INVALID.message)
+            assertThat(exception.message).contains(AuthErrorCode.OIDC_INVALID.message)
         }
     }
 

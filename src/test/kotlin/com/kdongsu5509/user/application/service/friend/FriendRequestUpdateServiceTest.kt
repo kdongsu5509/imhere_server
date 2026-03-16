@@ -1,7 +1,7 @@
 package com.kdongsu5509.user.application.service.friend
 
 import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.ErrorCode
+import com.kdongsu5509.support.exception.FriendErrorCode
 import com.kdongsu5509.user.application.port.out.friend.FriendRelationshipSavePort
 import com.kdongsu5509.user.application.port.out.friend.FriendRequestLoadPort
 import com.kdongsu5509.user.application.port.out.friend.FriendRequestUpdatePort
@@ -99,7 +99,7 @@ class FriendRequestUpdateServiceTest {
         Assertions.assertThatThrownBy {
             service.acceptFriendRequest(wrongEmail, requestId)
         }.isInstanceOf(BusinessException::class.java)
-            .hasMessage(ErrorCode.FRIENDSHIP_REQUEST_RECEIVER_MISS_MATCH.message)
+            .hasMessage(FriendErrorCode.FRIENDSHIP_REQUEST_RECEIVER_MISS_MATCH.message)
     }
 
     @Test
