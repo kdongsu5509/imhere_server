@@ -1,12 +1,14 @@
 plugins {
+    //spring
     id 'org.springframework.boot' version '3.4.3'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.jetbrains.kotlin.jvm' version '1.9.25'
-    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
-    id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.25'
-    id 'org.jetbrains.kotlin.kapt' version '1.9.25'
+    //kotlin
+    id 'org.jetbrains.kotlin.jvm' version '2.3.20'
+    id 'org.jetbrains.kotlin.plugin.spring' version '2.3.20'
+    id 'org.jetbrains.kotlin.plugin.jpa' version '2.3.20'
+    id 'com.google.devtools.ksp' version '2.3.6'
     id 'jacoco'
-    id 'com.epages.restdocs-api-spec' version '0.19.2'
+    id 'com.epages.restdocs-api-spec' version '0.19.4'
 }
 
 group = 'com.kdongsu5509'
@@ -15,7 +17,7 @@ description = 'ImHere Integrated Project'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -41,20 +43,18 @@ dependencies {
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     implementation 'org.postgresql:postgresql'
 
-    // EXTERNAL SDKs
+    // EXTERNAL SDKs For SMS
     implementation 'net.nurigo:sdk:4.3.0'
     implementation 'com.google.firebase:firebase-admin:9.7.0'
 
     // WEB & VALIDATION
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // QUERY DSL
-    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
-    kapt 'com.querydsl:querydsl-apt:5.1.0:jakarta'
-    kapt 'jakarta.annotation:jakarta.annotation-api'
-    kapt 'jakarta.persistence:jakarta.persistence-api'
+    implementation("io.github.openfeign.querydsl:querydsl-jpa:7.1")
+    ksp("io.github.openfeign.querydsl:querydsl-ksp-codegen:7.1")
 
     // LOMBOK
     compileOnly 'org.projectlombok:lombok'
@@ -77,6 +77,9 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.addAll '-Xjsr305=strict'
     }
+    sourceSets {
+        main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -89,7 +92,6 @@ allOpen {
     annotation 'jakarta.persistence.Embeddable'
 }
 
-// --- OpenAPI 3 설정 (Extension) ---
 openapi3 {
     setServer("http://localhost:8080")
     title = "ImHere API 문서"
@@ -98,22 +100,18 @@ openapi3 {
     format = "yaml"
 }
 
-// OAS 파일을 Swagger UI 경로로 복사하는 태스크
-// 에러 방지를 위해 openapi3를 문자열로 참조합니다.
 tasks.register("copyOasToSwagger", Copy) {
     dependsOn "openapi3"
     from "build/api-spec/openapi3.yaml"
     into "src/main/resources/static/docs"
 }
 
-// --- 테스트 및 리포트 태스크 체이닝 ---
 tasks.named('test') {
     useJUnitPlatform()
     jvmArgs("-XX:+EnableDynamicAgentLoading")
     finalizedBy 'jacocoTestReport', 'copyOasToSwagger'
 }
 
-// --- JaCoCo 설정 ---
 jacoco {
     toolVersion = "0.8.11"
 }
