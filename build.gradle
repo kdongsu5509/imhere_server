@@ -1,7 +1,6 @@
 plugins {
     //spring
-    id 'org.springframework.boot' version '3.4.3'
-    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' version '4.0.3'
     //kotlin
     id 'org.jetbrains.kotlin.jvm' version '2.3.20'
     id 'org.jetbrains.kotlin.plugin.spring' version '2.3.20'
@@ -26,47 +25,57 @@ repositories {
 }
 
 dependencies {
+    // 1. Spring Boot BOM 선언 (가장 핵심: 이거 하나로 기본 버전 관리가 끝납니다)
+    implementation platform("org.springframework.boot:spring-boot-dependencies:4.0.3")
+
     // KOTLIN
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
 
-    // JWT & SECURITY
+    // JWT & SECURITY (Spring BOM에 없으므로 버전 명시 유지)
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    // DATA (JPA, Redis, PostgreSQL)
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation "org.springframework.boot:spring-boot-starter-security"
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
-    implementation 'org.postgresql:postgresql'
-
-    // EXTERNAL SDKs For SMS
-    implementation 'net.nurigo:sdk:4.3.0'
-    implementation 'com.google.firebase:firebase-admin:9.7.0'
-
-    // WEB & VALIDATION
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    // QUERY DSL
+    // DB & EXTERNAL
+    implementation 'org.postgresql:postgresql'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0' // 외부 라이브러리는 버전 명시
+    implementation 'net.nurigo:sdk:4.3.0'
+    implementation 'com.google.firebase:firebase-admin:9.7.0'
+
+    // QUERY DSL (KSP 환경)
     implementation("io.github.openfeign.querydsl:querydsl-jpa:7.1")
     ksp("io.github.openfeign.querydsl:querydsl-ksp-codegen:7.1")
 
-    // TEST
+    // TEST (Spring BOM 적용)
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-redis-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-cache-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-restclient-test'
+    testImplementation 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-restdocs'
+
+    // 2. Testcontainers BOM 선언 (테스트 컨테이너 버전 충돌 방지)
+    testImplementation platform("org.testcontainers:testcontainers-bom:1.20.1")
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:testcontainers'
     testImplementation 'org.testcontainers:postgresql'
 
     // TEST Docs
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.2'
-    testImplementation 'com.h2database:h2'
 }
 
 kotlin {

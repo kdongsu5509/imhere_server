@@ -1,11 +1,8 @@
 package com.kdongsu5509.support.logger
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import java.time.LocalDateTime
-import java.util.*
 
 data class AccessLog(
     val traceId: String,
@@ -25,7 +22,6 @@ data class AccessLog(
 ) {
     companion object {
         private val objectMapper = ObjectMapper().apply {
-            registerModule(JavaTimeModule())
             disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         }
 

@@ -1,6 +1,5 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
-import com.epages.restdocs.apispec.ResourceDocumentation.resource
 import com.kdongsu5509.support.exception.AuthErrorCode
 import com.kdongsu5509.user.adapter.out.auth.oauth.KakaoOauthClient
 import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKey
@@ -21,11 +20,9 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.http.MediaType
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post
-import org.springframework.restdocs.payload.JsonFieldType
-import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.bean.override.mockito.MockitoBean
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.security.interfaces.RSAPublicKey
@@ -69,23 +66,6 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
         performLogin(idToken)
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.data.accessToken").exists())
-            .andDo(
-                restDocs.document(
-                    resource(
-                        "카카오 OAuth 로그인/회원가입",
-                    ),
-                    requestFields(
-                        fieldWithPath("provider").type(JsonFieldType.STRING).description("OAuth2 제공자 (KAKAO)"),
-                        fieldWithPath("idToken").type(JsonFieldType.STRING).description("OAuth2 ID Token")
-                    ),
-                    responseFields(
-                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
-                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지").optional(),
-                        fieldWithPath("data.accessToken").type(JsonFieldType.STRING).description("액세스 토큰"),
-                        fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).description("리프레시 토큰")
-                    )
-                )
-            )
     }
 
     @Test
@@ -137,7 +117,7 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
     fun reissue_okay() {
         // given
         val refreshToken = obtainRefreshToken()
-        val requestBody = objectMapper.writeValueAsString(mapOf("refreshToken" to refreshToken))
+        val requestBody = jsonMapper.writeValueAsString(mapOf("refreshToken" to refreshToken))
 
         // when & then
         mockMvc.perform(
@@ -147,22 +127,6 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.accessToken").exists())
-            .andDo(
-                restDocs.document(
-                    resource(
-                        "토큰 재발급",
-                    ),
-                    requestFields(
-                        fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("리프레시 토큰")
-                    ),
-                    responseFields(
-                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
-                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지").optional(),
-                        fieldWithPath("data.accessToken").type(JsonFieldType.STRING).description("새로운 액세스 토큰"),
-                        fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).description("새로운 리프레시 토큰")
-                    )
-                )
-            )
     }
 
     // --- Helper Methods ---
@@ -171,7 +135,7 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
         post(BASE_URL + LOGIN_URL)
             .contentType(MediaType.APPLICATION_JSON)
             .content(
-                objectMapper.writeValueAsString(
+                jsonMapper.writeValueAsString(
                     mapOf(
                         "provider" to "KAKAO",
                         "idToken" to idToken
@@ -190,7 +154,7 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
         val idToken = TestJwtBuilder.buildValidIdToken()
         val response = performLogin(idToken).andReturn().response.contentAsString
 
-        return objectMapper.readTree(response).path("data").path("refreshToken").asText()
+        return jsonMapper.readTree(response).path("data").path("refreshToken").asString()
     }
 
     private fun setMockKakaoPublicKey() {

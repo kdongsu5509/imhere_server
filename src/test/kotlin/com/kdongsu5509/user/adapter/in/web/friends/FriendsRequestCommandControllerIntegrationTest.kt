@@ -1,6 +1,5 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.support.config.QueryDslConfig
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRequestJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRequestRepository
@@ -15,8 +14,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
@@ -28,6 +27,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
+import tools.jackson.databind.json.JsonMapper
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -49,7 +49,7 @@ class FriendsRequestCommandControllerIntegrationTest {
     lateinit var mockMvc: MockMvc
 
     @Autowired
-    lateinit var objectMapper: ObjectMapper
+    lateinit var jsonMapper: JsonMapper
 
     @Autowired
     lateinit var userRepository: SpringDataUserRepository
@@ -117,6 +117,6 @@ class FriendsRequestCommandControllerIntegrationTest {
             .with(user(userEmail))
             .with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
-            .apply { if (content != null) content(objectMapper.writeValueAsString(content)) }
+            .apply { if (content != null) content(jsonMapper.writeValueAsString(content)) }
     )
 }

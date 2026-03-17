@@ -26,7 +26,7 @@ class LoggingFilter(
             return
         }
 
-        val cachingRequest = ContentCachingRequestWrapper(request)
+        val cachingRequest = ContentCachingRequestWrapper(request, 65536)
         val cachingResponse = ContentCachingResponseWrapper(response)
 
         val traceId = UUID.randomUUID().toString()
@@ -98,10 +98,10 @@ class LoggingFilter(
     }
 
     private fun isIgnoredUrl(uri: String): Boolean {
-        return uri.startsWith("/actuator") || 
-               uri.startsWith("/health") || 
-               uri.startsWith("/favicon.ico") ||
-               uri.startsWith("/swagger-ui") ||
-               uri.startsWith("/v3/api-docs")
+        return uri.startsWith("/actuator") ||
+                uri.startsWith("/health") ||
+                uri.startsWith("/favicon.ico") ||
+                uri.startsWith("/swagger-ui") ||
+                uri.startsWith("/v3/api-docs")
     }
 }
