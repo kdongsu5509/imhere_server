@@ -25,11 +25,10 @@ repositories {
 }
 
 dependencies {
-    // 1. Spring Boot BOM 선언 (가장 핵심: 이거 하나로 기본 버전 관리가 끝납니다)
     implementation platform("org.springframework.boot:spring-boot-dependencies:4.0.3")
 
     // KOTLIN
-    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'tools.jackson.module:jackson-module-kotlin'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
 
     // JWT & SECURITY (Spring BOM에 없으므로 버전 명시 유지)
