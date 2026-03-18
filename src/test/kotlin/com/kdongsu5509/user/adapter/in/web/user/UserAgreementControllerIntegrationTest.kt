@@ -1,7 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserTermsConsentRequest
-import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserTermsConsentRequest.ConsentDetail
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsDefinitionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsVersionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.TermsDefinitionJpaEntity
@@ -51,23 +50,30 @@ class UserAgreementControllerIntegrationTest : ControllerTestSupport() {
     @BeforeEach
     fun setUp() {
         userRepository.save(
-            UserJpaEntity(TEST_USER, "테스터", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.PENDING)
+            UserJpaEntity(
+                TEST_USER, "테스터", UserRole.NORMAL, OAuth2Provider.KAKAO, UserStatus.PENDING
+            )
         )
 
-        val testTermDef1 =
-            termsDefinitionRepository.save(TermsDefinitionJpaEntity(termsTitle = "테스트 약관1", TermsTypes.LOCATION, true))
-        TEST_DEF_ID1 = testTermDef1.id!!
-        val testTermDef2 =
-            termsDefinitionRepository.save(TermsDefinitionJpaEntity(termsTitle = "테스트 약관2", TermsTypes.PRIVACY, true))
-        TEST_DEF_ID2 = testTermDef2.id!!
-        val testTermDef3 =
-            termsDefinitionRepository.save(
-                TermsDefinitionJpaEntity(
-                    termsTitle = "테스트 약관2",
-                    TermsTypes.MARKETING,
-                    false
-                )
+        val testTermDef1 = termsDefinitionRepository.save(
+            TermsDefinitionJpaEntity(
+                termsTitle = "테스트 약관1", TermsTypes.LOCATION, true
             )
+        )
+        val testTermDef2 = termsDefinitionRepository.save(
+            TermsDefinitionJpaEntity(
+                termsTitle = "테스트 약관2", TermsTypes.PRIVACY, true
+            )
+        )
+        val testTermDef3 = termsDefinitionRepository.save(
+            TermsDefinitionJpaEntity(
+                termsTitle = "테스트 약관2",
+                TermsTypes.MARKETING,
+                false
+            )
+        )
+        TEST_DEF_ID1 = testTermDef1.id!!
+        TEST_DEF_ID2 = testTermDef2.id!!
         TEST_DEF_ID3 = testTermDef3.id!!
 
         createTestTermVersionEntity(testTermDef1)
@@ -81,8 +87,9 @@ class UserAgreementControllerIntegrationTest : ControllerTestSupport() {
     fun consentAll_success() {
         val request = UserTermsConsentRequest(
             consents = listOf(
-                ConsentDetail(TEST_DEF_ID1, true),
-                ConsentDetail(TEST_DEF_ID2, true)
+                UserTermsConsentRequest.ConsentDetail(TEST_DEF_ID1, true),
+                UserTermsConsentRequest.ConsentDetail(TEST_DEF_ID2, true),
+                UserTermsConsentRequest.ConsentDetail(TEST_DEF_ID3, true)
             )
         )
 
