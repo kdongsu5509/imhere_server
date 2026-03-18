@@ -6,13 +6,13 @@ import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 
 data class NewTermDefinitionRequest(
-    @field:NotBlank(message = "?��? ?�목?� ?�수?�니??")
-    @field:Size(max = 100, message = "?��? ?�목?� 100???�내?�야 ?�니??")
+    @field:NotBlank(message = "약관 제목은 필수입니다.")
+    @field:Size(max = 100, message = "약관 제목은 100자 이내여야 합니다.")
     val termsName: String,
 
-    @field:NotNull(message = "?��? 종류???�수?�니??")
-    var termsType: TermsTypes,
+    @field:NotNull(message = "약관 종류는 필수입니다.")
+    val termsType: TermsTypes,
 
-    @field:NotNull(message = "?�수 ?��? ?�정???�락?�었?�니??")
-    var isRequired: Boolean,
+    @field:NotNull(message = "필수 약관 여부가 누락되었습니다.")
+    val required: Boolean
 )
