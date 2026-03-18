@@ -1,9 +1,6 @@
 package com.kdongsu5509.support.config
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Bean
@@ -13,16 +10,20 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration
 import org.springframework.data.redis.cache.RedisCacheManager
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer
+import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
+import tools.jackson.databind.DefaultTyping
+import tools.jackson.databind.json.JsonMapper
+import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator
+import tools.jackson.module.kotlin.KotlinModule
 import java.time.Duration
 
 @Configuration
 class RedisConfig {
 
     @Value("\${spring.data.redis.host:localhost}")
-    private lateinit var host: String
+    private var host: String? = null
 
     @Value("\${spring.data.redis.port:6379}")
     private var port: String = "6379"
@@ -31,21 +32,19 @@ class RedisConfig {
 
     // Redis 캐시용 Serializer를 Bean으로 정의
     @Bean
-    fun redisJackson2JsonRedisSerializer(): GenericJackson2JsonRedisSerializer {
-        val mapper = ObjectMapper()
-        mapper.registerModule(KotlinModule.Builder().build())
-
-        // BasicPolymorphicTypeValidator를 사용하여 특정 패키지만 허용
+    fun redisJackson2JsonRedisSerializer(): GenericJacksonJsonRedisSerializer {
         val ptv = BasicPolymorphicTypeValidator.builder()
             .allowIfBaseType("com.kdongsu5509.user.")
             .allowIfBaseType("java.util.")
             .build()
 
-        // 모든 타입에 대해 타입 정보 저장 (가장 강력한 설정)
-        // JsonTypeInfo.As.PROPERTY, property = "@class" 가 기본 동작과 일치
-        mapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.PROPERTY)
+        val mapper = JsonMapper.builder()
+            .addModule(KotlinModule.Builder().build()) // registerModule -> addModule
+            .activateDefaultTyping(ptv, DefaultTyping.NON_FINAL_AND_ENUMS, JsonTypeInfo.As.PROPERTY)
+            .build() // 불변 JsonMapper 인스턴스 생성
 
-        return GenericJackson2JsonRedisSerializer(mapper)
+        // 생성된 불변 매퍼를 시리얼라이저에 주입
+        return GenericJacksonJsonRedisSerializer(mapper)
     }
 
     /**
@@ -55,7 +54,7 @@ class RedisConfig {
     @Primary
     fun redisCacheManager(
         cf: RedisConnectionFactory,
-        jsonRedisSerializer: GenericJackson2JsonRedisSerializer // 위에 정의한 Serializer 주입
+        jsonRedisSerializer: GenericJacksonJsonRedisSerializer // 위에 정의한 Serializer 주입
     ): CacheManager {
         val redisCacheConfiguration =
             RedisCacheConfiguration.defaultCacheConfig()
@@ -77,7 +76,7 @@ class RedisConfig {
     @Bean
     fun oidcCacheManager(
         cf: RedisConnectionFactory,
-        jsonRedisSerializer: GenericJackson2JsonRedisSerializer // 위에 정의한 Serializer 주입
+        jsonRedisSerializer: GenericJacksonJsonRedisSerializer // 위에 정의한 Serializer 주입
     ): CacheManager {
         val redisCacheConfiguration =
             RedisCacheConfiguration.defaultCacheConfig()
@@ -100,7 +99,7 @@ class RedisConfig {
     @Bean("customRedisTemplate")
     fun redisTemplate(
         connectionFactory: RedisConnectionFactory,
-        jsonRedisSerializer: GenericJackson2JsonRedisSerializer // 위에 정의한 Serializer 주입
+        jsonRedisSerializer: GenericJacksonJsonRedisSerializer // 위에 정의한 Serializer 주입
     ): RedisTemplate<String, Any> {
         val template = RedisTemplate<String, Any>()
         template.connectionFactory = connectionFactory

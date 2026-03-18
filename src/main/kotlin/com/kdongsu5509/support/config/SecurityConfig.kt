@@ -1,5 +1,6 @@
 package com.kdongsu5509.support.config
 
+import com.kdongsu5509.user.application.service.user.JwtTokenUtil
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
@@ -16,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain
     securedEnabled = true,
     jsr250Enabled = true
 )
-class SecurityConfig {
+class SecurityConfig(jwtTokenUtil: JwtTokenUtil) {
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
