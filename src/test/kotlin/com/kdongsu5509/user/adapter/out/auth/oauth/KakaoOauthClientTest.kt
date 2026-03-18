@@ -13,6 +13,7 @@ import org.springframework.boot.restclient.test.autoconfigure.AutoConfigureMockR
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cache.CacheManager
 import org.springframework.http.MediaType
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo
@@ -20,13 +21,8 @@ import org.springframework.test.web.client.response.MockRestResponseCreators.wit
 import org.springframework.test.web.servlet.client.RestTestClient
 import tools.jackson.databind.json.JsonMapper
 
-@SpringBootTest(
-    properties = [
-        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
-        "spring.datasource.driver-class-name=org.h2.Driver",
-        "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect"
-    ]
-)
+@ActiveProfiles("test")
+@SpringBootTest
 @AutoConfigureMockRestServiceServer
 class KakaoOauthClientTest {
 
@@ -57,14 +53,6 @@ class KakaoOauthClientTest {
 
     @MockitoBean(name = "oidcCacheManager")
     private lateinit var oidcCacheManager: CacheManager
-
-//    @TestConfiguration
-//    class TestConfig {
-//        @Bean("oidcCacheManager")
-//        fun testCacheManager(): CacheManager {
-//            return ConcurrentMapCacheManager()
-//        }
-//    }
 
     @BeforeEach
     fun setUp() {
