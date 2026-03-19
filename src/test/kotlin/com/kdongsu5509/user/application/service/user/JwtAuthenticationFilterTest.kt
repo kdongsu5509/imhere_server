@@ -64,7 +64,7 @@ class JwtAuthenticationFilterTest {
         Mockito.verify(jwtTokenUtil).getRoleFromToken(token)
         Mockito.verify(filterChain).doFilter(request, response)
         Assertions.assertThat(SecurityContextHolder.getContext().authentication).isNotNull()
-        Assertions.assertThat(SecurityContextHolder.getContext().authentication.name).isEqualTo(email)
+        Assertions.assertThat(SecurityContextHolder.getContext().authentication!!.name).isEqualTo(email)
     }
 
     @Test

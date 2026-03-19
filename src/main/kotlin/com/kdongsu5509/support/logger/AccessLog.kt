@@ -1,11 +1,8 @@
 package com.kdongsu5509.support.logger
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import tools.jackson.databind.json.JsonMapper
+import tools.jackson.module.kotlin.KotlinModule
 import java.time.LocalDateTime
-import java.util.*
 
 data class AccessLog(
     val traceId: String,
@@ -24,10 +21,9 @@ data class AccessLog(
     val durationMs: Long
 ) {
     companion object {
-        private val objectMapper = ObjectMapper().apply {
-            registerModule(JavaTimeModule())
-            disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-        }
+        val mapper: JsonMapper = JsonMapper.builder()
+            .addModule(KotlinModule.Builder().build())
+            .build()
 
         private val SENSITIVE_HEADERS = setOf(
             "authorization", "cookie", "set-cookie", "x-auth-token", "proxy-authorization"
@@ -48,7 +44,7 @@ data class AccessLog(
 
     override fun toString(): String {
         return try {
-            objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
+            mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
         } catch (e: Exception) {
             "Log JSON Parsing Error"
         }

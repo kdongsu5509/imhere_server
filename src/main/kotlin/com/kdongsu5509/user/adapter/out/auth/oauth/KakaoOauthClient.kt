@@ -7,13 +7,22 @@ import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
+import org.springframework.web.client.body
 
 @Component
-class KakaoOauthClient(private val restClientBuilder: RestClient.Builder) : OauthClientPort {
-    private val kakaoBaseUrl = "https://kauth.kakao.com"
-    private val publicKeyRequestSpecificUrl: String = "/.well-known/jwks.json"
+class KakaoOauthClient(
+    restClientBuilder: RestClient.Builder
+) : OauthClientPort {
 
-    private val log = LoggerFactory.getLogger(OauthClientPort::class.java)
+    companion object {
+        private val log = LoggerFactory.getLogger(KakaoOauthClient::class.java)
+        const val KAKAO_BASE_URL = "https://kauth.kakao.com"
+        const val KEY_REQ_URL = "/.well-known/jwks.json"
+    }
+
+    private val restClient: RestClient = restClientBuilder
+        .baseUrl(KAKAO_BASE_URL)
+        .build()
 
     @Cacheable(value = ["kakaoOidcKeys"], cacheManager = "oidcCacheManager", key = "'kakaoPublicKeySet'")
     override fun getPublicKeyFromProvider(): OIDCPublicKeyResponse? {
@@ -27,10 +36,9 @@ class KakaoOauthClient(private val restClientBuilder: RestClient.Builder) : Oaut
     }
 
     private fun fetchPublicKey(): OIDCPublicKeyResponse? {
-        val webClient = restClientBuilder.baseUrl(kakaoBaseUrl).build()
-        return webClient.get()
-            .uri(publicKeyRequestSpecificUrl)
+        return restClient.get()
+            .uri(KEY_REQ_URL)
             .retrieve()
-            .body(OIDCPublicKeyResponse::class.java)
+            .body<OIDCPublicKeyResponse>()
     }
 }

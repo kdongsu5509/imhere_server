@@ -82,7 +82,7 @@ class ImHereJWTTokenProviderTest {
         `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(TOKEN_INFO_ROLE)
         `when`(jwtTokenUtil.getUIDFromToken(REFRESH_TOKEN)).thenReturn(TEST_UUID)
         `when`(jwtTokenUtil.validateToken(REFRESH_TOKEN)).thenReturn(true)
-        `when`(cachePort.find(REDIS_KEY)).thenReturn(REFRESH_TOKEN)
+        `when`(cachePort.find(REDIS_KEY, String::class.java)).thenReturn(REFRESH_TOKEN)
         `when`(jwtTokenIssuer.createAccessToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_ACCESS_TOKEN)
         `when`(jwtTokenIssuer.createRefreshToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_REFRESH_TOKEN)
         `when`(jwtTokenUtil.getExpirationDateFromToken(NEW_REFRESH_TOKEN)).thenReturn(EXP_DATE)
@@ -98,7 +98,7 @@ class ImHereJWTTokenProviderTest {
         verify(jwtTokenUtil).getUsernameFromToken(REFRESH_TOKEN)
         verify(jwtTokenUtil).getRoleFromToken(REFRESH_TOKEN)
         verify(jwtTokenUtil).validateToken(REFRESH_TOKEN)
-        verify(cachePort).find(REDIS_KEY)
+        verify(cachePort).find(REDIS_KEY, String::class.java)
         verify(jwtTokenIssuer).createAccessToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)
         verify(jwtTokenIssuer).createRefreshToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)
         verify(jwtTokenUtil).getExpirationDateFromToken(NEW_REFRESH_TOKEN)
@@ -168,7 +168,7 @@ class ImHereJWTTokenProviderTest {
         `when`(jwtTokenUtil.getUsernameFromToken(refreshToken)).thenReturn(username)
         `when`(jwtTokenUtil.getRoleFromToken(refreshToken)).thenReturn(role)
         `when`(jwtTokenUtil.validateToken(refreshToken)).thenReturn(true)
-        `when`(cachePort.find(redisKey)).thenReturn(differentTokenInRedis)
+        `when`(cachePort.find(redisKey, String::class.java)).thenReturn(differentTokenInRedis)
 
         // when & then
         assertThrows<IllegalArgumentException> {
@@ -177,7 +177,7 @@ class ImHereJWTTokenProviderTest {
             assertThat(exception.message).isEqualTo("일치하지 않는 리프레시 토큰")
         }
 
-        verify(cachePort).find(redisKey)
+        verify(cachePort).find(redisKey, String::class.java)
     }
 
     @Test
@@ -187,7 +187,7 @@ class ImHereJWTTokenProviderTest {
         `when`(jwtTokenUtil.getUsernameFromToken(REFRESH_TOKEN)).thenReturn(USERNAME)
         `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(TOKEN_INFO_ROLE)
         `when`(jwtTokenUtil.validateToken(REFRESH_TOKEN)).thenReturn(true)
-        `when`(cachePort.find(REDIS_KEY)).thenReturn(null)
+        `when`(cachePort.find(REDIS_KEY, String::class.java)).thenReturn(null)
 
         // when & then
         assertThrows<IllegalArgumentException> {
@@ -196,7 +196,7 @@ class ImHereJWTTokenProviderTest {
             assertThat(exception.message).isEqualTo("일치하지 않는 리프레시 토큰")
         }
 
-        verify(cachePort).find(REDIS_KEY)
+        verify(cachePort).find(REDIS_KEY, String::class.java)
     }
 
     @Test
@@ -209,7 +209,7 @@ class ImHereJWTTokenProviderTest {
         `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(TOKEN_INFO_ROLE)
         `when`(jwtTokenUtil.getUIDFromToken(REFRESH_TOKEN)).thenReturn(TEST_UUID)
         `when`(jwtTokenUtil.validateToken(REFRESH_TOKEN)).thenReturn(true)
-        `when`(cachePort.find(REDIS_KEY)).thenReturn(REFRESH_TOKEN)
+        `when`(cachePort.find(REDIS_KEY, String::class.java)).thenReturn(REFRESH_TOKEN)
         `when`(jwtTokenIssuer.createAccessToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_ACCESS_TOKEN)
         `when`(jwtTokenIssuer.createRefreshToken(TEST_UUID, USERNAME, TOKEN_INFO_ROLE)).thenReturn(NEW_REFRESH_TOKEN)
         `when`(jwtTokenUtil.getExpirationDateFromToken(NEW_REFRESH_TOKEN)).thenReturn(expirationDate)

@@ -7,17 +7,17 @@ import jakarta.validation.constraints.Positive
 import java.time.LocalDateTime
 
 data class NewTermVersionRequest(
-    @field:NotNull(message = "?��? ?�의 ID???�수?�니??")
-    @field:Positive
-    var termDefinitionId: Long,
+    @field:NotNull(message = "약관 정의 ID는 필수입니다.")
+    @field:Positive(message = "약관 정의 ID는 양수여야 합니다.")
+    val termDefinitionId: Long,
 
-    @field:NotBlank(message = "버전 ?�보???�수?�니??")
+    @field:NotBlank(message = "버전 정보는 필수입니다.")
     val version: String,
 
-    @field:NotBlank(message = "?��? 본문 ?�용?� ?�수?�니??")
+    @field:NotBlank(message = "약관 본문 내용은 필수입니다.")
     val content: String,
 
-    @field:NotNull(message = "?�행???�정?� ?�수?�니??")
-    @field:FutureOrPresent(message = "?�행?��? ?�재 ?�는 미래 ?�짜?�야 ?�니??")
-    var effectiveDate: LocalDateTime
+    @field:NotNull(message = "시행일 지정은 필수입니다.")
+    @field:FutureOrPresent(message = "시행일은 현재 또는 미래 날짜여야 합니다.")
+    val effectiveDate: LocalDateTime
 )

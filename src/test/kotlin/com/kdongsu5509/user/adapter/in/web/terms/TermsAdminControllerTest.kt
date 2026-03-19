@@ -1,6 +1,5 @@
 package com.kdongsu5509.user.adapter.`in`.web.terms
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.NewTermDefinitionRequest
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.NewTermVersionRequest
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsDefinitionRepository
@@ -10,8 +9,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
@@ -20,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
+import tools.jackson.databind.json.JsonMapper
 import java.time.LocalDateTime
 
 @Transactional
@@ -28,7 +28,7 @@ import java.time.LocalDateTime
 @AutoConfigureMockMvc
 class TermsAdminControllerTest @Autowired constructor(
     private val mockMvc: MockMvc,
-    private val objectMapper: ObjectMapper,
+    private val jsonMapper: JsonMapper,
     private val springDataTermsDefinitionRepository: SpringDataTermsDefinitionRepository,
     private val springDataTermsVersionRepository: SpringDataTermsVersionRepository
 ) {
@@ -51,7 +51,7 @@ class TermsAdminControllerTest @Autowired constructor(
             post(BASE_URL + DEFINITION_URL)
                 .with(csrf()) // Spring Security 사용 시 필요
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
+                .content(jsonMapper.writeValueAsString(request))
         ).andExpect(status().isOk)
     }
 
@@ -67,7 +67,7 @@ class TermsAdminControllerTest @Autowired constructor(
             post(BASE_URL + DEFINITION_URL)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
+                .content(jsonMapper.writeValueAsString(request))
         ).andExpect(status().isForbidden)
     }
 
@@ -82,7 +82,7 @@ class TermsAdminControllerTest @Autowired constructor(
             post(BASE_URL + DEFINITION_URL)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(defRequest))
+                .content(jsonMapper.writeValueAsString(defRequest))
         ).andExpect(status().isOk)
 
         // DB에 잘 들어갔는지 확인
@@ -102,7 +102,7 @@ class TermsAdminControllerTest @Autowired constructor(
             post(BASE_URL + VERSION_URL)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(verRequest))
+                .content(jsonMapper.writeValueAsString(verRequest))
         ).andExpect(status().isOk)
 
         val savedVer = springDataTermsVersionRepository.findActiveVersion(savedDef.id!!).get()

@@ -1,6 +1,5 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.kdongsu5509.support.config.QueryDslConfig
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRelationshipsJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRelationshipsRepository
@@ -17,8 +16,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
@@ -30,6 +29,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
+import tools.jackson.databind.json.JsonMapper
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -42,7 +42,7 @@ class FriendsCommandControllerIntegrationTest {
     lateinit var mockMvc: MockMvc
 
     @Autowired
-    lateinit var objectMapper: ObjectMapper
+    lateinit var jsonMapper: JsonMapper
 
     @Autowired
     lateinit var userRepository: SpringDataUserRepository
@@ -113,7 +113,7 @@ class FriendsCommandControllerIntegrationTest {
                 .with(user(userA.email))
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
+                .content(jsonMapper.writeValueAsString(request))
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.friendAlias").value("Bestie"))

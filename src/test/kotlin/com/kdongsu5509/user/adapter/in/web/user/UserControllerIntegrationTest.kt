@@ -1,9 +1,5 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
-import com.epages.restdocs.apispec.ResourceDocumentation.headerWithName
-import com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName
-import com.epages.restdocs.apispec.ResourceDocumentation.resource
-import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.kdongsu5509.user.adapter.`in`.web.user.UserControllerIntegrationTest.Companion.TEST_OWNER_EMAIL
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.NicknameChangeRequest
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
@@ -18,11 +14,9 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post
-import org.springframework.restdocs.payload.JsonFieldType
-import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -55,23 +49,6 @@ class UserControllerIntegrationTest : ControllerTestSupport() {
     fun searchUsers_empty() {
         mockMvc.perform(get(BASE_URL + ME_URL))
             .andExpect(status().isOk)
-            .andDo(
-                restDocs.document(
-                    resource(
-                        ResourceSnippetParameters.builder()
-                            .tag("사용자 약관")
-                            .summary("단일 약관 동의 처리")
-                            .pathParameters(parameterWithName("termDefinitionId").description("동의할 약관 ID"))
-                            .requestHeaders(headerWithName("Authorization").description("액세스 토큰"))
-                            .responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
-                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지").optional(),
-                                fieldWithPath("data").type(JsonFieldType.NULL).description("응답 데이터 (없음)")
-                            )
-                            .build()
-                    )
-                )
-            )
     }
 
     @Test
@@ -129,7 +106,7 @@ class UserControllerIntegrationTest : ControllerTestSupport() {
         mockMvc.perform(
             post(BASE_URL + NICKNAME_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
+                .content(jsonMapper.writeValueAsString(request))
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.userEmail").value(TEST_OWNER_EMAIL))

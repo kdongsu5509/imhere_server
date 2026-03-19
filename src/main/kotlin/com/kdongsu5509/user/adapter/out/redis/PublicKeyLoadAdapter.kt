@@ -25,8 +25,9 @@ class PublicKeyLoadAdapter(
     }
 
     private fun getCachedPublicKeys(): OIDCPublicKeyResponse {
-        val cachedKeySet = cachePort.find(kakaoOIDCProperties.cacheKey) as? OIDCPublicKeyResponse
-            ?: throw BusinessException(AuthErrorCode.KAKAO_OIDC_PUBLIC_KEY_FETCH_FROM_REDIS_FAILED)
+        val cachedKeySet =
+            cachePort.find(kakaoOIDCProperties.cacheKey, OIDCPublicKeyResponse::class.java) as? OIDCPublicKeyResponse
+                ?: throw BusinessException(AuthErrorCode.KAKAO_OIDC_PUBLIC_KEY_FETCH_FROM_REDIS_FAILED)
         return cachedKeySet
     }
 }
