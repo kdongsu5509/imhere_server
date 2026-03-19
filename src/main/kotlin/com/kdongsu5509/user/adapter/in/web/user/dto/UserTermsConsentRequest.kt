@@ -1,5 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.user.dto
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 
@@ -8,9 +9,10 @@ data class UserTermsConsentRequest(
     val consents: List<ConsentDetail>
 ) {
     data class ConsentDetail(
-        @field:NotNull
-        var termDefinitionId: Long,
-        @field:NotNull
-        var isAgreed: Boolean
+        @param:NotNull
+        val termDefinitionId: Long,
+        @param:NotNull
+        @param:JsonProperty("agreed")
+        val isAgreed: Boolean
     )
 }

@@ -8,6 +8,8 @@
 *~
 *.swp
 *.pyc
+local.properties
+.env
 /log/
 /temp/
 logs/
@@ -67,7 +69,6 @@ bin/
 **/application-private.properties
 
 # Build artifacts from all modules
-**/build/
 **/bin/
 **/.gradle/
 
@@ -76,17 +77,15 @@ bin/
 **/jacocoHtml/
 
 # Log files
-*.log
-logs/
 
 # Temporary files
-*.tmp
 *.bak
-*.swp
-*~.nibources/application*.yaml
+*~.nib
+/src/main/resources/application*.yaml
 /src/main/resources/application*.properties
 /src/main/resources/application*.yml
 /src/main/resources/imhereFirebaseKey.json
+/src/main/resources/static/docs/openapi3.yaml
 
 # 암호화 키 파일
 *.jks

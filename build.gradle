@@ -1,12 +1,13 @@
 plugins {
-    id 'org.springframework.boot' version '3.4.3'
-    id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.jetbrains.kotlin.jvm' version '1.9.25'
-    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
-    id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.25'
-    id 'org.jetbrains.kotlin.kapt' version '1.9.25'
+    //spring
+    id 'org.springframework.boot' version '4.0.3'
+    //kotlin
+    id 'org.jetbrains.kotlin.jvm' version '2.3.20'
+    id 'org.jetbrains.kotlin.plugin.spring' version '2.3.20'
+    id 'org.jetbrains.kotlin.plugin.jpa' version '2.3.20'
+    id 'com.google.devtools.ksp' version '2.3.6'
     id 'jacoco'
-    id 'com.epages.restdocs-api-spec' version '0.19.2'
+    id 'com.epages.restdocs-api-spec' version '0.19.4'
 }
 
 group = 'com.kdongsu5509'
@@ -23,69 +24,65 @@ repositories {
     mavenCentral()
 }
 
-ext {
-    set('springCloudVersion', "2024.0.0")
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
-}
-
 dependencies {
+    implementation platform("org.springframework.boot:spring-boot-dependencies:4.0.3")
+
     // KOTLIN
-    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'tools.jackson.module:jackson-module-kotlin'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
 
-    // JWT & SECURITY
+    // JWT & SECURITY (Spring BOM에 없으므로 버전 명시 유지)
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    // DATA (JPA, Redis, PostgreSQL)
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation "org.springframework.boot:spring-boot-starter-security"
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
-    implementation 'org.postgresql:postgresql'
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    // EXTERNAL SDKs
+    // DB & EXTERNAL
+    implementation 'org.postgresql:postgresql'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0' // 외부 라이브러리는 버전 명시
     implementation 'net.nurigo:sdk:4.3.0'
     implementation 'com.google.firebase:firebase-admin:9.7.0'
 
-    // WEB & VALIDATION
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // QUERY DSL (KSP 환경)
+    implementation("io.github.openfeign.querydsl:querydsl-jpa:7.1")
+    ksp("io.github.openfeign.querydsl:querydsl-ksp-codegen:7.1")
 
-    // QUERY DSL
-    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
-    kapt 'com.querydsl:querydsl-apt:5.1.0:jakarta'
-    kapt 'jakarta.annotation:jakarta.annotation-api'
-    kapt 'jakarta.persistence:jakarta.persistence-api'
-
-    // LOMBOK
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
-    // TEST
+    // TEST (Spring BOM 적용)
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-redis-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-cache-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-restclient-test'
+    testImplementation 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-restdocs'
+
+    // 2. Testcontainers BOM 선언 (테스트 컨테이너 버전 충돌 방지)
+    testImplementation platform("org.testcontainers:testcontainers-bom:1.20.1")
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:testcontainers'
     testImplementation 'org.testcontainers:postgresql'
 
     // TEST Docs
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.2'
-    testImplementation 'com.h2database:h2'
 }
 
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll '-Xjsr305=strict'
+    }
+    sourceSets {
+        main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
     }
 }
 
@@ -99,7 +96,6 @@ allOpen {
     annotation 'jakarta.persistence.Embeddable'
 }
 
-// --- OpenAPI 3 설정 (Extension) ---
 openapi3 {
     setServer("http://localhost:8080")
     title = "ImHere API 문서"
@@ -108,22 +104,18 @@ openapi3 {
     format = "yaml"
 }
 
-// OAS 파일을 Swagger UI 경로로 복사하는 태스크
-// 에러 방지를 위해 openapi3를 문자열로 참조합니다.
 tasks.register("copyOasToSwagger", Copy) {
     dependsOn "openapi3"
     from "build/api-spec/openapi3.yaml"
     into "src/main/resources/static/docs"
 }
 
-// --- 테스트 및 리포트 태스크 체이닝 ---
 tasks.named('test') {
     useJUnitPlatform()
     jvmArgs("-XX:+EnableDynamicAgentLoading")
     finalizedBy 'jacocoTestReport', 'copyOasToSwagger'
 }
 
-// --- JaCoCo 설정 ---
 jacoco {
     toolVersion = "0.8.11"
 }

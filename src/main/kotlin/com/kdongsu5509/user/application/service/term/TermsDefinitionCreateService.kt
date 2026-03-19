@@ -20,7 +20,7 @@ class TermsDefinitionCreateService(
     override fun createNewTermsDefinition(newTermDefinitionRequest: NewTermDefinitionRequest) {
         val name = newTermDefinitionRequest.termsName
         val type = newTermDefinitionRequest.termsType
-        val required = newTermDefinitionRequest.isRequired
+        val required = newTermDefinitionRequest.required
 
         validateTermsDefinitionUniqueness(name, type)
 

@@ -1,10 +1,10 @@
 package com.kdongsu5509.support.logger
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
+import tools.jackson.databind.json.JsonMapper
 
 @Component
-class BodyMasker(private val objectMapper: ObjectMapper) {
+class BodyMasker(private val jsonMapper: JsonMapper) {
 
     fun mask(body: String): String {
         val formatted = formatJson(body)
@@ -13,8 +13,8 @@ class BodyMasker(private val objectMapper: ObjectMapper) {
 
     private fun formatJson(body: String): String {
         return try {
-            val jsonNode = objectMapper.readTree(body)
-            objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode)
+            val jsonNode = jsonMapper.readTree(body)
+            jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode)
         } catch (e: Exception) {
             body
         }

@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
-class GlobalExceptionHandler {
+class ImHereGlobalExceptionHandler {
 
-    private val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
+    private val logger = LoggerFactory.getLogger(ImHereGlobalExceptionHandler::class.java)
 
     @ExceptionHandler(BusinessException::class)
     protected fun handleBusinessException(e: BusinessException): ResponseEntity<APIResponse<ErrorResponse>> {
         val errorCode = e.errorCode
-        logger.warn("Business exception occurred: code={}, message={}", errorCode.code, e.message ?: errorCode.message)
+        logger.warn("Business exception occurred: code={}, message={}", errorCode.code, e.message)
 
-        val errorResponse = ErrorResponse(errorCode.code, e.message ?: errorCode.message)
+        val errorResponse = ErrorResponse(errorCode.code, e.message)
         return ResponseEntity
             .status(errorCode.status)
             .body(
