@@ -117,7 +117,9 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
     fun reissue_okay() {
         // given
         val refreshToken = obtainRefreshToken()
-        val requestBody = jsonMapper.writeValueAsString(mapOf("refreshToken" to refreshToken))
+        val requestBody = jsonMapper.writeValueAsString(
+            mapOf("refreshToken" to refreshToken)
+        )
 
         // when & then
         mockMvc.perform(
@@ -154,7 +156,10 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
         val idToken = TestJwtBuilder.buildValidIdToken()
         val response = performLogin(idToken).andReturn().response.contentAsString
 
-        return jsonMapper.readTree(response).path("data").path("refreshToken").asString()
+        return jsonMapper.readTree(response)
+            .path("data")
+            .path("refreshToken")
+            .stringValue()
     }
 
     private fun setMockKakaoPublicKey() {

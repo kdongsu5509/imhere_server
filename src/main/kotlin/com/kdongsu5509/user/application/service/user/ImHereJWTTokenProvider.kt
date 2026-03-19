@@ -43,7 +43,7 @@ class ImHereJWTTokenProvider(
             throw BusinessException(AuthErrorCode.IMHERE_INVALID_TOKEN)
         }
 
-        val refreshTokenFromRedis = cachePort.find("refresh:$username") as String?
+        val refreshTokenFromRedis = cachePort.find("refresh:$username", String::class.java)
 
         if (refreshTokenFromRedis != null && refreshTokenFromRedis == refreshToken) {
             return issueJwtToken(uid, username, role)

@@ -5,12 +5,10 @@ import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.user.application.port.out.user.oauth.OauthClientPort
 import com.kdongsu5509.user.application.service.user.KakaoPublicKeyScheduler
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.restclient.test.autoconfigure.AutoConfigureMockRestServiceServer
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.restclient.test.autoconfigure.RestClientTest
 import org.springframework.cache.CacheManager
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
@@ -18,12 +16,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo
 import org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess
-import org.springframework.test.web.servlet.client.RestTestClient
 import tools.jackson.databind.json.JsonMapper
 
 @ActiveProfiles("test")
-@SpringBootTest
-@AutoConfigureMockRestServiceServer
+@RestClientTest(KakaoOauthClient::class)
 class KakaoOauthClientTest {
 
     companion object {
@@ -40,24 +36,17 @@ class KakaoOauthClientTest {
         }
     }
 
-    private lateinit var restTestClient: RestTestClient;
+    @Autowired
+    private lateinit var mockServer: MockRestServiceServer
 
     @Autowired
     private lateinit var oauthClientPort: OauthClientPort
-
-    @Autowired
-    private lateinit var mockServer: MockRestServiceServer
 
     @MockitoBean
     private lateinit var kakaoPublicKeyScheduler: KakaoPublicKeyScheduler
 
     @MockitoBean(name = "oidcCacheManager")
     private lateinit var oidcCacheManager: CacheManager
-
-    @BeforeEach
-    fun setUp() {
-        restTestClient = RestTestClient.bindToServer().baseUrl(KAKAO_URL).build()
-    }
 
     @Test
     @DisplayName("카카오 공개키 요청 시 정상적으로 데이터를 파싱해서 반환한다")
