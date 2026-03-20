@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.Import
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
 import org.springframework.test.context.ActiveProfiles
@@ -94,6 +95,7 @@ class FriendsRequestReadControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser("receiver@kakao.com")
     @DisplayName("받은 친구 요청의 상세 정보를 잘 찾아 반환한다.")
     fun getReceivedRequestDetail_IntegrationSuccess() {
         //given

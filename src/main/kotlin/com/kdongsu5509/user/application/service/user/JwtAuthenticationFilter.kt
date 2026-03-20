@@ -25,8 +25,7 @@ class JwtAuthenticationFilter : OncePerRequestFilter {
     }
 
     public override fun shouldNotFilter(request: HttpServletRequest): Boolean {
-        val path = request.servletPath
-        return path.startsWith("/api/v1/auth") || path.startsWith("/actuator")
+        return request.servletPath.startsWith("/actuator")
     }
 
     public override fun doFilterInternal(

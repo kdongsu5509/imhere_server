@@ -1,6 +1,6 @@
 package com.kdongsu5509.support.config
 
-import com.kdongsu5509.user.application.service.user.JwtTokenUtil
+import com.kdongsu5509.user.application.service.user.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
@@ -9,15 +9,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
-//TODO : change this. refer to comment of this file
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(
     securedEnabled = true,
     jsr250Enabled = true
 )
-class SecurityConfig(jwtTokenUtil: JwtTokenUtil) {
+class SecurityConfig(
+    private val securityConstants: SecurityConstants,
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter
+) {
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -31,105 +34,16 @@ class SecurityConfig(jwtTokenUtil: JwtTokenUtil) {
             }
 
             authorizeHttpRequests {
-                authorize(anyRequest, permitAll)
+                // 제공된 화이트리스트 목록은 인증 없이 접근 허용
+                securityConstants.whiteListUrls.forEach { authorize(it, permitAll) }
+
+                // 그 외 모든 요청은 인증 필요
+                authorize(anyRequest, authenticated)
             }
+
+            // Spring Security의 기본 인증 필터 앞에 커스텀 JWT 필터 배치
+            addFilterBefore<UsernamePasswordAuthenticationFilter>(jwtAuthenticationFilter)
         }
         return http.build()
     }
 }
-
-//package com.kdongsu5509.imhereapigateway.filter;
-//
-//import com.kdongsu5509.imhereapigateway.filter.jwt.JwtTokenUtil;
-//import java.util.List;
-//import lombok.Getter;
-//import lombok.Setter;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.cloud.gateway.filter.GatewayFilter;
-//import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-//import org.springframework.http.HttpHeaders;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.server.reactive.ServerHttpRequest;
-//import org.springframework.http.server.reactive.ServerHttpResponse;
-//import org.springframework.stereotype.Component;
-//import org.springframework.util.AntPathMatcher;
-//import org.springframework.web.server.ServerWebExchange;
-//import reactor.core.publisher.Mono;
-//
-//@Slf4j
-//@Component
-//public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
-//
-//    private final JwtTokenUtil jwtTokenUtil;
-//    private final AntPathMatcher pathMatcher = new AntPathMatcher(); // 패턴 매칭용
-//
-//    public AuthorizationHeaderFilter(JwtTokenUtil jwtTokenUtil) {
-//        super(Config.class);
-//        this.jwtTokenUtil = jwtTokenUtil;
-//    }
-//
-//    @Getter
-//    @Setter
-//    public static class Config {
-//        private List<String> excludePaths; // YAML에서 받을 제외 목록
-//    }
-//
-//    @Override
-//    public GatewayFilter apply(Config config) {
-//        return (exchange, chain) -> {
-//            ServerHttpRequest request = exchange.getRequest();
-//            String path = request.getURI().getPath();
-//
-//            if (isWhiteListEndPoint(config, path)) {
-//                return chain.filter(exchange);
-//            }
-//
-//            // 2. 인증 헤더 존재 여부 확인
-//            if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-//                return onError(exchange, "No authorization header", HttpStatus.UNAUTHORIZED);
-//            }
-//
-//            String authorizationHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-//            String jwt = authorizationHeader.replace("Bearer ", "");
-//
-//            // 3. 토큰 유효성 검사
-//            if (!jwtTokenUtil.validateToken(jwt)) {
-//                return onError(exchange, "JWT token is not valid", HttpStatus.UNAUTHORIZED);
-//            }
-//
-//            // 4. 헤더 전파 및 필터 체인 진행
-//            return chain.filter(exchange.mutate()
-//                    .request(propagateHeader(exchange, jwt))
-//                    .build()
-//            );
-//        };
-//    }
-//
-//    private boolean isWhiteListEndPoint(Config config, String path) {
-//        if (config.getExcludePaths() != null) {
-//            for (String excludePath : config.getExcludePaths()) {
-//                if (pathMatcher.match(excludePath, path)) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
-//
-//    private ServerHttpRequest propagateHeader(ServerWebExchange exchange, String jwt) {
-//        String subject = jwtTokenUtil.getUsernameFromToken(jwt);
-//        String role = jwtTokenUtil.getRoleFromToken(jwt);
-//
-//        return exchange.getRequest().mutate()
-//                .header("X-User-Email", subject)
-//                .header("X-User-Role", role)
-//                .build();
-//    }
-//
-//    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
-//        ServerHttpResponse response = exchange.getResponse();
-//        response.setStatusCode(httpStatus);
-//        log.error("Filter Error: {}, Status: {}", err, httpStatus);
-//        return response.setComplete();
-//    }
-//}

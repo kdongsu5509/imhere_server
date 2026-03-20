@@ -29,21 +29,11 @@ jwt:
   refresh-expiration-days: 7
   access-header-name: Authorization
 
+security:
+  whitelist: /swagger-ui/**,/v3/api-docs/**
+
 oidc:
   kakao:
     issuer: "https://kauth.kakao.com"
     audience: "bf284f33bfeba9bc59575706d0eb0e9c"
     cacheKey: "kakaoOidcKeys::kakaoPublicKeySet"
-
-    spring:
-      datasource:
-        url: jdbc:h2:mem:testdb;MODE=PostgreSQL
-        driver-class-name: org.h2.Driver
-        username: sa
-        password:
-      jpa:
-        hibernate:
-          ddl-auto: create-drop
-        properties:
-          hibernate:
-            format_sql: true
