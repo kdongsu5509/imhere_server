@@ -4,6 +4,7 @@ import com.kdongsu5509.support.common.dto.APIResponse
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authorization.AuthorizationDeniedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -41,6 +42,22 @@ class ImHereGlobalExceptionHandler {
                 APIResponse.fail(
                     HttpStatus.BAD_REQUEST.value(),
                     HttpStatus.BAD_REQUEST.name,
+                    errorResponse
+                )
+            )
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException::class)
+    protected fun handleAuthorizationDeniedException(e: Exception): ResponseEntity<APIResponse<ErrorResponse>> {
+        logger.error("Authorization Denied Exception occurred: ", e)
+        val errorResponse =
+            ErrorResponse(AuthErrorCode.IMHERE_ACCESS_DENIED.code, AuthErrorCode.IMHERE_ACCESS_DENIED.message)
+        return ResponseEntity
+            .status(AuthErrorCode.IMHERE_ACCESS_DENIED.status)
+            .body(
+                APIResponse.fail(
+                    HttpStatus.FORBIDDEN.value(),
+                    HttpStatus.FORBIDDEN.name,
                     errorResponse
                 )
             )

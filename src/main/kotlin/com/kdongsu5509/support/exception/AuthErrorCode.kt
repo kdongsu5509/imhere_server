@@ -57,4 +57,9 @@ enum class AuthErrorCode(
         "IMHERE_TOKEN_002",
         "잘못된 토큰입니다"
     ),
+    IMHERE_ACCESS_DENIED(
+        HttpStatus.FORBIDDEN,
+        "IMHERE_TOKEN_003",
+        "해당 기능에 대한 권한이 없습니다."
+    ),
 }
