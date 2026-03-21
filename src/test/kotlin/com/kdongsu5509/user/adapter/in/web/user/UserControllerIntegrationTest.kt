@@ -1,5 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
+import com.common.testUtil.ControllerTestSupport
 import com.kdongsu5509.user.adapter.`in`.web.user.UserControllerIntegrationTest.Companion.TEST_OWNER_EMAIL
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.NicknameChangeRequest
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
@@ -7,7 +8,6 @@ import com.kdongsu5509.user.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.user.domain.user.OAuth2Provider
 import com.kdongsu5509.user.domain.user.UserRole
 import com.kdongsu5509.user.domain.user.UserStatus
-import com.kdongsu5509.user.testSupport.ControllerTestSupport
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -27,7 +27,7 @@ class UserControllerIntegrationTest : ControllerTestSupport() {
     lateinit var userRepository: SpringDataUserRepository
 
     companion object {
-        const val BASE_URL = "/api/v1/user/info"
+        const val BASE_URL = "/api/user/info"
         const val ME_URL = "/me"
         const val NICKNAME_URL = "/nickname"
         const val TEST_EMAIL = "test@test.com"
@@ -99,7 +99,7 @@ class UserControllerIntegrationTest : ControllerTestSupport() {
     @DisplayName("내 닉네임 변경")
     fun changeNickname_success() {
         // given
-        val newNickname = "dongsuKo"
+        val newNickname = "고동수"
         val request = NicknameChangeRequest(newNickname)
 
         // when & then

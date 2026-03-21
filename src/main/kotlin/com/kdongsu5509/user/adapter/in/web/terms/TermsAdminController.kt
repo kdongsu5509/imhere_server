@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
-@RequestMapping("/api/v1/user/terms")
+@RequestMapping("/api/user/terms", version = "1")
 class TermsAdminController(
     private val createTermsDefinitionUseCase: CreateTermsDefinitionUseCase,
     private val createTermVersionUseCase: CreateTermVersionUseCase,

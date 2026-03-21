@@ -1,5 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
+import com.common.testUtil.ControllerTestSupport
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRelationshipsJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRelationshipsRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
@@ -12,25 +13,21 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-@Transactional
 class FriendsReadControllerTest @Autowired constructor(
-    private val mockMvc: MockMvc,
     private val userRepository: SpringDataUserRepository,
     private val friendRelationshipRepository: SpringDataFriendRelationshipsRepository
-) {
+) : ControllerTestSupport() {
+
+    companion object {
+        const val FRIENDS_READ_BASE_URL = "/api/user/friends"
+    }
 
     @BeforeEach
     fun setUp() {
@@ -67,7 +64,7 @@ class FriendsReadControllerTest @Autowired constructor(
     @WithMockUser(username = "test@test.com")
     fun getMyFriends_success() {
         mockMvc.perform(
-            get("/api/v1/user/friends")
+            get(FRIENDS_READ_BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)

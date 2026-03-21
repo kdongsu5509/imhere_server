@@ -1,11 +1,17 @@
-package com.kdongsu5509.user.testSupport
+package com.common.testUtil
 
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
+import com.kdongsu5509.support.config.QueryDslConfig
+import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.restdocs.test.autoconfigure.AutoConfigureRestDocs
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
+import org.springframework.test.context.bean.override.mockito.MockitoBean
+import org.springframework.context.annotation.Import
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.test.context.ActiveProfiles
@@ -18,14 +24,24 @@ import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.filter.CharacterEncodingFilter
 import tools.jackson.databind.json.JsonMapper
 
-@ActiveProfiles("test")
-@Transactional
 @SpringBootTest
+@Transactional
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
+@Import(
+    SpringQueryDSLUserRepository::class,
+    QueryDslConfig::class,
+)
 //@Import(RestDocsConfiguration::class)
 @ExtendWith(RestDocumentationExtension::class)
 abstract class ControllerTestSupport : TestRedisContainer() {
+
+    @MockitoBean
+    protected lateinit var firebaseMessaging: FirebaseMessaging
+
+    @MockitoBean
+    protected lateinit var firebaseApp: FirebaseApp
 
     @Autowired
     protected lateinit var mockMvc: MockMvc

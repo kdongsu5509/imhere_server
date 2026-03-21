@@ -1,24 +1,23 @@
 package com.kdongsu5509.user.adapter.out.persistence.terms
 
+import com.common.testUtil.ControllerTestSupport
 import com.kdongsu5509.user.adapter.out.persistence.terms.adapter.TermsDefinitionCommandPersistenceAdapter
 import com.kdongsu5509.user.adapter.out.persistence.terms.adapter.TermsDefinitionQueryPersistenceAdapter
 import com.kdongsu5509.user.adapter.out.persistence.terms.adapter.TermsVersionCommandPersistenceAdapter
 import com.kdongsu5509.user.adapter.out.persistence.terms.adapter.TermsVersionQueryPersistenceAdapter
 import com.kdongsu5509.user.domain.terms.TermsTypes
-import com.kdongsu5509.user.testSupport.TestRedisContainer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cache.CacheManager
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
-@ActiveProfiles("test")
-@SpringBootTest
-class TermsCacheTest : TestRedisContainer() {
+class TermsCacheTest : ControllerTestSupport() {
 
     @Autowired
     private lateinit var termsDefinitionQueryPersistenceAdapter: TermsDefinitionQueryPersistenceAdapter

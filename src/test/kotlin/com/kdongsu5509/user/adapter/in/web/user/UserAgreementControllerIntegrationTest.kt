@@ -1,5 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
+import com.common.testUtil.ControllerTestSupport
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserTermsConsentRequest
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsDefinitionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsVersionRepository
@@ -12,7 +13,6 @@ import com.kdongsu5509.user.domain.terms.TermsTypes
 import com.kdongsu5509.user.domain.user.OAuth2Provider
 import com.kdongsu5509.user.domain.user.UserRole
 import com.kdongsu5509.user.domain.user.UserStatus
-import com.kdongsu5509.user.testSupport.ControllerTestSupport
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -38,7 +38,7 @@ class UserAgreementControllerIntegrationTest : ControllerTestSupport() {
     lateinit var agreementTermUseCase: AgreementTermUseCase
 
     companion object {
-        const val BASE_URL = "/api/v1/user/terms"
+        const val BASE_URL = "/api/user/terms"
         const val CONSENT_ALL_URL = "/consent"
         const val CONSENT_SINGLE_URL = "/consent/{termDefinitionId}"
         const val TEST_USER = "test@kakao.com"

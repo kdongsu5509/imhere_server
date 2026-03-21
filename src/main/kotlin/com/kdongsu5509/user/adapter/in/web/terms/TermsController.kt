@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1/user/terms")
+@RequestMapping("/api/user/terms", version = "1")
 class TermsController(
     private val readTermsDefinitionUseCase: ReadTermsDefinitionUseCase,
     private val readTermsVersionUseCase: ReadTermsVersionUseCase

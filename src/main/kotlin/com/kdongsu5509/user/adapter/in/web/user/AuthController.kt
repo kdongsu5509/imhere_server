@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1/user/auth")
+@RequestMapping("/api/user/auth", version = "1")
 class AuthController(
     val authenticateWithOidcUseCase: AuthenticateWithOidcUseCase,
     val reissueJwtUseCase: ReissueJWTUseCase

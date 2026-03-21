@@ -1,5 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.terms
 
+import com.common.testUtil.ControllerTestSupport
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.NewTermDefinitionRequest
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.NewTermVersionRequest
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsDefinitionRepository
@@ -9,35 +10,26 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.transaction.annotation.Transactional
-import tools.jackson.databind.json.JsonMapper
 import java.time.LocalDateTime
 
-@Transactional
-@SpringBootTest
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-class TermsAdminControllerTest @Autowired constructor(
-    private val mockMvc: MockMvc,
-    private val jsonMapper: JsonMapper,
-    private val springDataTermsDefinitionRepository: SpringDataTermsDefinitionRepository,
-    private val springDataTermsVersionRepository: SpringDataTermsVersionRepository
-) {
+class TermsAdminControllerTest : ControllerTestSupport() {
 
     companion object {
-        const val BASE_URL = "/api/v1/user/terms"
+        const val BASE_URL = "/api/user/terms"
         const val DEFINITION_URL = "/definition"
         const val VERSION_URL = "/version"
     }
+
+    @Autowired
+    lateinit var springDataTermsDefinitionRepository: SpringDataTermsDefinitionRepository
+
+    @Autowired
+    lateinit var springDataTermsVersionRepository: SpringDataTermsVersionRepository
 
     @Test
     @WithMockUser(roles = ["ADMIN"])

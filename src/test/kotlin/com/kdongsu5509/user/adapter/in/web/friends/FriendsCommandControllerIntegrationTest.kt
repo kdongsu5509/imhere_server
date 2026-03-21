@@ -1,11 +1,11 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.kdongsu5509.support.config.QueryDslConfig
+import com.common.testUtil.ControllerTestSupport
+import com.kdongsu5509.user.adapter.`in`.web.friends.FriendsCommandControllerIntegrationTest.Companion.USER_A_EMAIL
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRelationshipsJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRelationshipsRepository
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRestrictionRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
-import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.user.domain.friend.FriendRestrictionType
 import com.kdongsu5509.user.domain.user.OAuth2Provider
@@ -16,33 +16,26 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
-import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.transaction.annotation.Transactional
-import tools.jackson.databind.json.JsonMapper
 
-@SpringBootTest
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-@Transactional
-@Import(SpringQueryDSLUserRepository::class, QueryDslConfig::class)
-class FriendsCommandControllerIntegrationTest {
+@WithMockUser(username = USER_A_EMAIL)
+class FriendsCommandControllerIntegrationTest : ControllerTestSupport() {
 
-    @Autowired
-    lateinit var mockMvc: MockMvc
+    companion object {
+        const val FRIENDS_COMMAND_BASE_URL = "/api/user/friends"
+        const val FRIENDS_ALIAS_URL = "/alias"
+        const val FRIENDS_BLOCK_URL = "/block/{friendRelationshipId}"
 
-    @Autowired
-    lateinit var jsonMapper: JsonMapper
+        const val USER_A_EMAIL = "userA@test.com"
+        const val USER_B_EMAIL = "user@test.com"
+    }
 
     @Autowired
     lateinit var userRepository: SpringDataUserRepository
@@ -60,8 +53,8 @@ class FriendsCommandControllerIntegrationTest {
 
     @BeforeEach
     fun setUp() {
-        userA = createUser("userA@test.com", "UserA")
-        userB = createUser("userB@test.com", "UserB")
+        userA = createUser(USER_A_EMAIL, "UserA")
+        userB = createUser(USER_B_EMAIL, "UserB")
 
         relationshipAtoB = friendRelationshipsRepository.save(FriendRelationshipsJpaEntity.create(userA, userB))
         relationshipBtoA = friendRelationshipsRepository.save(FriendRelationshipsJpaEntity.create(userB, userA))
@@ -71,8 +64,8 @@ class FriendsCommandControllerIntegrationTest {
     @DisplayName("친구 삭제 API 호출 시 양방향 관계가 모두 삭제된다")
     fun deleteFriend_Success() {
         mockMvc.perform(
-            delete("/api/v1/user/friends/{friendRelationshipId}", relationshipAtoB.id)
-                .with(user(userA.email))
+            delete("$FRIENDS_COMMAND_BASE_URL/{friendRelationshipId}", relationshipAtoB.id)
+                .with(user(USER_A_EMAIL))
                 .with(csrf())
         )
             .andExpect(status().isOk)
@@ -85,8 +78,8 @@ class FriendsCommandControllerIntegrationTest {
     @DisplayName("친구 차단 API 호출 시 관계 삭제 및 차단 목록에 추가된다")
     fun blockFriend_Success() {
         mockMvc.perform(
-            post("/api/v1/user/friends/block/{friendRelationshipId}", relationshipAtoB.id)
-                .with(user(userA.email))
+            post("$FRIENDS_COMMAND_BASE_URL$FRIENDS_BLOCK_URL", relationshipAtoB.id)
+                .with(user(USER_A_EMAIL))
                 .with(csrf())
         )
             .andExpect(status().isOk)
@@ -109,8 +102,8 @@ class FriendsCommandControllerIntegrationTest {
         )
 
         mockMvc.perform(
-            post("/api/v1/user/friends/alias")
-                .with(user(userA.email))
+            post(FRIENDS_COMMAND_BASE_URL + FRIENDS_ALIAS_URL)
+                .with(user(USER_A_EMAIL))
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper.writeValueAsString(request))

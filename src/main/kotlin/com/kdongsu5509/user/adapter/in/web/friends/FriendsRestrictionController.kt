@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/v1/user/friends/restriction")
+@RequestMapping("/api/user/friends/restriction", version = "1")
 class FriendsRestrictionController(
     private val readFriendsRestrictionUseCase: ReadFriendsRestrictionUseCase,
     private val updateFriendRestrictionUseCase: UpdateFriendRestrictionUseCase

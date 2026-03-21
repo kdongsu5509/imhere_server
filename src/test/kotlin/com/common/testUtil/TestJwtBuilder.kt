@@ -1,4 +1,4 @@
-package com.kdongsu5509.user.testSupport
+package com.common.testUtil
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
