@@ -18,7 +18,7 @@ class FcmTokenJpaEntity(
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
+    var id: Long? = null
 
     fun updateToken(newToken: String) {
         this.token = newToken
