@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/notification", version = "v1")
+@RequestMapping("/api/notification", version = "1")
 class FcmTokenEnrollController(
     private val enrollFcmTokenUserCasePort: ManageFcmTokenUseCasePort
 ) {
@@ -24,4 +24,3 @@ class FcmTokenEnrollController(
         enrollFcmTokenUserCasePort.save(fcmTokenInfo.fcmToken, userEmail, fcmTokenInfo.deviceType)
     }
 }
-

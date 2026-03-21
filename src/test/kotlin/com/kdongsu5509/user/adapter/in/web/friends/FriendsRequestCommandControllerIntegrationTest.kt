@@ -98,6 +98,7 @@ class FriendsRequestCommandControllerIntegrationTest : ControllerTestSupport() {
 
     private fun performPost(url: String, userEmail: String, content: Any? = null) = mockMvc.perform(
         post(url)
+            .param("v", "1")
             .with(user(userEmail))
             .with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
