@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform("org.springframework.boot:spring-boot-dependencies:4.0.3")
+    implementation platform("org.springframework.boot:spring-boot-dependencies:4.0.4")
 
     // KOTLIN
     implementation 'tools.jackson.module:jackson-module-kotlin'
