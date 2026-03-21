@@ -2,7 +2,6 @@ package com.kdongsu5509.notifications.adapter.out.persistence
 
 import com.kdongsu5509.notifications.adapter.out.BaseEntity
 import com.kdongsu5509.notifications.domain.DeviceType
-import com.kdongsu5509.user.adapter.out.persistence.user.jpa.UserJpaEntity
 import jakarta.persistence.*
 
 @Entity
@@ -11,9 +10,7 @@ class FcmTokenJpaEntity(
     @Column(nullable = false)
     var token: String,
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
-    val user: UserJpaEntity,
+    val userEmail: String,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

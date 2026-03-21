@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/v1/user/friends/request")
+@RequestMapping("/api/user/friends/request", version = "1")
 class FriendsRequestCommandController(
     private val createFriendRequestUseCase: CreateFriendRequestUseCase,
     private val updateFriendRequestUseCase: UpdateFriendRequestUseCase

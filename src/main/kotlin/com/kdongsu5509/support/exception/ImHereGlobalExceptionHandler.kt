@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authorization.AuthorizationDeniedException
 import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
 @RestControllerAdvice
 class ImHereGlobalExceptionHandler {
@@ -15,7 +17,7 @@ class ImHereGlobalExceptionHandler {
     private val logger = LoggerFactory.getLogger(ImHereGlobalExceptionHandler::class.java)
 
     @ExceptionHandler(BusinessException::class)
-    protected fun handleBusinessException(e: BusinessException): ResponseEntity<APIResponse<ErrorResponse>> {
+    private fun handleBusinessException(e: BusinessException): ResponseEntity<APIResponse<ErrorResponse>> {
         val errorCode = e.errorCode
         logger.warn("Business exception occurred: code={}, message={}", errorCode.code, e.message)
 
@@ -32,7 +34,7 @@ class ImHereGlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    protected fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<APIResponse<ErrorResponse>> {
+    private fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<APIResponse<ErrorResponse>> {
         logger.warn("MethodArgumentNotValidException occurred: {}", e.message)
         val errorResponse =
             ErrorResponse(GlobalErrorCode.INVALID_INPUT_VALUE.code, GlobalErrorCode.INVALID_INPUT_VALUE.message)
@@ -47,8 +49,40 @@ class ImHereGlobalExceptionHandler {
             )
     }
 
+    @ExceptionHandler(MethodArgumentTypeMismatchException::class)
+    fun handleTypeMismatchExceptions(ex: MethodArgumentTypeMismatchException): ResponseEntity<APIResponse<ErrorResponse>> {
+        logger.warn("MethodArgumentTypeMismatchException occurred: {}", ex.message)
+        val errorResponse =
+            ErrorResponse(GlobalErrorCode.INVALID_INPUT_VALUE.code, GlobalErrorCode.INVALID_INPUT_VALUE.message)
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(
+                APIResponse.fail(
+                    HttpStatus.BAD_REQUEST.value(),
+                    HttpStatus.BAD_REQUEST.name,
+                    errorResponse
+                )
+            )
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException::class)
+    fun handleMissingParams(ex: MissingServletRequestParameterException): ResponseEntity<APIResponse<ErrorResponse>> {
+        logger.warn("MissingServletRequestParameterException occurred: {}", ex.message)
+        val errorResponse =
+            ErrorResponse(GlobalErrorCode.INVALID_INPUT_VALUE.code, GlobalErrorCode.INVALID_INPUT_VALUE.message)
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(
+                APIResponse.fail(
+                    HttpStatus.BAD_REQUEST.value(),
+                    HttpStatus.BAD_REQUEST.name,
+                    errorResponse
+                )
+            )
+    }
+
     @ExceptionHandler(AuthorizationDeniedException::class)
-    protected fun handleAuthorizationDeniedException(e: Exception): ResponseEntity<APIResponse<ErrorResponse>> {
+    private fun handleAuthorizationDeniedException(e: Exception): ResponseEntity<APIResponse<ErrorResponse>> {
         logger.error("Authorization Denied Exception occurred: ", e)
         val errorResponse =
             ErrorResponse(AuthErrorCode.IMHERE_ACCESS_DENIED.code, AuthErrorCode.IMHERE_ACCESS_DENIED.message)
@@ -64,7 +98,7 @@ class ImHereGlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception::class)
-    protected fun handleException(e: Exception): ResponseEntity<APIResponse<ErrorResponse>> {
+    private fun handleException(e: Exception): ResponseEntity<APIResponse<ErrorResponse>> {
         logger.error("Unexpected exception occurred: ", e)
         val errorResponse = ErrorResponse(GlobalErrorCode.UNKNOWN_ERROR.code, GlobalErrorCode.UNKNOWN_ERROR.message)
         return ResponseEntity

@@ -1,7 +1,7 @@
 package com.kdongsu5509.notifications.adapter.`in`
 
 import com.kdongsu5509.notifications.adapter.`in`.dto.FcmTokenInfo
-import com.kdongsu5509.notifications.application.port.`in`.SaveFcmTokenUseCasePort
+import com.kdongsu5509.notifications.application.port.`in`.ManageFcmTokenUseCasePort
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.validation.annotation.Validated
@@ -11,17 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1/notification")
+@RequestMapping("/api/notification", version = "1")
 class FcmTokenEnrollController(
-    private val saveFcmTokenUserCasePort: SaveFcmTokenUseCasePort
+    private val enrollFcmTokenUserCasePort: ManageFcmTokenUseCasePort
 ) {
-    @PostMapping("/enroll")
+    @PostMapping("/fcmToken")
     fun enroll(
-        @Validated @RequestBody fcmTokenInfo: FcmTokenInfo,
-        @AuthenticationPrincipal userDetails: UserDetails
+        @AuthenticationPrincipal userDetails: UserDetails,
+        @Validated @RequestBody fcmTokenInfo: FcmTokenInfo
     ) {
         val userEmail = userDetails.username
-        saveFcmTokenUserCasePort.save(fcmTokenInfo.fcmToken, userEmail, fcmTokenInfo.deviceType)
+        enrollFcmTokenUserCasePort.save(fcmTokenInfo.fcmToken, userEmail, fcmTokenInfo.deviceType)
     }
 }
-

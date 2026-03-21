@@ -34,14 +34,10 @@ class SecurityConfig(
             }
 
             authorizeHttpRequests {
-                // 제공된 화이트리스트 목록은 인증 없이 접근 허용
                 securityConstants.whiteListUrls.forEach { authorize(it, permitAll) }
-
-                // 그 외 모든 요청은 인증 필요
                 authorize(anyRequest, authenticated)
             }
 
-            // Spring Security의 기본 인증 필터 앞에 커스텀 JWT 필터 배치
             addFilterBefore<UsernamePasswordAuthenticationFilter>(jwtAuthenticationFilter)
         }
         return http.build()

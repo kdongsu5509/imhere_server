@@ -1,11 +1,11 @@
 package com.kdongsu5509.user.adapter.`in`.web.terms
 
+import com.common.testUtil.ControllerTestSupport
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsDefinitionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsVersionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.TermsDefinitionJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.TermsVersionJpaEntity
 import com.kdongsu5509.user.domain.terms.TermsTypes
-import com.kdongsu5509.user.testSupport.ControllerTestSupport
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,6 +21,11 @@ class TermsControllerTest @Autowired constructor(
     private val springDataTermsVersionRepository: SpringDataTermsVersionRepository
 ) : ControllerTestSupport() {
 
+    companion object {
+        const val TERM_VERSION_BASE_URL = "/api/user/terms"
+        const val VERSION_DETAIL_URL = "/version//{termsDefinitionId}"
+    }
+
     @Test
     @DisplayName("약관 목록 조회 시 페이징된 결과를 반환한다")
     fun readAllTermsDefinitions_Success() {
@@ -34,7 +39,7 @@ class TermsControllerTest @Autowired constructor(
 
         // when & then
         mockMvc.perform(
-            get("/api/v1/user/terms")
+            get(TERM_VERSION_BASE_URL)
                 .param("page", "0")
                 .param("size", "10")
         )
@@ -56,7 +61,7 @@ class TermsControllerTest @Autowired constructor(
 
         // when & then
         mockMvc.perform(
-            get("/api/v1/user/terms/version/{termsDefinitionId}", definition.id)
+            get("$TERM_VERSION_BASE_URL$VERSION_DETAIL_URL", definition.id)
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.version").value("v1.0"))
@@ -68,7 +73,7 @@ class TermsControllerTest @Autowired constructor(
     fun readTermsVersion_Fail_NotFound() {
         // when & then
         mockMvc.perform(
-            get("/api/v1/user/terms/version/{termsDefinitionId}", 9999)
+            get("$TERM_VERSION_BASE_URL$VERSION_DETAIL_URL", 9999)
         )
             .andExpect(status().isNotFound)
     }

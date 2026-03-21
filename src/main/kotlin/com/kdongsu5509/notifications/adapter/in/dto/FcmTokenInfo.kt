@@ -1,7 +1,6 @@
 package com.kdongsu5509.notifications.adapter.`in`.dto
 
 import com.kdongsu5509.notifications.domain.DeviceType
-import jakarta.validation.constraints.NotBlank
 
 data class FcmTokenInfo(
     val fcmToken: String,

@@ -1,10 +1,9 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.kdongsu5509.support.config.QueryDslConfig
+import com.common.testUtil.ControllerTestSupport
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRestrictionJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRestrictionRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
-import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.user.domain.friend.FriendRestrictionType
 import com.kdongsu5509.user.domain.user.OAuth2Provider
@@ -15,35 +14,29 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
-import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.transaction.annotation.Transactional
 
-@SpringBootTest
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-@Transactional
-@Import(SpringQueryDSLUserRepository::class, QueryDslConfig::class)
-class FriendsRestrictionControllerTest @Autowired constructor(
-    private val mockMvc: MockMvc,
-    private val userRepository: SpringDataUserRepository,
-    private val friendRestrictionRepository: SpringDataFriendRestrictionRepository
-) {
+class FriendsRestrictionControllerTest : ControllerTestSupport() {
+
     companion object {
+
+        const val FRIENDS_RESTRICTION_BASE_URL = "/api/user/friends/restriction"
         const val TEST_OWNER_EMAIL = "test0@test.com"
         const val START = 1
         const val END = 5
     }
+
+    @Autowired
+    lateinit var userRepository: SpringDataUserRepository
+
+    @Autowired
+    lateinit var friendRestrictionRepository: SpringDataFriendRestrictionRepository
 
     @BeforeEach
     fun setUp() {
@@ -65,7 +58,7 @@ class FriendsRestrictionControllerTest @Autowired constructor(
     @WithMockUser(username = "test0@test.com")
     fun getMyRestrictedFriends_success() {
         mockMvc.perform(
-            get("/api/v1/user/friends/restriction")
+            get(FRIENDS_RESTRICTION_BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
@@ -101,7 +94,7 @@ class FriendsRestrictionControllerTest @Autowired constructor(
         // when & then
         mockMvc.perform(
             MockMvcRequestBuilders
-                .delete("/api/v1/user/friends/restriction/$targetId")
+                .delete("$FRIENDS_RESTRICTION_BASE_URL/$targetId")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isCreated)
@@ -124,7 +117,7 @@ class FriendsRestrictionControllerTest @Autowired constructor(
         // when & then
         mockMvc.perform(
             MockMvcRequestBuilders
-                .delete("/api/v1/user/friends/restriction/$targetId")
+                .delete("$FRIENDS_RESTRICTION_BASE_URL/$targetId")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isBadRequest) // BusinessException (ErrorCode 확인)

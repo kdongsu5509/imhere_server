@@ -1,5 +1,7 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
+import com.common.testUtil.ControllerTestSupport
+import com.common.testUtil.TestJwtBuilder
 import com.kdongsu5509.support.exception.AuthErrorCode
 import com.kdongsu5509.user.adapter.out.auth.oauth.KakaoOauthClient
 import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKey
@@ -9,8 +11,6 @@ import com.kdongsu5509.user.domain.user.OAuth2Provider
 import com.kdongsu5509.user.domain.user.User
 import com.kdongsu5509.user.domain.user.UserRole
 import com.kdongsu5509.user.domain.user.UserStatus
-import com.kdongsu5509.user.testSupport.ControllerTestSupport
-import com.kdongsu5509.user.testSupport.TestJwtBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -32,7 +32,7 @@ import java.util.*
 class AuthControllerIntegrationTest : ControllerTestSupport() {
 
     companion object {
-        const val BASE_URL = "/api/v1/user/auth"
+        const val BASE_URL = "/api/user/auth"
         const val LOGIN_URL = "/login"
         const val REISSUE_URL = "/reissue"
         const val DEFAULT_TEST_EMAIL = "ds.ko@kakao.com"

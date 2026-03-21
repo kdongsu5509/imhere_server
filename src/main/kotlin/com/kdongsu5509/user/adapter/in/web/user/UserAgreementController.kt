@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/v1/user/terms")
+@RequestMapping("/api/user/terms", version = "1")
 class UserAgreementController(
     private val agreementTermUseCase: AgreementTermUseCase
 ) {

@@ -1,22 +1,19 @@
 package com.kdongsu5509.notifications.adapter.out.persistence
 
+import com.kdongsu5509.notifications.application.port.out.DeleteTokenPort
 import com.kdongsu5509.notifications.application.port.out.FindTokenPort
-import com.kdongsu5509.notifications.application.port.out.SaveTokenPersistencePort
+import com.kdongsu5509.notifications.application.port.out.SaveOrUpdateTokenPersistencePort
 import com.kdongsu5509.notifications.domain.DeviceType
 import com.kdongsu5509.notifications.domain.FcmToken
-import com.kdongsu5509.support.exception.BusinessException
-import com.kdongsu5509.support.exception.UserErrorCode
-import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import org.springframework.stereotype.Component
 
 @Component
-class FcmTokenPersistenceAdapter(
+class FcmOrUpdateTokenPersistenceAdapter(
     private val fcmTokenMapper: FcmTokenMapper,
     private val springDataFcmTokenRepository: SpringDataFcmTokenRepository,
-    private val springDataUserRepository: SpringDataUserRepository,
-) : SaveTokenPersistencePort, FindTokenPort {
+) : SaveOrUpdateTokenPersistencePort, FindTokenPort, DeleteTokenPort {
 
-    override fun save(fcmToken: String, userEmail: String, deviceType: DeviceType) {
+    override fun saveOrUpdate(userEmail: String, fcmToken: String, deviceType: DeviceType) {
         val existingEntity = springDataFcmTokenRepository.findByUserEmail(userEmail)
 
         if (existingEntity != null) {
@@ -24,12 +21,9 @@ class FcmTokenPersistenceAdapter(
                 existingEntity.updateToken(fcmToken)
             }
         } else {
-            val user =
-                springDataUserRepository.findByEmail(userEmail) ?: throw BusinessException(UserErrorCode.USER_NOT_FOUND)
-
             val newEntity = FcmTokenJpaEntity(
                 token = fcmToken,
-                user = user,
+                userEmail = userEmail,
                 deviceType = deviceType
             )
             springDataFcmTokenRepository.save(newEntity)
@@ -39,5 +33,9 @@ class FcmTokenPersistenceAdapter(
     override fun findByUserEmail(userEmail: String): FcmToken? {
         return springDataFcmTokenRepository.findByUserEmail(userEmail)
             ?.let { fcmTokenMapper.mapToDomainEntity(it) }
+    }
+
+    override fun deleteById(fcmTokenId: Long) {
+        springDataFcmTokenRepository.deleteById(fcmTokenId)
     }
 }

@@ -1,10 +1,9 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.kdongsu5509.support.config.QueryDslConfig
+import com.common.testUtil.ControllerTestSupport
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRequestJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRequestRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
-import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.user.domain.user.OAuth2Provider
 import com.kdongsu5509.user.domain.user.UserRole
@@ -14,42 +13,25 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
-import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.transaction.annotation.Transactional
-import tools.jackson.databind.json.JsonMapper
 
-@SpringBootTest
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-@Transactional
-@Import(SpringQueryDSLUserRepository::class, QueryDslConfig::class)
-class FriendsRequestCommandControllerIntegrationTest {
+class FriendsRequestCommandControllerIntegrationTest : ControllerTestSupport() {
 
     companion object {
-        const val BASE_URL = "/api/v1/user/friends/request"
+        const val FRIENDS_REQ_BASE_URL = "/api/user/friends/request"
         const val FRIEND_REQUEST_MESSAGE = "안녕하세요 저는 라티입니다! 친하게 지내요!"
         const val REQ_EMAIL = "requester1@kakao.com"
+        const val REC_EMAIL = "receiver@kakao.com"
     }
 
     private lateinit var requester1: UserJpaEntity
     private lateinit var receiver: UserJpaEntity
-
-    @Autowired
-    lateinit var mockMvc: MockMvc
-
-    @Autowired
-    lateinit var jsonMapper: JsonMapper
 
     @Autowired
     lateinit var userRepository: SpringDataUserRepository
@@ -60,7 +42,7 @@ class FriendsRequestCommandControllerIntegrationTest {
     @BeforeEach
     fun setUp() {
         requester1 = createUser(REQ_EMAIL, "요청자")
-        receiver = createUser("receiver@kakao.com", "수신자")
+        receiver = createUser(REC_EMAIL, "수신자")
     }
 
     @Test
@@ -72,7 +54,7 @@ class FriendsRequestCommandControllerIntegrationTest {
             "message" to FRIEND_REQUEST_MESSAGE
         )
 
-        performPost(BASE_URL, requester1.email, requestDto)
+        performPost(FRIENDS_REQ_BASE_URL, requester1.email, requestDto)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.code").value(200))
             .andExpect(jsonPath("$.data.friendRequestId").exists())
@@ -85,21 +67,23 @@ class FriendsRequestCommandControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(username = REC_EMAIL)
     @DisplayName("친구 요청 수락 API 호출 시 친구 요청은 DB 삭제, 친구는 DB 저장까지 성공한다")
     fun acceptToFriendRequest() {
         val requestId = createFriendRequest(requester1, receiver)
 
-        performPost("$BASE_URL/accept/$requestId", receiver.email)
+        performPost("$FRIENDS_REQ_BASE_URL/accept/$requestId", receiver.email)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.friendEmail").value(requester1.email))
     }
 
     @Test
+    @WithMockUser(username = REC_EMAIL)
     @DisplayName("친구 요청 거절 API 호출 시 친구 요청은 DB 삭제, 친구는 거절 DB에 저장까지 성공한다")
     fun rejectToFriendRequest() {
         val requestId = createFriendRequest(requester1, receiver)
 
-        performPost("$BASE_URL/reject/$requestId", receiver.email)
+        performPost("$FRIENDS_REQ_BASE_URL/reject/$requestId", receiver.email)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.targetEmail").value(requester1.email))
     }
@@ -114,6 +98,7 @@ class FriendsRequestCommandControllerIntegrationTest {
 
     private fun performPost(url: String, userEmail: String, content: Any? = null) = mockMvc.perform(
         post(url)
+            .param("v", "1")
             .with(user(userEmail))
             .with(csrf())
             .contentType(MediaType.APPLICATION_JSON)

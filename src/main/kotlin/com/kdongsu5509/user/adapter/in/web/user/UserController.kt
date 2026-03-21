@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/v1/user/info")
+@RequestMapping("/api/user/info", version = "1")
 class UserController(
     private val readUserUseCase: ReadUserUseCase,
     private val updateUserUseCase: UpdateUserUseCase

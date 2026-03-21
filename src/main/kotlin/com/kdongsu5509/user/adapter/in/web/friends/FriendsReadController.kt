@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1/user/friends")
+@RequestMapping("/api/user/friends", version = "1")
 class FriendsReadController(
     private val readFriendsUseCase: ReadFriendsUseCase
 ) {
