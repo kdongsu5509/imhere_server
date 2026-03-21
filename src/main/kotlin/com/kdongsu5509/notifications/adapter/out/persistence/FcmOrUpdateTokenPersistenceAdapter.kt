@@ -1,5 +1,6 @@
 package com.kdongsu5509.notifications.adapter.out.persistence
 
+import com.kdongsu5509.notifications.application.port.out.DeleteTokenPort
 import com.kdongsu5509.notifications.application.port.out.FindTokenPort
 import com.kdongsu5509.notifications.application.port.out.SaveOrUpdateTokenPersistencePort
 import com.kdongsu5509.notifications.domain.DeviceType
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component
 class FcmOrUpdateTokenPersistenceAdapter(
     private val fcmTokenMapper: FcmTokenMapper,
     private val springDataFcmTokenRepository: SpringDataFcmTokenRepository,
-) : SaveOrUpdateTokenPersistencePort, FindTokenPort {
+) : SaveOrUpdateTokenPersistencePort, FindTokenPort, DeleteTokenPort {
 
     override fun saveOrUpdate(userEmail: String, fcmToken: String, deviceType: DeviceType) {
         val existingEntity = springDataFcmTokenRepository.findByUserEmail(userEmail)
@@ -32,5 +33,9 @@ class FcmOrUpdateTokenPersistenceAdapter(
     override fun findByUserEmail(userEmail: String): FcmToken? {
         return springDataFcmTokenRepository.findByUserEmail(userEmail)
             ?.let { fcmTokenMapper.mapToDomainEntity(it) }
+    }
+
+    override fun deleteById(fcmTokenId: Long) {
+        springDataFcmTokenRepository.deleteById(fcmTokenId)
     }
 }
