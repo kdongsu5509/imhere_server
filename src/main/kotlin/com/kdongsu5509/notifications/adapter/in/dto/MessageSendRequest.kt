@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull
 
 data class MessageSendRequest(
     @param:NotNull
-    @Size(max = 45)
+    @param:Size(max = 45)
     val message: String,
 
     @param:NotNull
