@@ -1,8 +1,7 @@
 //package com.kdongsu5509.notifications.adapter.`in`
 //
-//import com.kdongsu5509.imhere.message.adapter.dto.MessageSendRequest
-//import com.kdongsu5509.imhere.message.adapter.dto.MultipleMessageSendRequest
-//import lombok.extern.slf4j.Slf4j
+//import com.kdongsu5509.notifications.adapter.`in`.dto.MessageSendRequest
+//import com.kdongsu5509.notifications.application.port.`in`.MessageSendUseCasePort
 //import org.springframework.security.core.annotation.AuthenticationPrincipal
 //import org.springframework.security.core.userdetails.UserDetails
 //import org.springframework.web.bind.annotation.PostMapping
@@ -10,16 +9,18 @@
 //import org.springframework.web.bind.annotation.RequestMapping
 //import org.springframework.web.bind.annotation.RestController
 //
-//@Slf4j
 //@RestController
-//@RequestMapping("/api/v1/notification")
+//@RequestMapping("/api/notification", version = "1")
 //class MessageController(
-//    private val singleMessageSendUseCasePort: SingleMessageSendUseCasePort,
+//    private val messageSendUseCasePort: MessageSendUseCasePort,
 //    private val multipleMessageSendUseCasePort: MultipleMessageSendUseCasePort
 //) {
 //
 //    @PostMapping("/send")
-//    fun send(@RequestBody request: MessageSendRequest, @AuthenticationPrincipal user: UserDetails) {
+//    fun send(
+//        @AuthenticationPrincipal user: UserDetails,
+//        @RequestBody request: MessageSendRequest
+//    ) {
 //        val email = user.username
 //        singleMessageSendUseCasePort.send(request, email)
 //    }
