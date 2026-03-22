@@ -28,6 +28,7 @@ class JwtAuthenticationFilterTest {
         const val INVALID_TOKEN = "invalid-jwt-token"
         const val NICKNAME = "rati"
         const val ACTIVE_STATUS = "ACTIVE"
+        const val PENDING_STATUS = "PENDING"
         const val TEST_EMAIL = "test@example.com"
         const val NORMAL_ROLE = "ROLE_NORMAL"
         const val bearerToken = "Bearer $VALID_TOKEN"
@@ -74,6 +75,26 @@ class JwtAuthenticationFilterTest {
         verify(filterChain).doFilter(request, response)
         assertThat(SecurityContextHolder.getContext().authentication).isNotNull()
         assertThat(SecurityContextHolder.getContext().authentication!!.name).isEqualTo(TEST_EMAIL)
+    }
+
+    @Test
+    @DisplayName("PENDING 상태인 유저의 토큰은 403 응답을 반환한다")
+    fun doFilterInternal_pendingUser_returns403() {
+        // given
+        `when`(request.getHeader("Authorization")).thenReturn(bearerToken)
+        `when`(jwtTokenUtil.validateToken(VALID_TOKEN)).thenReturn(true)
+        `when`(jwtTokenUtil.getUserEmailFromToken(VALID_TOKEN)).thenReturn(TEST_EMAIL)
+        `when`(jwtTokenUtil.getRoleFromToken(VALID_TOKEN)).thenReturn(NORMAL_ROLE)
+        `when`(jwtTokenUtil.getUserNicknameFromToken(VALID_TOKEN)).thenReturn(NICKNAME)
+        `when`(jwtTokenUtil.getStatusFromToken(VALID_TOKEN)).thenReturn(PENDING_STATUS) // PENDING 설정
+
+        `when`(response.writer).thenReturn(PrintWriter(StringWriter()))
+
+        // when
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain)
+
+        // then
+        verify(response).status = 403
     }
 
     @Test
