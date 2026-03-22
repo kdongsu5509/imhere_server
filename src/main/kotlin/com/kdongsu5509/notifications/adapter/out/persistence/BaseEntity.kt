@@ -1,4 +1,4 @@
-package com.kdongsu5509.notifications.adapter.out
+package com.kdongsu5509.notifications.adapter.out.persistence
 
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners
