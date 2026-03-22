@@ -46,9 +46,9 @@ dependencies {
 
     // DB & EXTERNAL
     implementation 'org.postgresql:postgresql'
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0' // 외부 라이브러리는 버전 명시
-    implementation 'net.nurigo:sdk:4.3.0'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     implementation 'com.google.firebase:firebase-admin:9.8.0'
+    implementation 'com.solapi:sdk:1.1.0'
 
     // QUERY DSL (KSP 환경)
     implementation("io.github.openfeign.querydsl:querydsl-jpa:7.1")
