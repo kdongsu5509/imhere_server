@@ -11,7 +11,7 @@ class TermsVersionJpaEntity(
     var version: String,
 
     @Lob
-    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    @Column(nullable = false)
     var content: String,
 
     @Column(nullable = false)

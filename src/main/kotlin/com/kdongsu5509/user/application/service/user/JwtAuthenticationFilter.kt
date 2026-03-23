@@ -1,5 +1,6 @@
 package com.kdongsu5509.user.application.service.user
 
+import com.kdongsu5509.support.config.SecurityConstants
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -7,11 +8,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
+import org.springframework.util.AntPathMatcher
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthenticationFilter(
-    private val jwtTokenUtil: JwtTokenUtil
+    private val jwtTokenUtil: JwtTokenUtil,
+    private val securityConstants: SecurityConstants
 ) : OncePerRequestFilter() {
 
     companion object {
@@ -19,8 +22,13 @@ class JwtAuthenticationFilter(
         private const val AUTH_HEADER = "Authorization"
     }
 
-    public override fun shouldNotFilter(request: HttpServletRequest): Boolean =
-        request.servletPath.startsWith("/actuator")
+    private val pathMatcher = AntPathMatcher()
+
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+        return securityConstants.whitelist.any { path ->
+            pathMatcher.match(path, request.servletPath)
+        }
+    }
 
     public override fun doFilterInternal(
         request: HttpServletRequest,

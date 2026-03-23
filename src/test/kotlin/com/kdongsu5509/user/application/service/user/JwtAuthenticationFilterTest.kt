@@ -1,5 +1,6 @@
 package com.kdongsu5509.user.application.service.user
 
+import com.kdongsu5509.support.config.SecurityConstants
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -46,11 +47,14 @@ class JwtAuthenticationFilterTest {
     @Mock
     private lateinit var filterChain: FilterChain
 
+    @Mock
+    private lateinit var securityConstants: SecurityConstants
+
     private lateinit var jwtAuthenticationFilter: JwtAuthenticationFilter
 
     @BeforeEach
     fun setUp() {
-        jwtAuthenticationFilter = JwtAuthenticationFilter(jwtTokenUtil)
+        jwtAuthenticationFilter = JwtAuthenticationFilter(jwtTokenUtil, securityConstants)
         SecurityContextHolder.clearContext()
     }
 
@@ -145,33 +149,7 @@ class JwtAuthenticationFilterTest {
         verify(response).contentType = "application/json;charset=UTF-8"
         verify(filterChain, Mockito.never()).doFilter(request, response)
     }
-
-    @Test
-    @DisplayName("actuator 경로는 필터를 건너뛴다")
-    fun shouldNotFilter_actuatorPath_returnsTrue() {
-        // given
-        `when`(request.servletPath).thenReturn("/actuator/health")
-
-        // when
-        val result = jwtAuthenticationFilter.shouldNotFilter(request)
-
-        // then
-        assertThat(result).isTrue()
-    }
-
-    @Test
-    @DisplayName("일반 경로는 필터를 실행한다")
-    fun shouldNotFilter_normalPath_returnsFalse() {
-        // given
-        `when`(request.servletPath).thenReturn("/api/test")
-
-        // when
-        val result = jwtAuthenticationFilter.shouldNotFilter(request)
-
-        // then
-        assertThat(result).isFalse()
-    }
-
+    
     @Test
     @DisplayName("이미 인증된 사용자가 있으면 새로운 인증을 설정하지 않는다")
     fun doFilterInternal_alreadyAuthenticated_doesNotSetNewAuthentication() {

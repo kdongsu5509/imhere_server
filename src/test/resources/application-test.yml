@@ -30,7 +30,10 @@ jwt:
   access-header-name: Authorization
 
 security:
-  whitelist: /swagger-ui/**,/v3/api-docs/**
+  whitelist:
+    - "/api/user/auth/login"
+    - "/swagger-ui/**"
+    - "/v3/api-docs/**"
 
 oidc:
   kakao:
