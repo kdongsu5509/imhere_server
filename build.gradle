@@ -67,6 +67,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-restclient-test'
     testImplementation 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-restdocs'
+    testImplementation "org.mockito.kotlin:mockito-kotlin:5.2.1"
 
     // 2. Testcontainers BOM 선언 (테스트 컨테이너 버전 충돌 방지)
     testImplementation platform("org.testcontainers:testcontainers-bom:1.20.1")

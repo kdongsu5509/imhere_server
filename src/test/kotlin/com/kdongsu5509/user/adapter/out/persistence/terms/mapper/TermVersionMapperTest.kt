@@ -31,7 +31,7 @@ class TermVersionMapperTest {
 
         // then
         assertThat(jpaEntity.version).isEqualTo(VERSION)
-        assertThat(jpaEntity.content).isEqualTo(CONTENT)
+        assertThat(jpaEntity.termVersionContent).isEqualTo(CONTENT)
         assertThat(jpaEntity.effectiveDate).isEqualTo(EFFECTIVE_DATE)
         assertThat(jpaEntity.terms).isEqualTo(termDefinition)
         assertThat(jpaEntity.isActive).isTrue() // 매퍼에서 true로 고정 설정됨
@@ -47,7 +47,7 @@ class TermVersionMapperTest {
         }
         val jpaEntity = TermsVersionJpaEntity(
             version = "v2.0",
-            content = "업데이트된 내용",
+            termVersionContent = "업데이트된 내용",
             isActive = true,
             effectiveDate = LocalDateTime.of(2026, 2, 6, 0, 0),
             terms = termDefinition
@@ -59,7 +59,7 @@ class TermVersionMapperTest {
         // then
         assertThat(domainTermVersion.termDefinitionId).isEqualTo(jpaEntity.terms.id)
         assertThat(domainTermVersion.version).isEqualTo(jpaEntity.version)
-        assertThat(domainTermVersion.content).isEqualTo(jpaEntity.content)
+        assertThat(domainTermVersion.content).isEqualTo(jpaEntity.termVersionContent)
         assertThat(domainTermVersion.effectiveDate).isEqualTo(jpaEntity.effectiveDate)
     }
 }

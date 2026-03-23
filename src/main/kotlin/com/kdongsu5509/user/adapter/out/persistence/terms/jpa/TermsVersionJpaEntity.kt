@@ -10,9 +10,8 @@ class TermsVersionJpaEntity(
     @Column(nullable = false)
     var version: String,
 
-    @Lob
-    @Column(nullable = false)
-    var content: String,
+    @Column(columnDefinition = "TEXT", nullable = false)
+    var termVersionContent: String,
 
     @Column(nullable = false)
     var isActive: Boolean = false,

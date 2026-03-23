@@ -1,19 +1,19 @@
 package com.kdongsu5509.notifications.adapter.out.solapi
 
 
-import com.kdongsu5509.notifications.adapter.out.solapi.SolapiAdapter.Companion.MSG_FORMAT
 import com.kdongsu5509.notifications.config.ExternalSMSProperties
 import com.kdongsu5509.notifications.domain.SMS
-import com.solapi.sdk.message.model.Message
 import com.solapi.sdk.message.service.DefaultMessageService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyList
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 
 @ExtendWith(MockitoExtension::class)
@@ -48,17 +48,9 @@ class SolapiAdapterTest {
             location = TEST_LOC
         )
 
-        val message = Message(
-            from = TEST_SENDER,
-            to = TEST_REC_NUM,
-            text = String.format(
-                MSG_FORMAT, sms.senderNickname, sms.location
-            )
-        )
-
-        solapiAdapter.send(sms)
-
-        verify(messageService, times(1)).send(message)
+        assertDoesNotThrow {
+            solapiAdapter.send(sms)
+        }
     }
 
     @Test

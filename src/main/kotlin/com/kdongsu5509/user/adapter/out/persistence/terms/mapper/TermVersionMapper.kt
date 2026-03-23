@@ -15,11 +15,11 @@ class TermVersionMapper {
         effectiveDate: LocalDateTime
     ): TermsVersionJpaEntity {
         return TermsVersionJpaEntity(
-            version,
-            content,
-            true,
-            effectiveDate,
-            termDefinitionJpaEntity
+            version = version,
+            termVersionContent = content,
+            isActive = true,
+            effectiveDate = effectiveDate,
+            terms = termDefinitionJpaEntity
         )
     }
 
@@ -27,10 +27,10 @@ class TermVersionMapper {
         termsVersionJpaEntity: TermsVersionJpaEntity
     ): TermVersion {
         return TermVersion(
-            termsVersionJpaEntity.terms.id!!,
-            termsVersionJpaEntity.version,
-            termsVersionJpaEntity.content,
-            termsVersionJpaEntity.effectiveDate
+            termDefinitionId = termsVersionJpaEntity.terms.id!!,
+            version = termsVersionJpaEntity.version,
+            content = termsVersionJpaEntity.termVersionContent,
+            effectiveDate = termsVersionJpaEntity.effectiveDate
         )
     }
 }
