@@ -3,15 +3,16 @@ package com.kdongsu5509.notifications.adapter.out.solapi
 import com.kdongsu5509.notifications.application.port.out.ExternalMessagePort
 import com.kdongsu5509.notifications.config.ExternalSMSProperties
 import com.kdongsu5509.notifications.domain.SMS
-import com.solapi.sdk.SolapiClient
-import com.solapi.sdk.message.dto.response.MultipleDetailMessageSentResponse
 import com.solapi.sdk.message.model.Message
 import com.solapi.sdk.message.service.DefaultMessageService
 import org.springframework.stereotype.Component
 
 
 @Component
-class SolapiAdapter(private val externalSMSProperties: ExternalSMSProperties) : ExternalMessagePort {
+class SolapiAdapter(
+    private val externalSMSProperties: ExternalSMSProperties,
+    private val solapiService: DefaultMessageService,
+) : ExternalMessagePort {
 
     companion object {
         const val MSG_FORMAT = "[도착 알림 서비스, ImHere]\n" +
@@ -19,16 +20,10 @@ class SolapiAdapter(private val externalSMSProperties: ExternalSMSProperties) : 
                 "내용:%s에 도착하였습니다"
     }
 
-    private val externalMessageService: DefaultMessageService = SolapiClient.createInstance(
-        externalSMSProperties.apiKey,
-        externalSMSProperties.apiSecret,
-    )
-
     override fun send(sms: SMS) {
         val message = buildExternalSMSMessage(sms)
 
-        val response: MultipleDetailMessageSentResponse = externalMessageService.send(message)
-        println("Group ID: ${response.groupInfo?.groupId}")
+        solapiService.send(message)
     }
 
     override fun sendMultiple(multiSMS: List<SMS>) {
@@ -44,7 +39,7 @@ class SolapiAdapter(private val externalSMSProperties: ExternalSMSProperties) : 
             messages.add(msg)
         }
 
-        externalMessageService.send(messages, null)
+        solapiService.send(messages, null)
     }
 
     private fun buildExternalSMSMessage(sms: SMS): Message {
