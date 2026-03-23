@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "solapi")
 data class ExternalSMSProperties(
-    var sender: String = "",
-    var apiKey: String = "",
-    var apiSecret: String = ""
+    val sender: String = "",
+    val apiKey: String = "",
+    val apiSecret: String = ""
 )
