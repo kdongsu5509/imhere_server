@@ -5,13 +5,13 @@ import com.kdongsu5509.support.exception.BusinessException
 import com.kdongsu5509.user.adapter.out.auth.oauth.KakaoOIDCProperties
 import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKey
 import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKeyResponse
-import com.kdongsu5509.user.application.port.out.user.CachePort
+import com.kdongsu5509.user.application.port.out.user.oauth.OauthClientPort
 import com.kdongsu5509.user.application.port.out.user.oauth.PublicKeyLoadPort
 import org.springframework.stereotype.Component
 
 @Component
 class PublicKeyLoadAdapter(
-    private val cachePort: CachePort,
+    private val oauthClientPort: OauthClientPort,
     private val kakaoOIDCProperties: KakaoOIDCProperties
 ) : PublicKeyLoadPort {
     override fun loadPublicKey(kid: String): OIDCPublicKey {
@@ -25,9 +25,7 @@ class PublicKeyLoadAdapter(
     }
 
     private fun getCachedPublicKeys(): OIDCPublicKeyResponse {
-        val cachedKeySet =
-            cachePort.find(kakaoOIDCProperties.cacheKey, OIDCPublicKeyResponse::class.java) as? OIDCPublicKeyResponse
-                ?: throw BusinessException(AuthErrorCode.KAKAO_OIDC_PUBLIC_KEY_FETCH_FROM_REDIS_FAILED)
-        return cachedKeySet
+        return oauthClientPort.getPublicKeyFromProvider()
+            ?: throw BusinessException(AuthErrorCode.KAKAO_OIDC_PUBLIC_KEY_FETCH_FROM_REDIS_FAILED)
     }
 }

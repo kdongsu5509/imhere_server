@@ -1,32 +1,36 @@
-//package com.kdongsu5509.notifications.adapter.`in`
-//
-//import com.kdongsu5509.imhere.message.adapter.dto.MessageSendRequest
-//import com.kdongsu5509.imhere.message.adapter.dto.MultipleMessageSendRequest
-//import lombok.extern.slf4j.Slf4j
-//import org.springframework.security.core.annotation.AuthenticationPrincipal
-//import org.springframework.security.core.userdetails.UserDetails
-//import org.springframework.web.bind.annotation.PostMapping
-//import org.springframework.web.bind.annotation.RequestBody
-//import org.springframework.web.bind.annotation.RequestMapping
-//import org.springframework.web.bind.annotation.RestController
-//
-//@Slf4j
-//@RestController
-//@RequestMapping("/api/v1/notification")
-//class MessageController(
-//    private val singleMessageSendUseCasePort: SingleMessageSendUseCasePort,
-//    private val multipleMessageSendUseCasePort: MultipleMessageSendUseCasePort
-//) {
-//
-//    @PostMapping("/send")
-//    fun send(@RequestBody request: MessageSendRequest, @AuthenticationPrincipal user: UserDetails) {
-//        val email = user.username
-//        singleMessageSendUseCasePort.send(request, email)
-//    }
-//
-//    @PostMapping("/multipleSend")
-//    fun sendMultiple(@RequestBody request: MultipleMessageSendRequest, @AuthenticationPrincipal user: UserDetails) {
-//        val email = user.username
-//        multipleMessageSendUseCasePort.send(request, email)
-//    }
-//}
+package com.kdongsu5509.notifications.adapter.`in`
+
+import com.kdongsu5509.notifications.adapter.`in`.dto.MessageSendRequest
+import com.kdongsu5509.notifications.adapter.`in`.dto.MultiMessageSendRequest
+import com.kdongsu5509.notifications.application.port.`in`.MessageSendUseCasePort
+import com.kdongsu5509.user.application.service.user.SimpleTokenUserDetails
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+@RequestMapping("/api/notification/sms/send", version = "1")
+class MessageController(
+    private val messageSendUseCasePort: MessageSendUseCasePort,
+) {
+
+    @PostMapping
+    fun send(
+        @AuthenticationPrincipal user: SimpleTokenUserDetails,
+        @RequestBody request: MessageSendRequest
+    ) {
+        val nickname = user.nickname
+        messageSendUseCasePort.send(nickname, request.receiverNumber, request.location)
+    }
+
+    @PostMapping("/multi")
+    fun sendMultiple(
+        @AuthenticationPrincipal user: SimpleTokenUserDetails,
+        @RequestBody request: MultiMessageSendRequest
+    ) {
+        val nickname = user.nickname
+        messageSendUseCasePort.sendMultiple(nickname, request.receiversNumbers, request.location)
+    }
+}

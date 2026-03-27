@@ -19,7 +19,6 @@ class SaveFcmTokenServiceTest {
     @InjectMocks
     private lateinit var saveFcmTokenService: ManageFcmTokenService
 
-    //-> 해당 테스트는 그냥 중간의 전달 계층이지만, 테스트 커버리지를 위해 일단은 작성하였음
     @Test
     @DisplayName("잘 저장한다.")
     fun save_success() {

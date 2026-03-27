@@ -130,10 +130,10 @@ class UserAgreementControllerIntegrationTest : ControllerTestSupport() {
         termsVersionRepository.save(
             TermsVersionJpaEntity(
                 version = "1.0",
-                content = "내용",
+                termVersionContent = "내용",
                 isActive = true,
                 effectiveDate = LocalDateTime.now().plusDays(1),
-                testTermDef
+                terms = testTermDef
             )
         )
     }

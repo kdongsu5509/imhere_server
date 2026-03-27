@@ -29,7 +29,7 @@ class FriendRelationshipsJpaEntity(
     @Id
     @GeneratedValue
     @UuidGenerator
-    @Column(name = "friend_relationship_id", columnDefinition = "BINARY(16)")
+    @Column(name = "friend_relationship_id")
     val id: UUID? = null
 
     init {

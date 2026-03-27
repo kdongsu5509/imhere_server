@@ -1,8 +1,11 @@
 package com.kdongsu5509.user.application.service.user
 
-import io.jsonwebtoken.*
+import com.kdongsu5509.support.exception.AuthErrorCode
+import com.kdongsu5509.support.exception.BusinessException
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import io.jsonwebtoken.security.SecurityException
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
@@ -23,18 +26,14 @@ class JwtTokenUtil(private val jwtProperties: JwtProperties) {
         try {
             parseClaims(token)
             return true
-        } catch (e: SecurityException) {
-            print("잘못된 JWT 서명입니다: ${e.message}")
-        } catch (e: MalformedJwtException) {
-            print("잘못된 JWT 서명입니다: ${e.message}")
-        } catch (e: ExpiredJwtException) {
-            print("만료된 JWT 서명입니다: ${e.message}")
-        } catch (e: UnsupportedJwtException) {
-            print("지원되지 않는 JWT 서명입니다: ${e.message}")
-        } catch (e: IllegalArgumentException) {
-            print("JWT 토큰이 잘못되었습니다 ${e.message}")
+        } catch (e: Exception) {
+            val errorCode = when (e) {
+                is ExpiredJwtException -> AuthErrorCode.IMHERE_EXPIRED_TOKEN
+                else -> AuthErrorCode.IMHERE_INVALID_TOKEN
+            }
+
+            throw BusinessException(errorCode)
         }
-        return false
     }
 
     fun getJwtIdFromToken(token: String): String {
@@ -42,26 +41,25 @@ class JwtTokenUtil(private val jwtProperties: JwtProperties) {
     }
 
     fun getUIDFromToken(token: String): UUID {
-        val claims = parseClaims(token)
-
-        // 1. "uid" 값이 아예 없는 경우에 대한 방어 로직
-        val uidValue = claims["uid"]?.toString()
-            ?: throw IllegalArgumentException("토큰에 UID 정보가 존재하지 않습니다.")
-
-        // 2. 문자열을 UUID로 변환
-        return try {
-            UUID.fromString(uidValue)
-        } catch (e: Exception) {
-            throw IllegalArgumentException("유효하지 않은 UUID 형식입니다: $uidValue")
-        }
+        val uidValue = parseClaims(token)[JwtClaimKeys.CLAIM_USER_ID] as String
+        return UUID.fromString(uidValue)
     }
 
-    fun getUsernameFromToken(token: String): String {
-        return parseClaims(token)["username"] as String
+    fun getUserEmailFromToken(token: String): String {
+        return parseClaims(token)[JwtClaimKeys.CLAIM_EMAIL] as String
+    }
+
+    fun getUserNicknameFromToken(token: String): String {
+        return parseClaims(token)[JwtClaimKeys.CLAIM_NICKNAME] as String
     }
 
     fun getRoleFromToken(token: String): String {
-        return parseClaims(token)["role"] as String
+        val roleInfo = parseClaims(token)[JwtClaimKeys.CLAIM_ROLE] as String
+        return roleInfo.removePrefix("ROLE_")
+    }
+
+    fun getStatusFromToken(token: String): String {
+        return parseClaims(token)[JwtClaimKeys.CLAIM_STATUS] as String
     }
 
     fun getExpirationDateFromToken(token: String): LocalDateTime {

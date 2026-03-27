@@ -36,10 +36,10 @@ class TermsVersionCommandPersistenceAdapter(
 
         springDataTermsVersionRepository.save(
             createNewTermVersionEntity(
-                queriedTermDefinition,
-                version,
-                content,
-                effectiveDate
+                queriedTermDefinition = queriedTermDefinition,
+                version = version,
+                content = content,
+                effectiveDate = effectiveDate
             )
         )
     }

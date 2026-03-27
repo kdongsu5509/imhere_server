@@ -1,5 +1,6 @@
 package com.kdongsu5509.user.application.service.user
 
+import com.kdongsu5509.support.exception.BusinessException
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -21,6 +22,13 @@ import javax.crypto.SecretKey
 @ExtendWith(MockitoExtension::class)
 class JwtTokenUtilTest {
 
+    companion object {
+        const val TEST_EMAIL = "test@example.com"
+        const val TEST_NICKNAME = "라티"
+        const val TEST_ROLE_NORMAL = "ROLE_NORMAL"
+        const val TEST_STATUS_ACTIVE = "ACTIVE"
+    }
+
     private lateinit var jwtTokenUtil: JwtTokenUtil
     private lateinit var jwtProperties: JwtProperties
     private lateinit var secretKey: SecretKey
@@ -36,12 +44,22 @@ class JwtTokenUtilTest {
         secretKey = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray(StandardCharsets.UTF_8))
     }
 
-    private fun createValidToken(username: String, role: String, expirationMinutes: Long): String {
+    private fun createValidAccessToken(
+        userEmail: String,
+        userNickname: String,
+        role: String,
+        status: String,
+        expirationMinutes: Long
+    ): String {
         val expiredTime = LocalDateTime.now().plusMinutes(expirationMinutes)
         return Jwts.builder()
             .setId(UUID.randomUUID().toString())
-            .claim("category", "access")
-            .claim("username", username)
+            .claim(JwtClaimKeys.CLAIM_CATEGORY, JwtClaimKeys.ACCESS_TOKEN)
+            .claim(JwtClaimKeys.CLAIM_USER_ID, UUID.randomUUID())
+            .claim(JwtClaimKeys.CLAIM_EMAIL, userEmail)
+            .claim(JwtClaimKeys.CLAIM_NICKNAME, userNickname)
+            .claim(JwtClaimKeys.CLAIM_ROLE, "ROLE_${role}")
+            .claim(JwtClaimKeys.CLAIM_STATUS, status)
             .claim("role", role)
             .setIssuedAt(Date.from(Instant.now()))
             .setExpiration(Date.from(expiredTime.atZone(ZoneId.systemDefault()).toInstant()))
@@ -53,7 +71,8 @@ class JwtTokenUtilTest {
     @DisplayName("유효한 토큰을 검증하면 true를 반환한다")
     fun validateToken_validToken_returnsTrue() {
         // given
-        val token = createValidToken("test@example.com", "ROLE_USER", 30)
+
+        val token = createValidAccessToken(TEST_EMAIL, TEST_NICKNAME, TEST_ROLE_NORMAL, TEST_STATUS_ACTIVE, 30)
 
         // when
         val result = jwtTokenUtil.validateToken(token)
@@ -63,7 +82,7 @@ class JwtTokenUtilTest {
     }
 
     @Test
-    @DisplayName("만료된 토큰을 검증하면 false를 반환한다")
+    @DisplayName("만료된 토큰을 검증하면 오류를 던진다")
     fun validateToken_expiredToken_returnsFalse() {
         // given
         val expiredTime = LocalDateTime.now().minusMinutes(1)
@@ -77,10 +96,11 @@ class JwtTokenUtilTest {
             .compact()
 
         // when
-        val result = jwtTokenUtil.validateToken(token)
-
-        // then
-        assertThat(result).isFalse()
+        assertThrows<BusinessException> {
+            jwtTokenUtil.validateToken(token)
+        }.also { exception ->
+            assertThat(exception.message).isEqualTo("만료된 토큰입니다")
+        }
     }
 
     @Test
@@ -98,72 +118,71 @@ class JwtTokenUtilTest {
             .signWith(wrongSecretKey)
             .compact()
 
-        // when
-        val result = jwtTokenUtil.validateToken(token)
-
-        // then
-        assertThat(result).isFalse()
+        // when, then
+        assertThrows<BusinessException> {
+            jwtTokenUtil.validateToken(token)
+        }
     }
 
     @Test
-    @DisplayName("잘못된 형식의 토큰을 검증하면 false를 반환한다")
+    @DisplayName("잘못된 형식의 토큰을 검증하면 오류를 던진다")
     fun validateToken_malformedToken_returnsFalse() {
         // given
         val malformedToken = "invalid.token.format"
 
-        // when
-        val result = jwtTokenUtil.validateToken(malformedToken)
-
         // then
-        assertThat(result).isFalse()
+        assertThrows<BusinessException> {
+            jwtTokenUtil.validateToken(malformedToken)
+        }.also { exception ->
+            assertThat(exception.message).isEqualTo("잘못된 토큰입니다")
+        }
     }
 
     @Test
-    @DisplayName("빈 문자열 토큰을 검증하면 false를 반환한다")
+    @DisplayName("빈 문자열 토큰을 검증하면 오류를 던진다")
     fun validateToken_emptyToken_returnsFalse() {
         // given
         val emptyToken = ""
 
-        // when
-        val result = jwtTokenUtil.validateToken(emptyToken)
-
         // then
-        assertThat(result).isFalse()
+        assertThrows<BusinessException> {
+            jwtTokenUtil.validateToken(emptyToken)
+        }.also { exception ->
+            assertThat(exception.message).isEqualTo("잘못된 토큰입니다")
+        }
     }
 
     @Test
-    @DisplayName("토큰에서 username을 성공적으로 추출한다")
-    fun getUsernameFromToken_success() {
+    @DisplayName("토큰에서 email을 성공적으로 추출한다")
+    fun getUserEmailFromToken_success() {
         // given
-        val expectedUsername = "test@example.com"
-        val token = createValidToken(expectedUsername, "ROLE_USER", 30)
+        val token = createValidAccessToken(TEST_EMAIL, TEST_NICKNAME, TEST_ROLE_NORMAL, TEST_STATUS_ACTIVE, 30)
 
         // when
-        val result = jwtTokenUtil.getUsernameFromToken(token)
+        val result = jwtTokenUtil.getUserEmailFromToken(token)
 
         // then
-        assertThat(result).isEqualTo(expectedUsername)
+        assertThat(result).isEqualTo(TEST_EMAIL)
     }
 
     @Test
     @DisplayName("토큰에서 role을 성공적으로 추출한다")
     fun getRoleFromToken_success() {
         // given
-        val expectedRole = "ROLE_ADMIN"
-        val token = createValidToken("test@example.com", expectedRole, 30)
+        val token = createValidAccessToken(TEST_EMAIL, TEST_NICKNAME, TEST_ROLE_NORMAL, TEST_STATUS_ACTIVE, 30)
 
         // when
         val result = jwtTokenUtil.getRoleFromToken(token)
 
         // then
-        assertThat(result).isEqualTo(expectedRole)
+        assertThat(result).isEqualTo(TEST_ROLE_NORMAL.removePrefix("ROLE_"))
     }
 
     @Test
     @DisplayName("토큰에서 JWT ID를 성공적으로 추출한다")
     fun getJwtIdFromToken_success() {
         // given
-        val token = createValidToken("test@example.com", "ROLE_USER", 30)
+        val token = createValidAccessToken(TEST_EMAIL, TEST_NICKNAME, TEST_ROLE_NORMAL, TEST_STATUS_ACTIVE, 30)
 
         // when
         val result = jwtTokenUtil.getJwtIdFromToken(token)
@@ -177,7 +196,7 @@ class JwtTokenUtilTest {
     fun getExpirationDateFromToken_success() {
         // given
         val expectedExpiration = LocalDateTime.now().plusMinutes(30)
-        val token = createValidToken("test@example.com", "ROLE_USER", 30)
+        val token = createValidAccessToken(TEST_EMAIL, TEST_NICKNAME, TEST_ROLE_NORMAL, TEST_STATUS_ACTIVE, 30)
 
         // when
         val result = jwtTokenUtil.getExpirationDateFromToken(token)
@@ -191,13 +210,13 @@ class JwtTokenUtilTest {
 
     @Test
     @DisplayName("유효하지 않은 토큰에서 username을 추출하면 예외가 발생한다")
-    fun getUsernameFromToken_invalidToken_throwsException() {
+    fun getUserEmailFromToken_invalidToken_throwsException() {
         // given
         val invalidToken = "invalid.token"
 
         // when & then
         assertThatThrownBy {
-            jwtTokenUtil.getUsernameFromToken(invalidToken)
+            jwtTokenUtil.getUserEmailFromToken(invalidToken)
         }
     }
 

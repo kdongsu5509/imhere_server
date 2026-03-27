@@ -16,6 +16,22 @@ class JwtTokenIssuerTest {
     private lateinit var jwtTokenIssuer: JwtTokenIssuer
     private lateinit var jwtProperties: JwtProperties
 
+    companion object {
+        val test_uid: UUID? = UUID.randomUUID()
+        const val TEST_EMAIL = "rati@kakao.com"
+        const val TEST_NICKNAME = "rati"
+        const val TEST_ROLE = "NORMAL"
+        const val TEST_STATUS = "ACTIVE"
+
+        val imHereJwtTokenElements: ImHereJwtTokenElements = ImHereJwtTokenElements(
+            uid = test_uid!!,
+            userEmail = TEST_EMAIL,
+            userNickname = TEST_NICKNAME,
+            role = TEST_ROLE,
+            status = TEST_STATUS
+        )
+    }
+
     @BeforeEach
     fun setUp() {
         jwtProperties = JwtProperties(
@@ -29,12 +45,8 @@ class JwtTokenIssuerTest {
     @Test
     @DisplayName("AccessToken을 성공적으로 생성한다")
     fun createAccessToken_success() {
-        // given
-        val userName = "test@example.com"
-        val role = "USER"
-
         // when
-        val accessToken = jwtTokenIssuer.createAccessToken(UUID.randomUUID(), userName, role)
+        val accessToken = jwtTokenIssuer.createAccessToken(imHereJwtTokenElements)
 
         // then
         assertThat(accessToken).isNotEmpty()
@@ -47,9 +59,10 @@ class JwtTokenIssuerTest {
             .parseClaimsJws(accessToken)
             .body
 
-        assertThat(claims["username"]).isEqualTo(userName)
-        assertThat(claims["role"]).isEqualTo("ROLE_$role")
-        assertThat(claims["category"]).isEqualTo("access")
+        assertThat(claims[JwtClaimKeys.CLAIM_EMAIL]).isEqualTo(TEST_EMAIL)
+        assertThat(claims[JwtClaimKeys.CLAIM_NICKNAME]).isEqualTo(TEST_NICKNAME)
+        assertThat(claims[JwtClaimKeys.CLAIM_ROLE]).isEqualTo("ROLE_$TEST_ROLE")
+        assertThat(claims[JwtClaimKeys.CLAIM_CATEGORY]).isEqualTo(JwtClaimKeys.ACCESS_TOKEN)
         assertThat(claims.id).isNotNull()
         assertThat(claims.issuedAt).isNotNull()
         assertThat(claims.expiration).isNotNull()
@@ -62,12 +75,8 @@ class JwtTokenIssuerTest {
     @Test
     @DisplayName("RefreshToken을 성공적으로 생성한다")
     fun createRefreshToken_success() {
-        // given
-        val userName = "test@example.com"
-        val role = "USER"
-
         // when
-        val refreshToken = jwtTokenIssuer.createRefreshToken(UUID.randomUUID(), userName, role)
+        val refreshToken = jwtTokenIssuer.createRefreshToken(imHereJwtTokenElements)
 
         // then
         assertThat(refreshToken).isNotEmpty()
@@ -80,9 +89,10 @@ class JwtTokenIssuerTest {
             .parseClaimsJws(refreshToken)
             .body
 
-        assertThat(claims["username"]).isEqualTo(userName)
-        assertThat(claims["role"]).isEqualTo("ROLE_$role")
-        assertThat(claims["category"]).isEqualTo("refresh")
+        assertThat(claims[JwtClaimKeys.CLAIM_EMAIL]).isEqualTo(TEST_EMAIL)
+        assertThat(claims[JwtClaimKeys.CLAIM_NICKNAME]).isEqualTo(TEST_NICKNAME)
+        assertThat(claims[JwtClaimKeys.CLAIM_ROLE]).isEqualTo("ROLE_$TEST_ROLE")
+        assertThat(claims[JwtClaimKeys.CLAIM_CATEGORY]).isEqualTo(JwtClaimKeys.REFRESH_TOKEN)
         assertThat(claims.id).isNotNull()
         assertThat(claims.issuedAt).isNotNull()
         assertThat(claims.expiration).isNotNull()
@@ -95,13 +105,9 @@ class JwtTokenIssuerTest {
     @Test
     @DisplayName("AccessToken과 RefreshToken의 만료 시간이 다르다")
     fun accessTokenAndRefreshTokenHaveDifferentExpiration() {
-        // given
-        val userName = "test@example.com"
-        val role = "USER"
-
         // when
-        val accessToken = jwtTokenIssuer.createAccessToken(UUID.randomUUID(), userName, role)
-        val refreshToken = jwtTokenIssuer.createRefreshToken(UUID.randomUUID(), userName, role)
+        val accessToken = jwtTokenIssuer.createAccessToken(imHereJwtTokenElements)
+        val refreshToken = jwtTokenIssuer.createRefreshToken(imHereJwtTokenElements)
 
         // then
         val secretKey = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray(StandardCharsets.UTF_8))
@@ -128,13 +134,9 @@ class JwtTokenIssuerTest {
     @Test
     @DisplayName("같은 사용자로 생성한 토큰도 매번 다른 ID를 가진다")
     fun tokensHaveDifferentIds() {
-        // given
-        val userName = "test@example.com"
-        val role = "USER"
-
         // when
-        val token1 = jwtTokenIssuer.createAccessToken(UUID.randomUUID(), userName, role)
-        val token2 = jwtTokenIssuer.createAccessToken(UUID.randomUUID(), userName, role)
+        val token1 = jwtTokenIssuer.createAccessToken(imHereJwtTokenElements)
+        val token2 = jwtTokenIssuer.createAccessToken(imHereJwtTokenElements)
 
         // then
         val secretKey = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray(StandardCharsets.UTF_8))

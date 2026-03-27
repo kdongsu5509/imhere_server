@@ -13,7 +13,9 @@ class TermDefinitionMapper {
         isRequired: Boolean
     ): TermsDefinitionJpaEntity {
         return TermsDefinitionJpaEntity(
-            termsTitle, termType, isRequired
+            termsTitle = termsTitle,
+            isRequired = isRequired,
+            termsType = termType
         )
     }
 
@@ -21,10 +23,10 @@ class TermDefinitionMapper {
         jpaEntity: TermsDefinitionJpaEntity
     ): TermDefinition {
         return TermDefinition(
-            jpaEntity.id!!,
-            jpaEntity.termsTitle,
-            jpaEntity.termsType,
-            jpaEntity.isRequired
+            id = jpaEntity.id!!,
+            title = jpaEntity.termsTitle,
+            termsTypes = jpaEntity.termsType,
+            isRequired = jpaEntity.isRequired
         )
     }
 }
