@@ -1,8 +1,10 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
 import com.kdongsu5509.support.common.dto.APIResponse
+import com.kdongsu5509.user.adapter.`in`.web.user.dto.AuthenticationResponse
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserTermsConsentRequest
 import com.kdongsu5509.user.application.port.`in`.user.AgreementTermUseCase
+import com.kdongsu5509.user.application.port.`in`.user.ReissueJWTUseCase
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Positive
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -13,15 +15,19 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/user/terms", version = "1")
 class UserAgreementController(
-    private val agreementTermUseCase: AgreementTermUseCase
+    private val agreementTermUseCase: AgreementTermUseCase,
+    private val reissueJWTUseCase: ReissueJWTUseCase
 ) {
     @PostMapping("/consent")
     fun consentAll(
         @AuthenticationPrincipal userDetail: UserDetails,
         @Validated @RequestBody userTermsConsentRequest: UserTermsConsentRequest
-    ): APIResponse<Unit> {
+    ): APIResponse<AuthenticationResponse?> {
         agreementTermUseCase.consentAll(userDetail.username, userTermsConsentRequest)
-        return APIResponse.success()
+        val jwt = reissueJwtUseCase.reissue(reAuthenticationRequest.refreshToken)
+        return APIResponse.success(
+            AuthenticationResponse(jwt.accessToken, jwt.refreshToken)
+        )
     }
 
     @PostMapping("/consent/{termDefinitionId}")

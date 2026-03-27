@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class JwtReissueService(private val jwtTokenProvider: JwtTokenProvider) : ReissueJWTUseCase {
-    override fun reissue(refreshToken: String): ImHereJwt {
-        return jwtTokenProvider.reissueJwtToken(refreshToken)
+    override fun reissueByRefreshToken(refreshToken: String): ImHereJwt {
+        return jwtTokenProvider.reissueJwtTokenByRefreshToken(refreshToken)
     }
 }

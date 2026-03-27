@@ -88,7 +88,7 @@ class ImHereJWTTokenProviderTest {
 
     @Test
     @DisplayName("유효한 리프레시 토큰으로 JWT 토큰을 재발급한다")
-    fun reissueJwtToken_validRefreshToken_success() {
+    fun reissueJwtToken_validRefreshTokenByRefreshToken_success() {
         // given
         `when`(jwtTokenUtil.getUserEmailFromToken(REFRESH_TOKEN)).thenReturn(USER_EMAIL)
         `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(ROLE) // setUp()과 동일한 role 유지
@@ -103,7 +103,7 @@ class ImHereJWTTokenProviderTest {
         `when`(jwtTokenUtil.getExpirationDateFromToken(NEW_REFRESH_TOKEN)).thenReturn(EXP_DATE)
 
         // when
-        val result = imHereJWTTokenProvider.reissueJwtToken(REFRESH_TOKEN)
+        val result = imHereJWTTokenProvider.reissueJwtTokenByRefreshToken(REFRESH_TOKEN)
 
         // then
         assertThat(result).isNotNull
@@ -126,7 +126,7 @@ class ImHereJWTTokenProviderTest {
 
     @Test
     @DisplayName("유효하지 않은 리프레시 토큰으로 재발급 시 예외가 발생한다")
-    fun reissueJwtToken_invalidRefreshToken_throwsException() {
+    fun reissueJwtToken_invalidRefreshTokenByRefreshToken_throwsException() {
         // given
         val invalidRefreshToken = "invalid-refresh-token"
 
@@ -139,7 +139,7 @@ class ImHereJWTTokenProviderTest {
 
         // when & then
         assertThrows<BusinessException> {
-            imHereJWTTokenProvider.reissueJwtToken(invalidRefreshToken)
+            imHereJWTTokenProvider.reissueJwtTokenByRefreshToken(invalidRefreshToken)
         }.also { exception ->
             assertThat(exception.message).isEqualTo("잘못된 토큰입니다")
         }
@@ -147,7 +147,7 @@ class ImHereJWTTokenProviderTest {
 
     @Test
     @DisplayName("만료된 리프레시 토큰으로 재발급 시 예외가 발생한다")
-    fun reissueJwtToken_expiredRefreshToken_throwsException() {
+    fun reissueJwtToken_expiredRefreshTokenByRefreshToken_throwsException() {
         // given
         val expiredRefreshToken = "expired-refresh-token"
 
@@ -160,7 +160,7 @@ class ImHereJWTTokenProviderTest {
 
         // when & then
         assertThrows<BusinessException> {
-            imHereJWTTokenProvider.reissueJwtToken(expiredRefreshToken)
+            imHereJWTTokenProvider.reissueJwtTokenByRefreshToken(expiredRefreshToken)
         }.also { exception ->
             assertThat(exception.message).isEqualTo("잘못된 토큰입니다")
         }
@@ -168,7 +168,7 @@ class ImHereJWTTokenProviderTest {
 
     @Test
     @DisplayName("Redis에 저장된 토큰과 일치하지 않는 리프레시 토큰으로 재발급 시 예외가 발생한다")
-    fun reissueJwtToken_mismatchedRefreshToken_throwsException() {
+    fun reissueJwtToken_mismatchedRefreshTokenByRefreshToken_throwsException() {
         // given
         val refreshToken = "refresh-token"
         val differentTokenInRedis = "different-refresh-token"
@@ -185,7 +185,7 @@ class ImHereJWTTokenProviderTest {
 
         // when & then
         assertThrows<BusinessException> {
-            imHereJWTTokenProvider.reissueJwtToken(refreshToken)
+            imHereJWTTokenProvider.reissueJwtTokenByRefreshToken(refreshToken)
         }.also { exception ->
             assertThat(exception.message).isEqualTo("잘못된 토큰입니다")
         }
@@ -193,7 +193,7 @@ class ImHereJWTTokenProviderTest {
 
     @Test
     @DisplayName("Redis에 리프레시 토큰이 없을 때 재발급 시 예외가 발생한다")
-    fun reissueJwtToken_noTokenInRedis_throwsException() {
+    fun reissueJwtToken_noTokenByRefreshTokenInRedis_throwsException() {
         // given
         `when`(jwtTokenUtil.getUserEmailFromToken(REFRESH_TOKEN)).thenReturn(USER_EMAIL)
         `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(ROLE)
@@ -206,7 +206,7 @@ class ImHereJWTTokenProviderTest {
 
         // when & then
         assertThrows<BusinessException> {
-            imHereJWTTokenProvider.reissueJwtToken(REFRESH_TOKEN)
+            imHereJWTTokenProvider.reissueJwtTokenByRefreshToken(REFRESH_TOKEN)
         }.also { exception ->
             assertThat(exception.message).isEqualTo("잘못된 토큰입니다") // Exception 타입 및 메시지 수정
         }
@@ -214,7 +214,7 @@ class ImHereJWTTokenProviderTest {
 
     @Test
     @DisplayName("재발급 시 토큰에서 추출한 role을 그대로 전달한다")
-    fun reissueJwtToken_passesRoleAsIs() {
+    fun reissueJwtTokenByRefreshToken_passesRoleAsIs() {
         // given
         `when`(jwtTokenUtil.getUserEmailFromToken(REFRESH_TOKEN)).thenReturn(USER_EMAIL)
         `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(NORMAL_ROLE)
@@ -231,7 +231,7 @@ class ImHereJWTTokenProviderTest {
         `when`(jwtTokenUtil.getExpirationDateFromToken(NEW_REFRESH_TOKEN)).thenReturn(EXP_DATE)
 
         // when
-        val result = imHereJWTTokenProvider.reissueJwtToken(REFRESH_TOKEN)
+        val result = imHereJWTTokenProvider.reissueJwtTokenByRefreshToken(REFRESH_TOKEN)
 
         // then
         assertThat(result.accessToken).isEqualTo(NEW_ACCESS_TOKEN)

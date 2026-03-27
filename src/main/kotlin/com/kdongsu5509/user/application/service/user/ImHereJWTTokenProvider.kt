@@ -30,7 +30,7 @@ class ImHereJWTTokenProvider(
         return ImHereJwt(accessToken, refreshToken)
     }
 
-    override fun reissueJwtToken(refreshToken: String): ImHereJwt {
+    override fun reissueJwtTokenByRefreshToken(refreshToken: String): ImHereJwt {
         val imHereJwtTokenElements = consistImHereJwtTokenElementsFromRefreshToken(refreshToken)
 
         // 토큰 유효성 검사 (만료 시간 포함)
