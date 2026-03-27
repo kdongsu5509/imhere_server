@@ -1,10 +1,8 @@
 package com.kdongsu5509.support.config
 
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
+import org.springframework.boot.context.properties.ConfigurationProperties
 
-@Component
+@ConfigurationProperties(prefix = "security")
 class SecurityConstants(
-    @field:Value(value = "\${security.whitelist}")
-    val whiteListUrls: List<String>
+    val whitelist: List<String> = emptyList()
 )

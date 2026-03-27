@@ -2,11 +2,9 @@ package com.kdongsu5509.notifications.adapter.`in`.dto
 
 import org.jetbrains.annotations.NotNull
 
-data class MessageSendRequest(
+data class MultiMessageSendRequest(
     @param:NotNull
-    val receiverNumber: String,
+    val receiversNumbers: List<String>,
     @param:NotNull
     val location: String
 )
-
-//TODO : FCM -> 100자 제한

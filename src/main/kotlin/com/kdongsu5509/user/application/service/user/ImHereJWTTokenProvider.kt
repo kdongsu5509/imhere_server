@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
-import java.util.*
 
 @Component
 class ImHereJWTTokenProvider(
@@ -17,38 +16,49 @@ class ImHereJWTTokenProvider(
     private val cachePort: CachePort,
 ) : JwtTokenProvider {
     override fun issueJwtToken(
-        id: UUID,
-        email: String,
-        role: String
+        imHereJwtTokenElements: ImHereJwtTokenElements
     ): ImHereJwt {
-        val accessToken = jwtTokenIssuer.createAccessToken(id, email, role)
-        val refreshToken = jwtTokenIssuer.createRefreshToken(id, email, role)
+        val accessToken = jwtTokenIssuer.createAccessToken(imHereJwtTokenElements)
+        val refreshToken = jwtTokenIssuer.createRefreshToken(imHereJwtTokenElements)
 
         val expiredDateTime = jwtTokenUtil.getExpirationDateFromToken(refreshToken).atZone(ZoneId.systemDefault())
         val duration: Duration = Duration.between(Instant.now(), expiredDateTime.toInstant())
 
-        val redisKey = "refresh:$email"
+        val redisKey = getTokenRedisKeyFromImHereJwtTokenElements(imHereJwtTokenElements)
         cachePort.save(redisKey, refreshToken, duration)
 
         return ImHereJwt(accessToken, refreshToken)
     }
 
     override fun reissueJwtToken(refreshToken: String): ImHereJwt {
-        val username = jwtTokenUtil.getUsernameFromToken(refreshToken)
-        val role = jwtTokenUtil.getRoleFromToken(refreshToken)
-        val uid = jwtTokenUtil.getUIDFromToken(refreshToken)
+        val imHereJwtTokenElements = consistImHereJwtTokenElementsFromRefreshToken(refreshToken)
 
         // 토큰 유효성 검사 (만료 시간 포함)
         if (!jwtTokenUtil.validateToken(refreshToken)) {
             throw BusinessException(AuthErrorCode.IMHERE_INVALID_TOKEN)
         }
 
-        val refreshTokenFromRedis = cachePort.find("refresh:$username", String::class.java)
+        val redisKey = getTokenRedisKeyFromImHereJwtTokenElements(imHereJwtTokenElements)
+        val refreshTokenFromRedis = cachePort.find(redisKey, String::class.java)
 
         if (refreshTokenFromRedis != null && refreshTokenFromRedis == refreshToken) {
-            return issueJwtToken(uid, username, role)
+            return issueJwtToken(imHereJwtTokenElements)
         }
 
-        throw IllegalArgumentException("일치하지 않는 리프레시 토큰")
+        throw BusinessException(AuthErrorCode.IMHERE_INVALID_TOKEN)
+    }
+
+    private fun getTokenRedisKeyFromImHereJwtTokenElements(imHereJwtTokenElements: ImHereJwtTokenElements): String {
+        return "refresh:${imHereJwtTokenElements.userEmail}"
+    }
+
+    private fun consistImHereJwtTokenElementsFromRefreshToken(refreshToken: String): ImHereJwtTokenElements {
+        return ImHereJwtTokenElements(
+            uid = jwtTokenUtil.getUIDFromToken(refreshToken),
+            userEmail = jwtTokenUtil.getUserEmailFromToken(refreshToken),
+            userNickname = jwtTokenUtil.getUserNicknameFromToken(refreshToken),
+            role = jwtTokenUtil.getRoleFromToken(refreshToken),
+            status = jwtTokenUtil.getStatusFromToken(refreshToken)
+        )
     }
 }

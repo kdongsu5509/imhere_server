@@ -37,6 +37,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-restclient'
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
@@ -46,9 +47,9 @@ dependencies {
 
     // DB & EXTERNAL
     implementation 'org.postgresql:postgresql'
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0' // 외부 라이브러리는 버전 명시
-    implementation 'net.nurigo:sdk:4.3.0'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     implementation 'com.google.firebase:firebase-admin:9.8.0'
+    implementation 'com.solapi:sdk:1.1.0'
 
     // QUERY DSL (KSP 환경)
     implementation("io.github.openfeign.querydsl:querydsl-jpa:7.1")
@@ -66,6 +67,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-restclient-test'
     testImplementation 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-restdocs'
+    testImplementation "org.mockito.kotlin:mockito-kotlin:5.2.1"
 
     // 2. Testcontainers BOM 선언 (테스트 컨테이너 버전 충돌 방지)
     testImplementation platform("org.testcontainers:testcontainers-bom:1.20.1")

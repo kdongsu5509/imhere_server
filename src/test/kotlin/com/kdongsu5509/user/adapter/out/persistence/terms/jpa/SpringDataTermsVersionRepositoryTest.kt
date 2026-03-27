@@ -58,7 +58,7 @@ class SpringDataTermsVersionRepositoryTest @Autowired constructor(
         TermsVersionJpaEntity(
             terms = definition,
             version = "1.0",
-            content = "활성 약관 내용",
+            termVersionContent = "활성 약관 내용",
             isActive = true,
             effectiveDate = LocalDateTime.now()
         )

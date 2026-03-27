@@ -1,6 +1,5 @@
 package com.kdongsu5509.notifications.adapter.out.persistence
 
-import com.kdongsu5509.notifications.adapter.out.BaseEntity
 import com.kdongsu5509.notifications.domain.DeviceType
 import jakarta.persistence.*
 
