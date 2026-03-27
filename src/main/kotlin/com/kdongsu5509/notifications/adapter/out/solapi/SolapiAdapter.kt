@@ -3,7 +3,8 @@ package com.kdongsu5509.notifications.adapter.out.solapi
 import com.kdongsu5509.notifications.application.port.out.ExternalMessagePort
 import com.kdongsu5509.notifications.config.ExternalSMSProperties
 import com.kdongsu5509.notifications.domain.SMS
-import com.solapi.sdk.message.dto.response.MultipleDetailMessageSentResponse
+import com.kdongsu5509.support.exception.BusinessException
+import com.kdongsu5509.support.exception.ExternalSMSErrorCode
 import com.solapi.sdk.message.exception.SolapiBadRequestException
 import com.solapi.sdk.message.exception.SolapiInvalidApiKeyException
 import com.solapi.sdk.message.exception.SolapiMessageNotReceivedException
@@ -21,20 +22,24 @@ class SolapiAdapter(
     private val solapiService: DefaultMessageService,
 ) : ExternalMessagePort {
 
-    companion object {
-        const val MSG_FORMAT = "안전하게 도착하였습니다.\n\n" +
-                "보낸 분 : %s\n" +
-                "장소: %s\n" +
-                "시간: %s\n\n" +
-                "Service by ImHere"
-    }
-
     private val log = LoggerFactory.getLogger(this::class.java)
+
+    companion object {
+        private const val MSG_FORMAT = """
+            %s에 안전하게 도착하였습니다.
+            
+            보낸 분 : %s
+            시간: %s
+            
+            Service by ImHere"""
+        private val DATE_FORMATTER = DateTimeFormatter.ofPattern("a h시 m분").withLocale(Locale.KOREAN)
+    }
 
     override fun send(sms: SMS): SolapiResponse {
         val message = buildExternalSMSMessage(sms)
         return try {
-            solapiService.send(message, null)
+            val response = solapiService.send(message, null)
+            log.info("단일 문자 발송 성공: {}", response)
             SolapiResponse.success()
         } catch (e: Exception) {
             handleException("단일 발송", e)
@@ -43,24 +48,25 @@ class SolapiAdapter(
 
     override fun sendMultiple(multiSMS: List<SMS>): List<SolapiResponse> {
         if (multiSMS.isEmpty()) {
-            log.warn("[Solapi 다중 발송] 발송할 대상이 없습니다.")
-            return emptyList()
+            throw BusinessException(ExternalSMSErrorCode.NOT_ALLOW_EMPTY)
         }
 
         val messages = multiSMS.map { buildExternalSMSMessage(it) }
         return try {
-            val result: MultipleDetailMessageSentResponse = solapiService.send(messages, null)
+            val result = solapiService.send(messages, null)
+            log.info("다중 문자 발송 결과: {}", result)
 
             val detailList = result.messageList
-            if (detailList.isNullOrEmpty()) {
-                return List(multiSMS.size) { SolapiResponse.fail("Response list is empty") }
+            if (detailList.isEmpty()) {
+                return List(multiSMS.size) { SolapiResponse.fail("응답 데이터가 비어있습니다.") }
             }
 
             detailList.map { detail ->
-                if (detail.statusCode == "200" || detail.statusCode == "4000") {
+                // Solapi 성공 코드는 보통 2000, 4000 등이니 라이브러리 스펙 재확인 권장
+                if (detail.statusCode in listOf("200", "2000", "4000")) {
                     SolapiResponse.success()
                 } else {
-                    SolapiResponse.fail(detail.statusMessage ?: "Unknown Error")
+                    SolapiResponse.fail("[${detail.statusCode}] ${detail.statusMessage ?: "알 수 없는 에러"}")
                 }
             }
         } catch (e: Exception) {
@@ -75,26 +81,21 @@ class SolapiAdapter(
             to = sms.receiverNumber,
             text = String.format(
                 MSG_FORMAT,
-                sms.senderNickname,
                 sms.location,
-                getCurrentTimeInformation()
+                sms.senderNickname,
+                LocalDateTime.now().format(DATE_FORMATTER)
             )
         )
     }
 
-    private fun getCurrentTimeInformation(): String {
-        return LocalDateTime.now().format(
-            DateTimeFormatter.ofPattern("a h시 m분").withLocale(Locale.KOREAN)
-        )
-    }
-
     private fun handleException(type: String, e: Exception): SolapiResponse {
-        when (e) {
+        val errorMessage = when (e) {
             is SolapiBadRequestException -> "잘못된 요청: ${e.message}"
             is SolapiInvalidApiKeyException -> "잘못된 API 키: ${e.message}"
             is SolapiMessageNotReceivedException -> "발송 미접수: ${e.message}"
-            else -> "시스템 오류: ${e.message}"
+            else -> "시스템 오류: ${e.message ?: "Internal Error"}"
         }
-        return SolapiResponse.fail(e.message ?: "Internal Error")
+        log.error("{} 실패 - {}", type, errorMessage, e)
+        return SolapiResponse.fail(errorMessage)
     }
 }
