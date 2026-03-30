@@ -1,5 +1,6 @@
 package com.kdongsu5509.user.application.service.user
 
+import com.kdongsu5509.support.exception.AuthErrorCode
 import com.kdongsu5509.support.exception.BusinessException
 import com.kdongsu5509.user.application.port.out.user.CachePort
 import org.assertj.core.api.Assertions.assertThat
@@ -88,7 +89,7 @@ class ImHereJWTTokenProviderTest {
 
     @Test
     @DisplayName("유효한 리프레시 토큰으로 JWT 토큰을 재발급한다")
-    fun reissueJwtToken_validRefreshTokenByRefreshToken_success() {
+    fun reissueJwtTokenByRefreshToken_validRefreshToken_success() {
         // given
         `when`(jwtTokenUtil.getUserEmailFromToken(REFRESH_TOKEN)).thenReturn(USER_EMAIL)
         `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(ROLE) // setUp()과 동일한 role 유지
@@ -111,7 +112,6 @@ class ImHereJWTTokenProviderTest {
         assertThat(result.refreshToken).isEqualTo(NEW_REFRESH_TOKEN)
 
         verify(jwtTokenUtil).validateToken(REFRESH_TOKEN)
-        verify(cachePort).find(REDIS_KEY, String::class.java)
         verify(jwtTokenIssuer).createAccessToken(imHereJwtTokenElements)
 
         val keyCaptor: ArgumentCaptor<String> = ArgumentCaptor.forClass(String::class.java)
@@ -126,36 +126,26 @@ class ImHereJWTTokenProviderTest {
 
     @Test
     @DisplayName("유효하지 않은 리프레시 토큰으로 재발급 시 예외가 발생한다")
-    fun reissueJwtToken_invalidRefreshTokenByRefreshToken_throwsException() {
+    fun reissueJwtTokenByRefreshToken_invalidRefreshToken_throwsException() {
         // given
         val invalidRefreshToken = "invalid-refresh-token"
 
-        `when`(jwtTokenUtil.getUserEmailFromToken(invalidRefreshToken)).thenReturn(USER_EMAIL)
-        `when`(jwtTokenUtil.getRoleFromToken(invalidRefreshToken)).thenReturn(ROLE)
-        `when`(jwtTokenUtil.getUIDFromToken(invalidRefreshToken)).thenReturn(TEST_UUID)
-        `when`(jwtTokenUtil.getUserNicknameFromToken(invalidRefreshToken)).thenReturn(USER_NICKNAME)
-        `when`(jwtTokenUtil.getStatusFromToken(invalidRefreshToken)).thenReturn(ACTIVE_STATUS)
-        `when`(jwtTokenUtil.validateToken(invalidRefreshToken)).thenReturn(false)
+        `when`(jwtTokenUtil.validateToken(invalidRefreshToken)).thenReturn(false);
 
         // when & then
         assertThrows<BusinessException> {
             imHereJWTTokenProvider.reissueJwtTokenByRefreshToken(invalidRefreshToken)
         }.also { exception ->
-            assertThat(exception.message).isEqualTo("잘못된 토큰입니다")
+            assertThat(exception.message).isEqualTo(AuthErrorCode.IMHERE_INVALID_TOKEN.message)
         }
     }
 
     @Test
     @DisplayName("만료된 리프레시 토큰으로 재발급 시 예외가 발생한다")
-    fun reissueJwtToken_expiredRefreshTokenByRefreshToken_throwsException() {
+    fun reissueJwtTokenByRefreshToken_expiredRefreshToken_throwsException() {
         // given
         val expiredRefreshToken = "expired-refresh-token"
 
-        `when`(jwtTokenUtil.getUIDFromToken(expiredRefreshToken)).thenReturn(TEST_UUID) // UUID.randomUUID() 제거
-        `when`(jwtTokenUtil.getUserEmailFromToken(expiredRefreshToken)).thenReturn(USER_EMAIL)
-        `when`(jwtTokenUtil.getUserNicknameFromToken(expiredRefreshToken)).thenReturn(USER_NICKNAME)
-        `when`(jwtTokenUtil.getRoleFromToken(expiredRefreshToken)).thenReturn(ROLE)
-        `when`(jwtTokenUtil.getStatusFromToken(expiredRefreshToken)).thenReturn(ACTIVE_STATUS)
         `when`(jwtTokenUtil.validateToken(expiredRefreshToken)).thenReturn(false)
 
         // when & then
@@ -168,24 +158,28 @@ class ImHereJWTTokenProviderTest {
 
     @Test
     @DisplayName("Redis에 저장된 토큰과 일치하지 않는 리프레시 토큰으로 재발급 시 예외가 발생한다")
-    fun reissueJwtToken_mismatchedRefreshTokenByRefreshToken_throwsException() {
+    fun reissueJwtTokenByRefreshToken_mismatchedRefreshToken_throwsException() {
         // given
-        val refreshToken = "refresh-token"
         val differentTokenInRedis = "different-refresh-token"
-        val redisKey = "refresh:$USER_EMAIL"
 
-        `when`(jwtTokenUtil.getUserEmailFromToken(refreshToken)).thenReturn(USER_EMAIL)
-        `when`(jwtTokenUtil.getRoleFromToken(refreshToken)).thenReturn(ROLE)
-        `when`(jwtTokenUtil.getUIDFromToken(refreshToken)).thenReturn(TEST_UUID)
-        `when`(jwtTokenUtil.getUserNicknameFromToken(refreshToken)).thenReturn(USER_NICKNAME)
-        `when`(jwtTokenUtil.getStatusFromToken(refreshToken)).thenReturn(ACTIVE_STATUS)
+        `when`(jwtTokenUtil.validateToken(REFRESH_TOKEN)).thenReturn(true)
 
-        `when`(jwtTokenUtil.validateToken(refreshToken)).thenReturn(true)
-        `when`(cachePort.find(redisKey, String::class.java)).thenReturn(differentTokenInRedis)
+        `when`(cachePort.find(REDIS_KEY, String::class.java)).thenReturn(differentTokenInRedis)
+        `when`(jwtTokenUtil.getUserEmailFromToken(REFRESH_TOKEN)).thenReturn(USER_EMAIL)
+
+//        `when`(jwtTokenUtil.getUIDFromToken(REFRESH_TOKEN)).thenReturn(TEST_UUID)
+//        `when`(jwtTokenUtil.getUserNicknameFromToken(REFRESH_TOKEN)).thenReturn(USER_NICKNAME)
+//        `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(ROLE)
+//        `when`(jwtTokenUtil.getStatusFromToken(REFRESH_TOKEN)).thenReturn(ACTIVE_STATUS)
+
+//        //jwtIssuer : 새로운 토큰 잘 만들어 준다.
+//        `when`(jwtTokenIssuer.createAccessToken(imHereJwtTokenElements)).thenReturn(NEW_ACCESS_TOKEN)
+//        `when`(jwtTokenIssuer.createRefreshToken(imHereJwtTokenElements)).thenReturn(NEW_REFRESH_TOKEN)
+//        `when`(jwtTokenUtil.getExpirationDateFromToken(NEW_REFRESH_TOKEN)).thenReturn(EXP_DATE)
 
         // when & then
         assertThrows<BusinessException> {
-            imHereJWTTokenProvider.reissueJwtTokenByRefreshToken(refreshToken)
+            imHereJWTTokenProvider.reissueJwtTokenByRefreshToken(REFRESH_TOKEN)
         }.also { exception ->
             assertThat(exception.message).isEqualTo("잘못된 토큰입니다")
         }
@@ -193,13 +187,9 @@ class ImHereJWTTokenProviderTest {
 
     @Test
     @DisplayName("Redis에 리프레시 토큰이 없을 때 재발급 시 예외가 발생한다")
-    fun reissueJwtToken_noTokenByRefreshTokenInRedis_throwsException() {
+    fun reissueJwtTokenByRefreshToken_noTokenInRedis_throwsException() {
         // given
         `when`(jwtTokenUtil.getUserEmailFromToken(REFRESH_TOKEN)).thenReturn(USER_EMAIL)
-        `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(ROLE)
-        `when`(jwtTokenUtil.getUIDFromToken(REFRESH_TOKEN)).thenReturn(TEST_UUID)
-        `when`(jwtTokenUtil.getUserNicknameFromToken(REFRESH_TOKEN)).thenReturn(USER_NICKNAME)
-        `when`(jwtTokenUtil.getStatusFromToken(REFRESH_TOKEN)).thenReturn(ACTIVE_STATUS)
 
         `when`(jwtTokenUtil.validateToken(REFRESH_TOKEN)).thenReturn(true)
         `when`(cachePort.find(REDIS_KEY, String::class.java)).thenReturn(null)
@@ -208,7 +198,7 @@ class ImHereJWTTokenProviderTest {
         assertThrows<BusinessException> {
             imHereJWTTokenProvider.reissueJwtTokenByRefreshToken(REFRESH_TOKEN)
         }.also { exception ->
-            assertThat(exception.message).isEqualTo("잘못된 토큰입니다") // Exception 타입 및 메시지 수정
+            assertThat(exception.message).isEqualTo(AuthErrorCode.IMHERE_KEY_NOT_FOUND_IN_REDIS.message)
         }
     }
 
@@ -239,5 +229,41 @@ class ImHereJWTTokenProviderTest {
 
         verify(jwtTokenIssuer).createAccessToken(expectedElements)
         verify(jwtTokenIssuer).createRefreshToken(expectedElements)
+    }
+
+    @Test
+    @DisplayName("사용자 이메일 기반으로 redis에서 refreshToken를 찾아와 재발급을 한다")
+    fun reissueJwtTokenByUserEmail_validRefreshToken_success() {
+        // given
+        `when`(cachePort.find(REDIS_KEY, String::class.java)).thenReturn(REFRESH_TOKEN)
+
+        `when`(jwtTokenUtil.getUIDFromToken(REFRESH_TOKEN)).thenReturn(TEST_UUID)
+        `when`(jwtTokenUtil.getUserEmailFromToken(REFRESH_TOKEN)).thenReturn(USER_EMAIL)
+        `when`(jwtTokenUtil.getUserNicknameFromToken(REFRESH_TOKEN)).thenReturn(USER_NICKNAME)
+        `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(ROLE)
+        `when`(jwtTokenUtil.getStatusFromToken(REFRESH_TOKEN)).thenReturn(ACTIVE_STATUS)
+
+        //jwtIssuer : 새로운 토큰 잘 만들어 준다.
+        `when`(jwtTokenIssuer.createAccessToken(imHereJwtTokenElements)).thenReturn(NEW_ACCESS_TOKEN)
+        `when`(jwtTokenIssuer.createRefreshToken(imHereJwtTokenElements)).thenReturn(NEW_REFRESH_TOKEN)
+        `when`(jwtTokenUtil.getExpirationDateFromToken(NEW_REFRESH_TOKEN)).thenReturn(EXP_DATE)
+
+        // when
+        val result = imHereJWTTokenProvider.reissueJwtTokenByUserEmail(USER_EMAIL)
+
+        // then
+        assertThat(result).isNotNull
+        assertThat(result.accessToken).isEqualTo(NEW_ACCESS_TOKEN)
+        assertThat(result.refreshToken).isEqualTo(NEW_REFRESH_TOKEN)
+
+        verify(cachePort).find(REDIS_KEY, String::class.java)
+        verify(jwtTokenIssuer).createAccessToken(imHereJwtTokenElements)
+
+        val keyCaptor: ArgumentCaptor<String> = ArgumentCaptor.forClass(String::class.java)
+        val valueCaptor: ArgumentCaptor<String> = ArgumentCaptor.forClass(String::class.java)
+        val durationCaptor: ArgumentCaptor<Duration> = ArgumentCaptor.forClass(Duration::class.java)
+        verify(cachePort).save(capture(keyCaptor), capture(valueCaptor), capture(durationCaptor))
+        assertThat(keyCaptor.value).isEqualTo(REDIS_KEY)
+        assertThat(valueCaptor.value).isEqualTo(NEW_REFRESH_TOKEN)
     }
 }

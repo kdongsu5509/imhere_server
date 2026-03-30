@@ -9,4 +9,8 @@ class JwtReissueService(private val jwtTokenProvider: JwtTokenProvider) : Reissu
     override fun reissueByRefreshToken(refreshToken: String): ImHereJwt {
         return jwtTokenProvider.reissueJwtTokenByRefreshToken(refreshToken)
     }
+
+    override fun reissueByUserEmail(email: String): ImHereJwt {
+        return jwtTokenProvider.reissueJwtTokenByUserEmail(email)
+    }
 }

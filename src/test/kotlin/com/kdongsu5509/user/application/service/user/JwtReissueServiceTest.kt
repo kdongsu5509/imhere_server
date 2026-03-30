@@ -32,7 +32,7 @@ class JwtReissueServiceTest {
         `when`(jwtTokenProvider.reissueJwtTokenByRefreshToken(mockRefreshToken)).thenReturn(mockImHereJWT)
 
         //when
-        val result = getJwtReissueByRefreshTokenService.reissueByRefreshToken(mockRefreshToken)
+        val result = jwtReissueByRefreshTokenService.reissueByRefreshToken(mockRefreshToken)
 
         //then
         assertThat(result).isNotNull
@@ -47,7 +47,7 @@ class JwtReissueServiceTest {
         `when`(jwtTokenProvider.reissueJwtTokenByRefreshToken(mockRefreshToken)).thenThrow(mockException)
 
         assertThrows<BusinessException> {
-            getJwtReissueByRefreshTokenService.reissueByRefreshToken(mockRefreshToken)
+            jwtReissueByRefreshTokenService.reissueByRefreshToken(mockRefreshToken)
         }.also { exception ->
             assertThat(exception.message).isEqualTo("잘못된 토큰입니다")
         }

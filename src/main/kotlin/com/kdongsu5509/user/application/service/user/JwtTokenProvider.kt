@@ -6,4 +6,5 @@ interface JwtTokenProvider {
     fun issueJwtToken(imHereJwtTokenElements: ImHereJwtTokenElements): ImHereJwt
 
     fun reissueJwtTokenByRefreshToken(refreshToken: String): ImHereJwt
+    fun reissueJwtTokenByUserEmail(email: String): ImHereJwt
 }

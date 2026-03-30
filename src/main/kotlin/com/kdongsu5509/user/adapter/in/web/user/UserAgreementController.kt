@@ -5,6 +5,7 @@ import com.kdongsu5509.user.adapter.`in`.web.user.dto.AuthenticationResponse
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserTermsConsentRequest
 import com.kdongsu5509.user.application.port.`in`.user.AgreementTermUseCase
 import com.kdongsu5509.user.application.port.`in`.user.ReissueJWTUseCase
+import com.kdongsu5509.user.application.service.user.SimpleTokenUserDetails
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Positive
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -20,11 +21,12 @@ class UserAgreementController(
 ) {
     @PostMapping("/consent")
     fun consentAll(
-        @AuthenticationPrincipal userDetail: UserDetails,
+        @AuthenticationPrincipal userDetail: SimpleTokenUserDetails,
         @Validated @RequestBody userTermsConsentRequest: UserTermsConsentRequest
     ): APIResponse<AuthenticationResponse?> {
-        agreementTermUseCase.consentAll(userDetail.username, userTermsConsentRequest)
-        val jwt = reissueJwtUseCase.reissue(reAuthenticationRequest.refreshToken)
+        val userEmail = userDetail.username
+        agreementTermUseCase.consentAll(userEmail, userTermsConsentRequest)
+        val jwt = reissueJWTUseCase.reissueByUserEmail(userEmail)
         return APIResponse.success(
             AuthenticationResponse(jwt.accessToken, jwt.refreshToken)
         )

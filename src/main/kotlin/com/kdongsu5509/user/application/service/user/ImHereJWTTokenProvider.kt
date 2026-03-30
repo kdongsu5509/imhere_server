@@ -24,33 +24,46 @@ class ImHereJWTTokenProvider(
         val expiredDateTime = jwtTokenUtil.getExpirationDateFromToken(refreshToken).atZone(ZoneId.systemDefault())
         val duration: Duration = Duration.between(Instant.now(), expiredDateTime.toInstant())
 
-        val redisKey = getTokenRedisKeyFromImHereJwtTokenElements(imHereJwtTokenElements)
+        val redisKey = getTokenRedisKey(imHereJwtTokenElements.userEmail)
         cachePort.save(redisKey, refreshToken, duration)
 
         return ImHereJwt(accessToken, refreshToken)
     }
 
     override fun reissueJwtTokenByRefreshToken(refreshToken: String): ImHereJwt {
-        val imHereJwtTokenElements = consistImHereJwtTokenElementsFromRefreshToken(refreshToken)
-
-        // 토큰 유효성 검사 (만료 시간 포함)
         if (!jwtTokenUtil.validateToken(refreshToken)) {
             throw BusinessException(AuthErrorCode.IMHERE_INVALID_TOKEN)
         }
 
-        val redisKey = getTokenRedisKeyFromImHereJwtTokenElements(imHereJwtTokenElements)
+        val email = jwtTokenUtil.getUserEmailFromToken(refreshToken)
+        val refreshTokenSavedAtRedis = findTokenFromRedisWithUserEmail(email)
+
+        if (refreshTokenSavedAtRedis != refreshToken) throw BusinessException(AuthErrorCode.IMHERE_INVALID_TOKEN)
+
+        return commonReissueLogic(email)
+    }
+
+    override fun reissueJwtTokenByUserEmail(email: String): ImHereJwt {
+        return commonReissueLogic(email)
+    }
+
+    private fun commonReissueLogic(email: String): ImHereJwt {
+        val refreshTokenFromRedis = findTokenFromRedisWithUserEmail(email)
+
+        val elements = consistImHereJwtTokenElementsFromRefreshToken(refreshTokenFromRedis)
+        return issueJwtToken(elements)
+    }
+
+    private fun findTokenFromRedisWithUserEmail(email: String): String {
+        val redisKey = getTokenRedisKey(email)
+
         val refreshTokenFromRedis = cachePort.find(redisKey, String::class.java)
+            ?: throw BusinessException(AuthErrorCode.IMHERE_KEY_NOT_FOUND_IN_REDIS)
 
-        if (refreshTokenFromRedis != null && refreshTokenFromRedis == refreshToken) {
-            return issueJwtToken(imHereJwtTokenElements)
-        }
-
-        throw BusinessException(AuthErrorCode.IMHERE_INVALID_TOKEN)
+        return refreshTokenFromRedis
     }
 
-    private fun getTokenRedisKeyFromImHereJwtTokenElements(imHereJwtTokenElements: ImHereJwtTokenElements): String {
-        return "refresh:${imHereJwtTokenElements.userEmail}"
-    }
+    private fun getTokenRedisKey(userEmail: String): String = "refresh:$userEmail"
 
     private fun consistImHereJwtTokenElementsFromRefreshToken(refreshToken: String): ImHereJwtTokenElements {
         return ImHereJwtTokenElements(
