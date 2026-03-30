@@ -43,8 +43,8 @@ class AuthController(
     fun handleJwtTokenReissueRequest(
         @Validated @RequestBody reAuthenticationRequest: ReAuthenticationRequest
     ): APIResponse<AuthenticationResponse?> {
-        val jwt = reissueJwtUseCase.reissue(reAuthenticationRequest.refreshToken)
-        return APIResponse.Companion.success(
+        val jwt = reissueJwtUseCase.reissueByRefreshToken(reAuthenticationRequest.refreshToken)
+        return APIResponse.success(
             AuthenticationResponse(jwt.accessToken, jwt.refreshToken)
         )
     }

@@ -5,5 +5,6 @@ import com.kdongsu5509.user.application.dto.ImHereJwt
 interface JwtTokenProvider {
     fun issueJwtToken(imHereJwtTokenElements: ImHereJwtTokenElements): ImHereJwt
 
-    fun reissueJwtToken(refreshToken: String): ImHereJwt
+    fun reissueJwtTokenByRefreshToken(refreshToken: String): ImHereJwt
+    fun reissueJwtTokenByUserEmail(email: String): ImHereJwt
 }

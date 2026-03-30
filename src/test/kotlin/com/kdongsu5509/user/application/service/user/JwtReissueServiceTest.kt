@@ -21,18 +21,18 @@ class JwtReissueServiceTest {
     lateinit var jwtTokenProvider: JwtTokenProvider
 
     @InjectMocks
-    lateinit var jwtReissueService: JwtReissueService
+    lateinit var jwtReissueByRefreshTokenService: JwtReissueService
 
     @Test
     @DisplayName("재발급 요청이 들어오면 새로운 토큰을 발급해준다.")
-    fun reissue() {
+    fun reissueByRefreshToken() {
         //given
         val mockRefreshToken = "prevRefreshToken"
         val mockImHereJWT = ImHereJwt("accessToken", mockRefreshToken)
-        `when`(jwtTokenProvider.reissueJwtToken(mockRefreshToken)).thenReturn(mockImHereJWT)
+        `when`(jwtTokenProvider.reissueJwtTokenByRefreshToken(mockRefreshToken)).thenReturn(mockImHereJWT)
 
         //when
-        val result = jwtReissueService.reissue(mockRefreshToken)
+        val result = jwtReissueByRefreshTokenService.reissueByRefreshToken(mockRefreshToken)
 
         //then
         assertThat(result).isNotNull
@@ -44,10 +44,10 @@ class JwtReissueServiceTest {
     fun thorw_exception_of_sub_class() {
         val mockRefreshToken = "prevRefreshToken"
         val mockException = BusinessException(AuthErrorCode.IMHERE_INVALID_TOKEN)
-        `when`(jwtTokenProvider.reissueJwtToken(mockRefreshToken)).thenThrow(mockException)
+        `when`(jwtTokenProvider.reissueJwtTokenByRefreshToken(mockRefreshToken)).thenThrow(mockException)
 
         assertThrows<BusinessException> {
-            jwtReissueService.reissue(mockRefreshToken)
+            jwtReissueByRefreshTokenService.reissueByRefreshToken(mockRefreshToken)
         }.also { exception ->
             assertThat(exception.message).isEqualTo("잘못된 토큰입니다")
         }

@@ -40,7 +40,7 @@ class JjwtVerifyAdapter(
                 .build()
                 .parseClaimsJws(token)
         } catch (e: ExpiredJwtException) {
-            throw BusinessException(AuthErrorCode.OIDC_EXPIRED)
+            throw BusinessException(AuthErrorCode.IMHERE_KEY_MISMATCH)
         }
     }
 

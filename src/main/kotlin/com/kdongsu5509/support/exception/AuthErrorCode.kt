@@ -62,4 +62,14 @@ enum class AuthErrorCode(
         "IMHERE_TOKEN_003",
         "해당 기능에 대한 권한이 없습니다."
     ),
+    IMHERE_KEY_MISMATCH(
+        HttpStatus.UNAUTHORIZED,
+        "IMHERE_TOKEN_004",
+        "키의 서명에 문제가 있습니다."
+    ),
+    IMHERE_KEY_NOT_FOUND_IN_REDIS(
+        HttpStatus.UNAUTHORIZED,
+        "IMHERE_TOKEN_005",
+        "레디스에서 리프레시 토큰을 찾지 못하였습니다."
+    ),
 }

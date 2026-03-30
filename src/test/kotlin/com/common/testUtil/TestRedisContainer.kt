@@ -7,15 +7,14 @@ import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 
-@Testcontainers
 abstract class TestRedisContainer {
 
     companion object {
         private const val REDIS_PORT = 6379
 
-        @Container
         val redisContainer = GenericContainer(DockerImageName.parse("redis:alpine"))
             .withExposedPorts(REDIS_PORT)
+            .apply { start() }
 
         @JvmStatic
         @DynamicPropertySource
@@ -24,5 +23,4 @@ abstract class TestRedisContainer {
             registry.add("spring.data.redis.port") { redisContainer.getMappedPort(REDIS_PORT) }
         }
     }
-
 }

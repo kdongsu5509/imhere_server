@@ -1,5 +1,7 @@
 package com.kdongsu5509.user.adapter.out.auth.oauth
 
+import com.kdongsu5509.support.exception.AuthErrorCode
+import com.kdongsu5509.support.exception.BusinessException
 import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.user.application.port.out.user.oauth.OauthClientPort
 import org.slf4j.LoggerFactory
@@ -35,10 +37,11 @@ class KakaoOauthClient(
         return fetchPublicKey()
     }
 
-    private fun fetchPublicKey(): OIDCPublicKeyResponse? {
-        return restClient.get()
+    private fun fetchPublicKey(): OIDCPublicKeyResponse {
+        val response = restClient.get()
             .uri(KEY_REQ_URL)
             .retrieve()
             .body<OIDCPublicKeyResponse>()
+        return response ?: throw BusinessException(AuthErrorCode.KAKAO_OIDC_PUBLIC_KEY_FETCH_FAILED)
     }
 }

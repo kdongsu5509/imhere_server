@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.http.MediaType
-import org.springframework.test.context.TestPropertySource
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -28,7 +28,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.security.interfaces.RSAPublicKey
 import java.util.*
 
-@TestPropertySource(properties = ["spring.data.redis.host=localhost", "spring.data.redis.port=6379"])
 class AuthControllerIntegrationTest : ControllerTestSupport() {
 
     companion object {
@@ -40,10 +39,6 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
 
     @Autowired
     lateinit var userSavePort: UserSavePort
-
-    @Autowired
-    @Qualifier("customRedisTemplate")
-    lateinit var redisTemplate: RedisTemplate<String, Any>
 
     @MockitoBean
     lateinit var kakaoOauthClient: KakaoOauthClient
@@ -113,6 +108,7 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
     }
 
     @Test
+    @WithMockUser(username = DEFAULT_TEST_EMAIL)
     @DisplayName("정상적인 refreshToken은 잘 통과한다.")
     fun reissue_okay() {
         // given
