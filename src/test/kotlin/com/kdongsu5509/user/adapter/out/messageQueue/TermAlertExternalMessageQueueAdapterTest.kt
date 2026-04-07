@@ -1,10 +1,10 @@
 package com.kdongsu5509.user.adapter.out.messageQueue
 
 import com.common.testUtil.TestRabbitMQContainer
+import com.kdongsu5509.support.config.RabbitMQConfig
 import com.kdongsu5509.user.adapter.out.messageQueue.dto.NotificationMessageDto
 import com.kdongsu5509.user.adapter.out.messageQueue.dto.NotificationType
 import com.kdongsu5509.user.application.dto.AlertInformation
-import com.kdongsu5509.user.common.config.UserRabbitMQConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest(
     classes = [
         TermAlertExternalMessageQueueAdapter::class,
-        UserRabbitMQConfig::class,
+        RabbitMQConfig::class,
         RabbitAutoConfiguration::class
     ]
 )
@@ -41,9 +41,9 @@ class TermAlertExternalMessageQueueAdapterTest : TestRabbitMQContainer() {
     fun setUp() {
         val queue = Queue(queueName, true)
 
-        val exchange = TopicExchange(UserRabbitMQConfig.EXCHANGE_NAME)
+        val exchange = TopicExchange(RabbitMQConfig.EXCHANGE_NAME)
 
-        val binding = BindingBuilder.bind(queue).to(exchange).with(UserRabbitMQConfig.SERVICE_ROUTING_KEY)
+        val binding = BindingBuilder.bind(queue).to(exchange).with(RabbitMQConfig.SERVICE_ROUTING_KEY)
 
         amqpAdmin.declareQueue(queue)
         amqpAdmin.declareExchange(exchange)

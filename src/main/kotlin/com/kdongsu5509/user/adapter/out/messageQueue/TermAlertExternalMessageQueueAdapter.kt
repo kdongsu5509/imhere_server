@@ -1,10 +1,10 @@
 package com.kdongsu5509.user.adapter.out.messageQueue
 
+import com.kdongsu5509.support.config.RabbitMQConfig
 import com.kdongsu5509.user.adapter.out.messageQueue.dto.NotificationMessageDto
 import com.kdongsu5509.user.adapter.out.messageQueue.dto.NotificationType
 import com.kdongsu5509.user.application.dto.AlertInformation
 import com.kdongsu5509.user.application.port.out.noti.TermAlertPort
-import com.kdongsu5509.user.common.config.UserRabbitMQConfig
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component
 class TermAlertExternalMessageQueueAdapter(val rabbitTemplate: RabbitTemplate) : TermAlertPort {
     override fun sendAlert(alertInformation: AlertInformation) {
         rabbitTemplate.convertAndSend(
-            UserRabbitMQConfig.EXCHANGE_NAME,
-            UserRabbitMQConfig.SERVICE_ROUTING_KEY,
+            RabbitMQConfig.EXCHANGE_NAME,
+            RabbitMQConfig.SERVICE_ROUTING_KEY,
             consistNotificationMessageDto(alertInformation)
         )
     }

@@ -1,4 +1,4 @@
-package com.kdongsu5509.notifications.config
+package com.kdongsu5509.support.config
 
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.BindingBuilder
@@ -11,19 +11,19 @@ import tools.jackson.databind.json.JsonMapper
 import tools.jackson.module.kotlin.kotlinModule
 
 @Configuration
-class NotificationRabbitMQConfig {
+class RabbitMQConfig {
 
     companion object {
+        const val EXCHANGE_NAME: String = "imhere.noti.topic"
+
         const val FRIEND_QUEUE: String = "noti.queue.friend"
         const val SERVICE_QUEUE: String = "noti.queue.service"
 
         const val FRIEND_ROUTING_KEY: String = "noti.user.friend.#"
         const val SERVICE_ROUTING_KEY: String = "noti.service.#"
-
-        const val EXCHANGE_NAME: String = "imhere.noti.topic"
     }
 
-    @Bean(name = ["notificationJsonMessageConverter"])
+    @Bean
     fun jsonMessageConverter(): JacksonJsonMessageConverter {
         val jsonMapper = JsonMapper.builder()
             .addModule(kotlinModule())

@@ -4,7 +4,7 @@ import com.common.testUtil.TestRabbitMQContainer
 import com.kdongsu5509.notifications.adapter.`in`.messageQueue.dto.NotificationMessageDto
 import com.kdongsu5509.notifications.adapter.`in`.messageQueue.dto.NotificationType
 import com.kdongsu5509.notifications.application.port.`in`.NotificationToUserCasePort
-import com.kdongsu5509.notifications.config.NotificationRabbitMQConfig
+import com.kdongsu5509.support.config.RabbitMQConfig
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.willDoNothing
 import org.mockito.Mockito.times
@@ -20,7 +20,7 @@ import java.time.LocalDateTime
 @SpringBootTest(
     classes = [
         TermNotificationConsumer::class,
-        NotificationRabbitMQConfig::class,
+        RabbitMQConfig::class,
         RabbitAutoConfiguration::class
     ]
 )
