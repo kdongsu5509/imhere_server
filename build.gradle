@@ -7,7 +7,10 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.jpa' version '2.3.20'
     id 'com.google.devtools.ksp' version '2.3.6'
     id 'jacoco'
+
     id 'com.epages.restdocs-api-spec' version '0.19.4'
+    id "org.asciidoctor.jvm.convert" version "4.0.2"
+//    id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group = 'com.kdongsu5509'
@@ -24,8 +27,17 @@ repositories {
     mavenCentral()
 }
 
+asciidoctorj {
+    version = "3.0.0"
+}
+
+configurations {
+    asciidoctorExt
+}
+
 dependencies {
     implementation platform("org.springframework.boot:spring-boot-dependencies:4.0.4")
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:4.0.0'
 
     // KOTLIN
     implementation 'tools.jackson.module:jackson-module-kotlin'
@@ -69,10 +81,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-restclient-test'
     testImplementation 'com.h2database:h2'
-    testImplementation 'org.springframework.boot:spring-boot-restdocs'
     testImplementation "org.mockito.kotlin:mockito-kotlin:5.2.1"
 
-    // 2. Testcontainers BOM 선언 (테스트 컨테이너 버전 충돌 방지)
     testImplementation platform("org.testcontainers:testcontainers-bom:1.20.1")
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:testcontainers'
@@ -80,6 +90,8 @@ dependencies {
 
     // TEST Docs
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.2'
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:4.0.0'
 }
 
 kotlin {
@@ -93,6 +105,20 @@ kotlin {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
 }
 
 allOpen {
@@ -118,7 +144,14 @@ tasks.register("copyOasToSwagger", Copy) {
 tasks.named('test') {
     useJUnitPlatform()
     jvmArgs("-XX:+EnableDynamicAgentLoading")
+    outputs.dir snippetsDir
     finalizedBy 'jacocoTestReport', 'copyOasToSwagger'
+}
+
+tasks.named("asciidoctor") {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
 }
 
 jacoco {
