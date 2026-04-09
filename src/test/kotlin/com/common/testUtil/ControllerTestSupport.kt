@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Import
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
@@ -38,6 +40,19 @@ import tools.jackson.databind.json.JsonMapper
 )
 @ExtendWith(RestDocumentationExtension::class)
 abstract class ControllerTestSupport : TestRedisContainer() {
+
+    companion object {
+        @JvmStatic
+        @DynamicPropertySource
+        fun configureRabbitMqProperties(registry: DynamicPropertyRegistry) {
+            registry.add("spring.rabbitmq.host") { TestRabbitMQContainer.rabbitMqContainer.host }
+            registry.add("spring.rabbitmq.port") { TestRabbitMQContainer.rabbitMqContainer.getMappedPort(5672) }
+            registry.add("spring.rabbitmq.virtual-host") { "/" }
+            registry.add("spring.rabbitmq.username") { "guest" }
+            registry.add("spring.rabbitmq.password") { "guest" }
+        }
+    }
+
 
     @MockitoBean
     protected lateinit var friendAlertPort: FriendAlertPort
