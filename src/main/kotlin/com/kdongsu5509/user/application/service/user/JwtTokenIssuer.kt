@@ -13,6 +13,10 @@ import javax.crypto.SecretKey
 @Component
 class JwtTokenIssuer(private val jwtProperties: JwtProperties) {
 
+    companion object {
+        private const val ADMIN_TOKEN_EXPIRATION_MINUTES = 5L
+    }
+
     private val zoneID: ZoneId = ZoneId.systemDefault()
     private val secretKey: SecretKey by lazy {
         val keyBytes = jwtProperties.secret.toByteArray(StandardCharsets.UTF_8)
@@ -23,6 +27,11 @@ class JwtTokenIssuer(private val jwtProperties: JwtProperties) {
         val expiredTime = LocalDateTime.now().plusMinutes(jwtProperties.accessExpirationMinutes)
         return setDetailInformationIntoToken(JwtClaimKeys.ACCESS_TOKEN, imHereJwtTokenElements, expiredTime)
 
+    }
+
+    fun createAdminAccessToken(imHereJwtTokenElements: ImHereJwtTokenElements): String {
+        val expiredTime = LocalDateTime.now().plusMinutes(ADMIN_TOKEN_EXPIRATION_MINUTES)
+        return setDetailInformationIntoToken(JwtClaimKeys.ACCESS_TOKEN, imHereJwtTokenElements, expiredTime)
     }
 
     fun createRefreshToken(imHereJwtTokenElements: ImHereJwtTokenElements): String {

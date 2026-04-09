@@ -2,8 +2,21 @@ spring:
   application:
     name: imhere
   profiles:
-    include: secret
-
+    include: secret, monitoring
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: iamhereqwfavsd
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.CamelToUnderscoresNamingStrategy
   data:
     redis:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
@@ -15,3 +28,10 @@ spring:
           max-idle: 8
           min-idle: 0
         shutdown-timeout: 100ms
+  rabbitmq:
+    host: ${SPRING_RABBIT_MQ_HOST:localhost}
+    port: ${SPRING_RABBIT_MQ_PORT:5672}
+    username: ${SPRING_RABBIT_MQ_USERNAME:guest}
+    password: ${SPRING_RABBIT_MQ_PASSWORD:guest}
+    virtual-host: /main
+
