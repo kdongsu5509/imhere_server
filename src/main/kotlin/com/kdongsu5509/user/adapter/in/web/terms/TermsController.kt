@@ -19,10 +19,6 @@ class TermsController(
     private val readTermsDefinitionUseCase: ReadTermsDefinitionUseCase,
     private val readTermsVersionUseCase: ReadTermsVersionUseCase
 ) {
-    /**
-     * READ
-     */
-    // ?�재 ?��? 종류 ?�체 조회
     @GetMapping
     fun readAllTermsDefinitions(
         @PageableDefault(size = 10) pageable: Pageable
@@ -31,7 +27,6 @@ class TermsController(
         return APIResponse.success(response)
     }
 
-    //?��? 버전 ?��? ?�용 조회
     @GetMapping("/version/{termDefinitionId}")
     fun readTermsVersion(
         @PathVariable termDefinitionId: Long

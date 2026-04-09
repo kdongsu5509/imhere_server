@@ -1,6 +1,7 @@
 package com.kdongsu5509.support.logger
 
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
@@ -8,6 +9,10 @@ class AccessLogPrinter(
     private val messageSendPort: MessageSendPort,
     private val formatter: AccessLogFormatter
 ) {
+
+    @Value("\${discord.url.error:}")
+    private val errorAlertChannelWebhookUrl: String? = null
+
     private val log = LoggerFactory.getLogger(AccessLogPrinter::class.java)
 
     fun print(accessLog: AccessLog, sendAlert: Boolean) {
@@ -17,8 +22,14 @@ class AccessLogPrinter(
     }
 
     private fun sendAlertIfNeeded(accessLog: AccessLog, formatted: String, sendAlert: Boolean) {
+
         if (sendAlert && accessLog.status >= 400) {
-            messageSendPort.sendMessage("## 🚨 HTTP Error\n\n```json\n$formatted\n```")
+            errorAlertChannelWebhookUrl?.let {
+                messageSendPort.sendMessage(
+                    it,
+                    "## 🚨 HTTP Error\n\n```json\n$formatted\n```"
+                )
+            }
         }
     }
 }
