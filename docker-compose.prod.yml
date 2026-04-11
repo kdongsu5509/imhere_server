@@ -15,7 +15,7 @@ services:
     image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
     container_name: iamhere-server-container
     ports:
-      - "80:8080"
+      - "8080:8080"
       - "127.0.0.1:4861:4861"
     environment:
       - SPRING_DATA_REDIS_HOST=${INFRA_HOST}

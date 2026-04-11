@@ -70,7 +70,7 @@ jobs:
       - name: Create Firebase Key File
         run: |
           mkdir -p src/main/resources
-          echo "${{ secrets.FIREBASE_KEY_BASE64 }}" | base64 --decode > src/main/resources/firebase-key.json
+          echo "${{ secrets.FIREBASE_KEY_BASE64 }}" | base64 --decode > src/main/resources/imhereFirebaseKey.json
 
       - name: Build JAR
         run: |
