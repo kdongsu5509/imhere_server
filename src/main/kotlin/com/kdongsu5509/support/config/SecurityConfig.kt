@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.authentication.ott.GenerateOneTimeTokenFilter
 
@@ -38,7 +39,8 @@ class SecurityConfig(
     private val discordOttSuccessHandler: DiscordOttSuccessHandler,
     private val ottLoginSuccessHandler: OttLoginSuccessHandler,
     @param:Value("\${admin.secret}") private val adminSecret: String,
-    @param:Value("\${admin.id}") private val adminId: String
+    @param:Value("\${admin.id}") private val adminId: String,
+    @param:Value("\${admin.login.url}") private val adminLoginUrl: String
 ) {
 
     @Bean
@@ -84,9 +86,14 @@ class SecurityConfig(
                 authorize(anyRequest, authenticated)
             }
 
+            exceptionHandling {
+                authenticationEntryPoint =
+                    LoginUrlAuthenticationEntryPoint("/$adminLoginUrl")
+            }
+
             oneTimeTokenLogin {
+
                 showDefaultSubmitPage = false
-                loginPage = "/api/admin/auth/ott"
                 tokenGeneratingUrl = "/api/admin/auth/ott"
                 loginProcessingUrl = "/api/admin/auth"
                 oneTimeTokenGenerationSuccessHandler = discordOttSuccessHandler // 1. 발급 성공 시 메신저 발송
