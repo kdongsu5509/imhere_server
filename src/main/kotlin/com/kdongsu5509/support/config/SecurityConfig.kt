@@ -86,6 +86,7 @@ class SecurityConfig(
 
             oneTimeTokenLogin {
                 showDefaultSubmitPage = false
+                loginPage = "/api/admin/auth/ott"
                 tokenGeneratingUrl = "/api/admin/auth/ott"
                 loginProcessingUrl = "/api/admin/auth"
                 oneTimeTokenGenerationSuccessHandler = discordOttSuccessHandler // 1. 발급 성공 시 메신저 발송
