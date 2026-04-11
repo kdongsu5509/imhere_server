@@ -1,6 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.kdongsu5509.support.common.dto.APIResponse
+import com.kdongsu5509.support.response.APIResponse
 import com.kdongsu5509.user.application.port.`in`.friend.AdminFriendManagementUseCase
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping

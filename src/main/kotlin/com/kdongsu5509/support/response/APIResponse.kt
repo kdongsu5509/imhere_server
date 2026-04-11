@@ -1,4 +1,4 @@
-package com.kdongsu5509.support.common.dto
+package com.kdongsu5509.support.response
 
 import org.springframework.http.HttpStatus
 
