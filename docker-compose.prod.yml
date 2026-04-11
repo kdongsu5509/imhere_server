@@ -1,0 +1,56 @@
+version: '3.8'
+
+# Production compose — App(Spring) + Prometheus only
+# Grafana: use Grafana Cloud (remote_write from Prometheus)
+# Redis / RabbitMQ: separate infra server (docker-compose.infra.yml)
+#
+# Required .env on EC2 (EC2_DEPLOY_PATH/.env):
+#   ECR_REGISTRY, ECR_REPOSITORY
+#   INFRA_HOST, DB_HOST, DB_NAME
+#   DB_USER, DB_PASSWORD
+#   RABBITMQ_USER, RABBITMQ_PASSWORD
+
+services:
+  dsko:
+    image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
+    container_name: iamhere-server-container
+    ports:
+      - "80:8080"
+      - "127.0.0.1:4861:4861"
+    environment:
+      - SPRING_DATA_REDIS_HOST=${INFRA_HOST}
+      - SPRING_DATA_REDIS_PORT=6379
+      - SPRING_RABBITMQ_HOST=${INFRA_HOST}
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_VIRTUAL_HOST=/main
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USER}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus-container
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=15d"
+      - "--web.enable-lifecycle"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  prometheus_data:
+
+networks:
+  app-network:
