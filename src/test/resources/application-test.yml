@@ -54,11 +54,7 @@ oidc:
     audience: "bf284f33bfeba9bc59575706d0eb0e9c"
     cacheKey: "kakaoOidcKeys::kakaoPublicKeySet"
 
-# ── Test logging: plain text (readable in console, no file output) ────────
 logging:
-  structured:
-    format:
-      console: none    # override prod JSON — use default pattern in tests
   file:
     name: ""           # no file output during tests
   level:
