@@ -73,3 +73,8 @@ solapi:
 
 firebase:
   path: "src/test/resources/dummy-firebase-key.json"
+
+discord:
+  url:
+    error: "http://localhost/dummy-error"
+    ott: "http://localhost/dummy-ott"
