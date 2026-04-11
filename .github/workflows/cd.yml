@@ -66,7 +66,11 @@ jobs:
           echo "${{ secrets.APP_DATASOURCE_YAML }}" > src/main/resources/application-datasource.yaml
           echo "${{ secrets.APP_MONITORING_YAML }}"  > src/main/resources/application-monitoring.yaml
           echo "${{ secrets.APP_SECRET_YAML }}"      > src/main/resources/application-secret.yaml
-          echo "${{ secrets.FIREBASE_KEY_JSON }}"    > src/main/resources/imhereFirebaseKey.json
+
+      - name: Create Firebase Key File
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.FIREBASE_KEY_BASE64 }}" | base64 --decode > src/main/resources/firebase-key.json
 
       - name: Build JAR
         run: |
