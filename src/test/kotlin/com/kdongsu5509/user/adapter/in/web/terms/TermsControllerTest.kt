@@ -1,6 +1,8 @@
 package com.kdongsu5509.user.adapter.`in`.web.terms
 
 import com.common.testUtil.ControllerTestSupport
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsDefinitionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsVersionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.TermsDefinitionJpaEntity
@@ -9,6 +11,7 @@ import com.kdongsu5509.user.domain.terms.TermsTypes
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -30,8 +33,8 @@ class TermsControllerTest @Autowired constructor(
 
     @Test
     @DisplayName("약관 목록 조회 시 페이징된 결과를 반환한다")
-    fun readAllTermsDefinitions_Success() {
-        // given: 테스트용 데이터 2개 저장
+    fun readAllTermsDefinitions_success() {
+        // given
         springDataTermsDefinitionRepository.saveAll(
             listOf(
                 TermsDefinitionJpaEntity("서비스 이용약관", TermsTypes.SERVICE, true),
@@ -48,11 +51,23 @@ class TermsControllerTest @Autowired constructor(
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.content.length()").value(2))
             .andExpect(jsonPath("$.data.content[0].title").exists())
+            .andDo(
+                document(
+                    "terms-list",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("약관")
+                            .summary("약관 목록 조회")
+                            .description("등록된 약관 종류(Definition) 목록을 페이징하여 반환합니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
     @Test
     @DisplayName("약관 버전 상세 조회 시 활성화된 버전을 반환한다")
-    fun readTermsVersion_Success() {
+    fun readTermsVersion_success() {
         // given
         val definition = springDataTermsDefinitionRepository.save(
             TermsDefinitionJpaEntity("위치 정보 약관", TermsTypes.LOCATION, true)
@@ -68,11 +83,23 @@ class TermsControllerTest @Autowired constructor(
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.version").value("v1.0"))
             .andExpect(jsonPath("$.data.content").value("약관 내용"))
+            .andDo(
+                document(
+                    "terms-version-detail",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("약관")
+                            .summary("약관 버전 상세 조회")
+                            .description("특정 약관(termDefinitionId)의 현재 활성화된 버전 내용을 반환합니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
     @Test
     @DisplayName("존재하지 않는 약관 ID로 버전 조회 시 에러를 반환한다")
-    fun readTermsVersion_Fail_NotFound() {
+    fun readTermsVersion_fail_causeOfNotFound() {
         // when & then
         mockMvc.perform(
             get("$TERM_VERSION_BASE_URL$VERSION_DETAIL_URL", 9999)

@@ -2,6 +2,8 @@ package com.kdongsu5509.user.adapter.`in`.web.user
 
 import com.common.testUtil.ControllerTestSupport
 import com.common.testUtil.TestJwtBuilder
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.kdongsu5509.user.adapter.`in`.web.user.AuthControllerIntegrationTest.Companion.LOGIN_URL
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserTermsConsentRequest
 import com.kdongsu5509.user.adapter.out.auth.oauth.KakaoOauthClient
@@ -24,10 +26,9 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.http.MediaType
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -91,7 +92,6 @@ class UserAgreementControllerIntegrationTest : ControllerTestSupport() {
     @Test
     @DisplayName("전체 약관 동의 API가 정상적으로 호출된다")
     fun consentAll_success() {
-        // 1. 실제 로그인 프로세스를 통해 유효한 토큰들을 가져옴
         val idToken = TestJwtBuilder.buildValidIdToken()
         val loginResponse = performLogin(idToken).andReturn().response.contentAsString
         val rootNode = jsonMapper.readTree(loginResponse).path("data")
@@ -123,6 +123,24 @@ class UserAgreementControllerIntegrationTest : ControllerTestSupport() {
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.accessToken").exists())
+            .andDo(
+                document(
+                    "terms-consent-all",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("약관 동의")
+                            .summary("전체 약관 일괄 동의")
+                            .description(
+                                """
+                                PENDING 상태의 사용자가 약관에 동의합니다.
+                                **모든 필수(required=true) 약관에 동의 완료 시 사용자 상태가 PENDING → ACTIVE로 자동 전환됩니다.**
+                                전환 후 새로운 accessToken/refreshToken이 재발급되어 응답에 포함됩니다.
+                                """.trimIndent()
+                            )
+                            .build()
+                    )
+                )
+            )
     }
 
     private fun createTestTermVersionEntity(testTermDef: TermsDefinitionJpaEntity) {

@@ -1,6 +1,9 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
 import com.common.testUtil.ControllerTestSupport
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.user.adapter.out.redis.RedisCacheAdapter
@@ -44,6 +47,18 @@ class UserAdminControllerTest : ControllerTestSupport() {
             delete("$BASE_URL/{email}/token", email)
                 .with(csrf())
         ).andExpect(status().isOk)
+            .andDo(
+                document(
+                    "admin-user-force-logout",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("관리자 - 사용자")
+                            .summary("유저 강제 로그아웃")
+                            .description("Redis에서 해당 유저의 refreshToken을 삭제하여 강제 로그아웃시킵니다.")
+                            .build()
+                    )
+                )
+            )
 
         val remaining = redisCacheAdapter.find(redisKey, String::class.java)
         assertThat(remaining).isNull()
@@ -72,6 +87,18 @@ class UserAdminControllerTest : ControllerTestSupport() {
             post("$BASE_URL/{email}/block", email)
                 .with(csrf())
         ).andExpect(status().isOk)
+            .andDo(
+                document(
+                    "admin-user-block",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("관리자 - 사용자")
+                            .summary("유저 서비스 차단")
+                            .description("특정 유저의 상태를 BLOCKED로 변경하여 서비스 이용을 차단합니다.")
+                            .build()
+                    )
+                )
+            )
 
         val blocked = springDataUserRepository.findByEmail(email)
         assertThat(blocked?.status).isEqualTo(UserStatus.BLOCKED)
@@ -90,6 +117,18 @@ class UserAdminControllerTest : ControllerTestSupport() {
             delete("$BASE_URL/{email}/block", email)
                 .with(csrf())
         ).andExpect(status().isOk)
+            .andDo(
+                document(
+                    "admin-user-unblock",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("관리자 - 사용자")
+                            .summary("유저 차단 해제")
+                            .description("BLOCKED 상태의 유저를 ACTIVE로 복구합니다.")
+                            .build()
+                    )
+                )
+            )
 
         val unblocked = springDataUserRepository.findByEmail(email)
         assertThat(unblocked?.status).isEqualTo(UserStatus.ACTIVE)

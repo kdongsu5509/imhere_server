@@ -1,3 +1,11 @@
+buildscript {
+    configurations.all {
+        resolutionStrategy {
+            force("org.springframework.boot:spring-boot-jackson2:4.0.4")
+        }
+    }
+}
+
 plugins {
     //spring
     id 'org.springframework.boot' version '4.0.3'
@@ -8,9 +16,8 @@ plugins {
     id 'com.google.devtools.ksp' version '2.3.6'
     id 'jacoco'
 
-    id 'com.epages.restdocs-api-spec' version '0.19.4'
+    id 'com.epages.restdocs-api-spec' version '0.20.0'
     id "org.asciidoctor.jvm.convert" version "4.0.2"
-//    id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group = 'com.kdongsu5509'
@@ -91,7 +98,7 @@ dependencies {
     testImplementation 'org.testcontainers:postgresql'
 
     // TEST Docs
-    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.2'
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.20.0'
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:4.0.0'
 }

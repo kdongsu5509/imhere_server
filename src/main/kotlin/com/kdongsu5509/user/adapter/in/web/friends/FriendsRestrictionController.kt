@@ -1,6 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.kdongsu5509.support.common.dto.APIResponse
+import com.kdongsu5509.support.response.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.FriendRestrictionDeletedResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.FriendRestrictionResponse
 import com.kdongsu5509.user.application.port.`in`.friend.ReadFriendsRestrictionUseCase

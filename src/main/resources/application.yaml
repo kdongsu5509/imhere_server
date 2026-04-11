@@ -1,6 +1,31 @@
 spring:
   application:
     name: imhere
+
+logging:
+  structured:
+    format:
+      console: ecs
+      file: ecs
+  file:
+    name: logs/imhere.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: "${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz"
+      max-file-size: 100MB
+      max-history: 30          # keep 30 daily files
+      total-size-cap: 3GB
+  # ── Level overrides ───────────────────────────────────────────────────────
+  level:
+    root: INFO
+    com.kdongsu5509: INFO
+    # silence noisy frameworks
+    org.springframework: WARN
+    org.hibernate: WARN
+    com.zaxxer.hikari: WARN
+    io.lettuce: WARN
+    com.google.firebase: WARN
+    p6spy: WARN               # SQL logging — enable in dev profile if needed
   profiles:
     include: secret, monitoring
   datasource:

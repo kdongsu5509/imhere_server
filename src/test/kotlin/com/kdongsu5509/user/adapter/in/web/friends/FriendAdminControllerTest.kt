@@ -1,6 +1,8 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
 import com.common.testUtil.ControllerTestSupport
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRelationshipsJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRequestJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRelationshipsRepository
@@ -14,6 +16,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
@@ -53,6 +56,18 @@ class FriendAdminControllerTest : ControllerTestSupport() {
                 .param("userB", userB.email)
                 .with(csrf())
         ).andExpect(status().isOk)
+            .andDo(
+                document(
+                    "admin-friend-clear-relationship",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("관리자 - 친구")
+                            .summary("친구 관계 강제 삭제")
+                            .description("두 유저 간의 친구 관계를 양방향 모두 강제 삭제합니다. CS 대응 목적으로 사용합니다.")
+                            .build()
+                    )
+                )
+            )
 
         assertThat(relationshipsRepository.findAll()).isEmpty()
     }
@@ -73,6 +88,18 @@ class FriendAdminControllerTest : ControllerTestSupport() {
                 .param("receiver", receiver.email)
                 .with(csrf())
         ).andExpect(status().isOk)
+            .andDo(
+                document(
+                    "admin-friend-clear-request",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("관리자 - 친구")
+                            .summary("친구 요청 강제 삭제")
+                            .description("requester → receiver 방향의 친구 요청을 강제 삭제합니다. CS 대응 목적으로 사용합니다.")
+                            .build()
+                    )
+                )
+            )
 
         assertThat(requestRepository.findAll()).isEmpty()
     }

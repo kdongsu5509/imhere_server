@@ -2,6 +2,8 @@ package com.kdongsu5509.user.adapter.`in`.web.user
 
 import com.common.testUtil.ControllerTestSupport
 import com.common.testUtil.TestJwtBuilder
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.kdongsu5509.support.exception.AuthErrorCode
 import com.kdongsu5509.user.adapter.out.auth.oauth.KakaoOauthClient
 import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKey
@@ -16,10 +18,9 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.http.MediaType
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -61,6 +62,25 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
         performLogin(idToken)
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.data.accessToken").exists())
+            .andDo(
+                document(
+                    "auth-login-new",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("인증")
+                            .summary("카카오 OAuth 로그인 / 신규 가입")
+                            .description(
+                                """
+                                카카오 OIDC ID 토큰으로 로그인합니다.
+                                - 신규 유저: 201 Created, status=PENDING 상태로 가입됩니다.
+                                - PENDING 상태에서 모든 필수 약관에 동의 완료 시 status가 ACTIVE로 전환됩니다.
+                                - 기존 유저: 200 OK, accessToken/refreshToken이 재발급됩니다.
+                                """.trimIndent()
+                            )
+                            .build()
+                    )
+                )
+            )
     }
 
     @Test
@@ -85,13 +105,23 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
         val idToken = TestJwtBuilder.buildValidIdToken()
 
         // when & then
-        // 1. 첫 로그인
         performLogin(idToken).andExpect(status().isOk)
 
-        // 2. 재로그인 (동일 정보)
         performLogin(idToken)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.accessToken").exists())
+            .andDo(
+                document(
+                    "auth-login-existing",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("인증")
+                            .summary("카카오 OAuth 로그인 / 기존 유저")
+                            .description("기존 ACTIVE 유저 로그인. 200 OK와 함께 accessToken/refreshToken이 재발급됩니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
     @Test
@@ -103,7 +133,7 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
         // when & then
         performLogin(invalidToken)
             .andExpect(status().is4xxClientError)
-            .andExpect(jsonPath("$.code").value(400)) // APIResponse의 code 필드 확인
+            .andExpect(jsonPath("$.code").value(400))
             .andExpect(jsonPath("$.data.message").value(AuthErrorCode.OIDC_INVALID.message))
     }
 
@@ -125,6 +155,18 @@ class AuthControllerIntegrationTest : ControllerTestSupport() {
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.accessToken").exists())
+            .andDo(
+                document(
+                    "auth-reissue",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("인증")
+                            .summary("JWT 토큰 재발급")
+                            .description("유효한 refreshToken으로 accessToken/refreshToken을 재발급합니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
     // --- Helper Methods ---

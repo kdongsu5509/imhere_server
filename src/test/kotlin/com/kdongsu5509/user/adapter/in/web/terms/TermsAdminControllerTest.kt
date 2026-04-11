@@ -1,6 +1,8 @@
 package com.kdongsu5509.user.adapter.`in`.web.terms
 
 import com.common.testUtil.ControllerTestSupport
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.NewTermDefinitionRequest
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.NewTermVersionRequest
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsDefinitionRepository
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -41,10 +44,22 @@ class TermsAdminControllerTest : ControllerTestSupport() {
         // when & then
         mockMvc.perform(
             post(BASE_URL + DEFINITION_URL)
-                .with(csrf()) // Spring Security 사용 시 필요
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper.writeValueAsString(request))
         ).andExpect(status().isOk)
+            .andDo(
+                document(
+                    "admin-terms-create-definition",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("관리자 - 약관")
+                            .summary("약관 종류(Definition) 생성")
+                            .description("새로운 약관 종류를 등록합니다. required=true이면 필수 동의 약관입니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
     @Test
@@ -96,7 +111,23 @@ class TermsAdminControllerTest : ControllerTestSupport() {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper.writeValueAsString(verRequest))
         ).andExpect(status().isOk)
-
+            .andDo(
+                document(
+                    "admin-terms-create-version",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("관리자 - 약관")
+                            .summary("약관 버전 등록")
+                            .description(
+                                """
+                                새로운 약관 버전을 등록합니다.
+                                기존 활성화된 버전은 자동으로 비활성화(isActive=false)되며, 새 버전이 활성 버전이 됩니다.
+                                """.trimIndent()
+                            )
+                            .build()
+                    )
+                )
+            )
         val savedVer = springDataTermsVersionRepository.findActiveVersion(savedDef.id!!).get()
         assertThat(savedVer).isNotNull
         assertThat(savedVer.version).isEqualTo("v1.0")

@@ -25,6 +25,8 @@ class KakaoPublicKeyScheduler(
 
     @Scheduled(fixedRate = DURATION)
     fun updatePublicKey() {
+        log.info("카카오 공개키 갱신 스케쥴 실행")
         oauthClientPort.refreshPublicKeyFromProvider()
+        log.info("카카오 공개키 갱신 완료")
     }
 }
