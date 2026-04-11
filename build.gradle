@@ -97,6 +97,10 @@ dependencies {
     testImplementation 'org.testcontainers:testcontainers'
     testImplementation 'org.testcontainers:postgresql'
 
+    // Swagger UI (WebJar) — /webjars/swagger-ui/index.html?url=/docs/openapi3.yaml
+    runtimeOnly 'org.webjars:swagger-ui:5.18.2'
+    runtimeOnly 'org.webjars:webjars-locator-lite:1.0.1'
+
     // TEST Docs
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.20.0'
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
