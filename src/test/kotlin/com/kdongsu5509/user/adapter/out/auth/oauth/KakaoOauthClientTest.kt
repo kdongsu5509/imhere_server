@@ -1,5 +1,6 @@
 package com.kdongsu5509.user.adapter.out.auth.oauth
 
+import com.kdongsu5509.support.config.HttpExchangeConfig
 import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKey
 import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.user.application.port.out.user.oauth.OauthClientPort
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.restclient.test.autoconfigure.RestClientTest
 import org.springframework.cache.CacheManager
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.bean.override.mockito.MockitoBean
@@ -20,6 +22,7 @@ import tools.jackson.databind.json.JsonMapper
 
 @ActiveProfiles("test")
 @RestClientTest(KakaoOauthClient::class)
+@Import(HttpExchangeConfig::class)
 class KakaoOauthClientTest {
 
     companion object {
