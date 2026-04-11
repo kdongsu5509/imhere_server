@@ -1,6 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.terms
 
-import com.kdongsu5509.support.common.dto.APIResponse
+import com.kdongsu5509.support.response.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.NewTermDefinitionRequest
 import com.kdongsu5509.user.adapter.`in`.web.terms.dto.NewTermVersionRequest
 import com.kdongsu5509.user.application.port.`in`.terms.CreateTermVersionUseCase

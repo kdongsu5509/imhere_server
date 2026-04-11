@@ -1,6 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
-import com.kdongsu5509.support.common.dto.APIResponse
+import com.kdongsu5509.support.response.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.FriendRelationshipResponse
 import com.kdongsu5509.user.adapter.`in`.web.friends.dto.UpdateFriendAliasRequest
 import com.kdongsu5509.user.application.port.`in`.friend.UpdateFriendsUseCase

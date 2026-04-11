@@ -2,6 +2,7 @@ package com.common.testUtil
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
+import com.kdongsu5509.support.config.HttpExchangeConfig
 import com.kdongsu5509.support.config.QueryDslConfig
 import com.kdongsu5509.support.config.RabbitMQConfig
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.Import
+import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
@@ -36,7 +39,8 @@ import tools.jackson.databind.json.JsonMapper
 @Import(
     SpringQueryDSLUserRepository::class,
     QueryDslConfig::class,
-    RabbitMQConfig::class
+    RabbitMQConfig::class,
+    HttpExchangeConfig::class
 )
 @ExtendWith(RestDocumentationExtension::class)
 abstract class ControllerTestSupport : TestRedisContainer() {
@@ -78,7 +82,8 @@ abstract class ControllerTestSupport : TestRedisContainer() {
 
     @BeforeEach
     fun setUp(
-        webApplicationContext: WebApplicationContext
+        webApplicationContext: WebApplicationContext,
+        restDocumentation: RestDocumentationContextProvider
     ) {
         redisTemplate.execute { connection ->
             connection.serverCommands().flushDb()
@@ -87,6 +92,7 @@ abstract class ControllerTestSupport : TestRedisContainer() {
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
             .apply<DefaultMockMvcBuilder>(springSecurity())
+            .apply<DefaultMockMvcBuilder>(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
             .alwaysDo<DefaultMockMvcBuilder>(MockMvcResultHandlers.print())
             .addFilters<DefaultMockMvcBuilder>(CharacterEncodingFilter("UTF-8", true))
             .build()

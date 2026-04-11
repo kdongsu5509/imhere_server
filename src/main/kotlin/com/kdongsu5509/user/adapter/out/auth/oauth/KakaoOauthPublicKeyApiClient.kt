@@ -1,0 +1,12 @@
+package com.kdongsu5509.user.adapter.out.auth.oauth
+
+import com.kdongsu5509.user.adapter.out.auth.oauth.dto.OIDCPublicKeyResponse
+import org.springframework.web.service.annotation.GetExchange
+import org.springframework.web.service.annotation.HttpExchange
+
+@HttpExchange
+interface KakaoOauthPublicKeyApiClient {
+
+    @GetExchange("/.well-known/jwks.json")
+    fun fetchKakaoPublicKey(): OIDCPublicKeyResponse
+}

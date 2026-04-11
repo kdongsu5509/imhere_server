@@ -1,6 +1,6 @@
 package com.kdongsu5509.support.exception
 
-import com.kdongsu5509.support.common.dto.APIResponse
+import com.kdongsu5509.support.response.APIResponse
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

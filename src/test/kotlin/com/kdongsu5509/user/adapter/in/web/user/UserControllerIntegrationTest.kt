@@ -1,6 +1,9 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
 import com.common.testUtil.ControllerTestSupport
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import com.kdongsu5509.user.adapter.`in`.web.user.UserControllerIntegrationTest.Companion.TEST_OWNER_EMAIL
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.NicknameChangeRequest
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
@@ -41,9 +44,6 @@ class UserControllerIntegrationTest : ControllerTestSupport() {
         saveUser(TEST_OWNER_EMAIL, TEST_OWNER_NICKNAME)
     }
 
-    /**
-     * 개인 정보 조회
-     */
     @Test
     @DisplayName("없는 사람 조회 - 빈 결과를 검색 결과로 반환")
     fun searchUsers_empty() {
@@ -54,16 +54,24 @@ class UserControllerIntegrationTest : ControllerTestSupport() {
     @Test
     @DisplayName("내 정보 조회 성공")
     fun searchMe_success() {
-        // when & then
         mockMvc.perform(get(BASE_URL + ME_URL))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.userEmail").value(TEST_OWNER_EMAIL))
             .andExpect(jsonPath("$.data.userNickname").value(TEST_OWNER_NICKNAME))
+            .andDo(
+                document(
+                    "user-get-me",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("사용자")
+                            .summary("내 정보 조회")
+                            .description("로그인한 사용자의 이메일, 닉네임 정보를 반환합니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
-    /**
-     * 사용자 조회 : /{keyword}
-     */
     @Test
     @DisplayName("존재하는 닉네임으로 조회 시 유저 정보 반환")
     fun searchUsers_success() {
@@ -76,6 +84,18 @@ class UserControllerIntegrationTest : ControllerTestSupport() {
             .andExpect(jsonPath("$.data[0].userId").value(user.id.toString()))
             .andExpect(jsonPath("$.data[0].userEmail").value(user.email))
             .andExpect(jsonPath("$.data[0].userNickname").value(TEST_NICKNAME))
+            .andDo(
+                document(
+                    "user-search-by-nickname",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("사용자")
+                            .summary("닉네임으로 유저 검색")
+                            .description("닉네임 키워드로 유저를 검색합니다. 동일 닉네임의 복수 결과가 반환될 수 있습니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
     @Test
@@ -91,10 +111,6 @@ class UserControllerIntegrationTest : ControllerTestSupport() {
             .andExpect(jsonPath("$.data[0].userNickname").value(TEST_NICKNAME))
     }
 
-
-    /**
-     * NICKNAME 변경
-     */
     @Test
     @DisplayName("내 닉네임 변경")
     fun changeNickname_success() {
@@ -111,6 +127,18 @@ class UserControllerIntegrationTest : ControllerTestSupport() {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.userEmail").value(TEST_OWNER_EMAIL))
             .andExpect(jsonPath("$.data.userNickname").value(newNickname))
+            .andDo(
+                document(
+                    "user-change-nickname",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("사용자")
+                            .summary("닉네임 변경")
+                            .description("로그인한 사용자의 닉네임을 변경합니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
     private fun saveUser(

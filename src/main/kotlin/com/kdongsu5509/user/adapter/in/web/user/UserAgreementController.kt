@@ -1,6 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
-import com.kdongsu5509.support.common.dto.APIResponse
+import com.kdongsu5509.support.response.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.AuthenticationResponse
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserTermsConsentRequest
 import com.kdongsu5509.user.application.port.`in`.user.AgreementTermUseCase

@@ -1,12 +1,14 @@
 package com.kdongsu5509.support.logger
 
+import com.kdongsu5509.support.external.DiscordMessageDto
+import com.kdongsu5509.support.external.DiscordMessageSendPort
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
 class AccessLogPrinter(
-    private val messageSendPort: MessageSendPort,
+    private val discordMessageSendPort: DiscordMessageSendPort,
     private val formatter: AccessLogFormatter
 ) {
 
@@ -22,14 +24,25 @@ class AccessLogPrinter(
     }
 
     private fun sendAlertIfNeeded(accessLog: AccessLog, formatted: String, sendAlert: Boolean) {
+        if (!sendAlert || accessLog.status < 500) return
 
-        if (sendAlert && accessLog.status >= 400) {
-            errorAlertChannelWebhookUrl?.let {
-                messageSendPort.sendMessage(
-                    it,
-                    "## 🚨 HTTP Error\n\n```json\n$formatted\n```"
-                )
-            }
+        errorAlertChannelWebhookUrl?.takeIf { it.isNotEmpty() }?.let { webhookUrl ->
+            discordMessageSendPort.sendMessage(webhookUrl, build5xxAlert(accessLog, formatted))
         }
+    }
+
+    private fun build5xxAlert(accessLog: AccessLog, formatted: String): DiscordMessageDto {
+        val uri = accessLog.uri + (accessLog.queryString?.let { "?$it" } ?: "")
+        val content = """
+            ## 🔥 Server Error (${accessLog.status})
+            **TraceId:** `${accessLog.traceId}`
+            **${accessLog.method}** `$uri` — ${accessLog.durationMs}ms
+            **IP:** ${accessLog.remoteIp}
+
+            ```
+            $formatted
+            ```
+        """.trimIndent()
+        return DiscordMessageDto(content)
     }
 }

@@ -6,6 +6,11 @@ import tools.jackson.databind.json.JsonMapper
 @Component
 class BodyMasker(private val jsonMapper: JsonMapper) {
 
+    companion object {
+        private val SENSITIVE_PATTERN =
+            Regex(""""(password|pw|confirmPassword|secret)"\s*:\s*"[^"]+"""")
+    }
+
     fun mask(body: String): String {
         val formatted = formatJson(body)
         return maskSensitiveFields(formatted)
@@ -15,15 +20,11 @@ class BodyMasker(private val jsonMapper: JsonMapper) {
         return try {
             val jsonNode = jsonMapper.readTree(body)
             jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             body
         }
     }
 
-    private fun maskSensitiveFields(json: String): String {
-        return json.replace(
-            Regex("\"(password|pw|confirmPassword|secret)\"\\s*:\\s*\"[^\"]+\""),
-            "\"$1\": \"*****\""
-        )
-    }
+    private fun maskSensitiveFields(json: String): String =
+        json.replace(SENSITIVE_PATTERN, "\"$1\": \"*****\"")
 }

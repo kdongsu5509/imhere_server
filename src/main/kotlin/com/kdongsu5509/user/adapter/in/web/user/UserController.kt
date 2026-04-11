@@ -1,6 +1,6 @@
 package com.kdongsu5509.user.adapter.`in`.web.user
 
-import com.kdongsu5509.support.common.dto.APIResponse
+import com.kdongsu5509.support.response.APIResponse
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.NicknameChangeRequest
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserInfoResponse
 import com.kdongsu5509.user.adapter.`in`.web.user.dto.UserSearchResponse
