@@ -65,6 +65,8 @@ admin:
   id: test-admin
   nickname: test-nickname
   secret: password
+  login:
+    url: adminLoginUrl
 
 solapi:
   sender: "01012341234"
