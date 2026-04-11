@@ -1,6 +1,7 @@
 package com.kdongsu5509.support.external
 
 import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import java.net.URI
 
@@ -11,6 +12,7 @@ class DiscordMessageSender(
 
     private val logger = LoggerFactory.getLogger(DiscordMessageSender::class.java)
 
+    @Async("discordExecutor")
     override fun sendMessage(webHookUrl: String, content: DiscordMessageDto) {
         if (isWebhookUrlEmpty(webHookUrl)) return
 

@@ -24,14 +24,25 @@ class AccessLogPrinter(
     }
 
     private fun sendAlertIfNeeded(accessLog: AccessLog, formatted: String, sendAlert: Boolean) {
+        if (!sendAlert || accessLog.status < 500) return
 
-        if (sendAlert && accessLog.status >= 400) {
-            errorAlertChannelWebhookUrl?.let {
-                discordMessageSendPort.sendMessage(
-                    it,
-                    DiscordMessageDto("## 🚨 HTTP Error\n\n```json\n$formatted\n```")
-                )
-            }
+        errorAlertChannelWebhookUrl?.takeIf { it.isNotEmpty() }?.let { webhookUrl ->
+            discordMessageSendPort.sendMessage(webhookUrl, build5xxAlert(accessLog, formatted))
         }
+    }
+
+    private fun build5xxAlert(accessLog: AccessLog, formatted: String): DiscordMessageDto {
+        val uri = accessLog.uri + (accessLog.queryString?.let { "?$it" } ?: "")
+        val content = """
+            ## 🔥 Server Error (${accessLog.status})
+            **TraceId:** `${accessLog.traceId}`
+            **${accessLog.method}** `$uri` — ${accessLog.durationMs}ms
+            **IP:** ${accessLog.remoteIp}
+
+            ```
+            $formatted
+            ```
+        """.trimIndent()
+        return DiscordMessageDto(content)
     }
 }
