@@ -1,12 +1,14 @@
 package com.kdongsu5509.support.logger
 
+import com.kdongsu5509.support.external.DiscordMessageDto
+import com.kdongsu5509.support.external.DiscordMessageSendPort
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
 class AccessLogPrinter(
-    private val messageSendPort: MessageSendPort,
+    private val discordMessageSendPort: DiscordMessageSendPort,
     private val formatter: AccessLogFormatter
 ) {
 
@@ -25,9 +27,9 @@ class AccessLogPrinter(
 
         if (sendAlert && accessLog.status >= 400) {
             errorAlertChannelWebhookUrl?.let {
-                messageSendPort.sendMessage(
+                discordMessageSendPort.sendMessage(
                     it,
-                    "## 🚨 HTTP Error\n\n```json\n$formatted\n```"
+                    DiscordMessageDto("## 🚨 HTTP Error\n\n```json\n$formatted\n```")
                 )
             }
         }

@@ -2,6 +2,7 @@ package com.common.testUtil
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
+import com.kdongsu5509.support.config.HttpExchangeConfig
 import com.kdongsu5509.support.config.QueryDslConfig
 import com.kdongsu5509.support.config.RabbitMQConfig
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringQueryDSLUserRepository
@@ -38,7 +39,8 @@ import tools.jackson.databind.json.JsonMapper
 @Import(
     SpringQueryDSLUserRepository::class,
     QueryDslConfig::class,
-    RabbitMQConfig::class
+    RabbitMQConfig::class,
+    HttpExchangeConfig::class
 )
 @ExtendWith(RestDocumentationExtension::class)
 abstract class ControllerTestSupport : TestRedisContainer() {

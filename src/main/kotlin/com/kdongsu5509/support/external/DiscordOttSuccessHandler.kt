@@ -17,26 +17,22 @@ class DiscordOttSuccessHandler(
         response: HttpServletResponse,
         oneTimeToken: OneTimeToken
     ) {
-        // discordOttSuccessHandler 내부 로직 예시
-        val tokenValue = oneTimeToken.tokenValue
-
-        val message = """
-                    **ImHere Admin OTT Login Requested**
-                    User: ${oneTimeToken.username}
-                    Token: $tokenValue
-                    Expires: 10 minutes
-                """.trimIndent()
-
-        sendOttViaDiscord(message)
+        val message = createDiscordMessageWithOneTimeToken(oneTimeToken)
+        discordMessageSender.sendMessage(ottAlertChannelWebhookUrl, message)
 
         configureSuccessResponse(response)
     }
 
-    private fun sendOttViaDiscord(discordMessage: String) {
-        discordMessageSender.sendMessage(
-            ottAlertChannelWebhookUrl,
-            discordMessage
-        )
+    private fun createDiscordMessageWithOneTimeToken(oneTimeToken: OneTimeToken): DiscordMessageDto {
+        val tokenValue = oneTimeToken.tokenValue
+
+        val message = """
+                        **ImHere Admin OTT Login Requested**
+                        User: ${oneTimeToken.username}
+                        Token: $tokenValue
+                        Expires: 10 minutes
+                    """.trimIndent()
+        return DiscordMessageDto(message)
     }
 
     private fun configureSuccessResponse(response: HttpServletResponse) {
