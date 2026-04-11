@@ -4,13 +4,13 @@ info:
   description: User & Notification 통합 API 문서
   version: 0.0.1
 servers:
-- url: http://localhost:8080
-tags: []
+  - url: http://localhost:8080
+tags: [ ]
 paths:
   /api/admin/friends:
     delete:
       tags:
-      - 관리자 - 친구
+        - 관리자 - 친구
       summary: 친구 관계 강제 삭제
       description: 두 유저 간의 친구 관계를 양방향 모두 강제 삭제합니다. CS 대응 목적으로 사용합니다.
       operationId: admin-friend-clear-relationship
@@ -18,24 +18,24 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-terms-consent-33084672"
             examples:
               admin-friend-clear-relationship:
-                value: userA=adminA%40kakao.com&userB=adminB%40kakao.com&_csrf=haO59Dl3gGLOjwe9_aE-iQ9jwGPPgZ0Li2xZ7RPck09S2CXL5sWOkQtG41Tjvjffz4wKuDkG7QGrsK8m7l84iHG98XlkvByu
+                value: userA=adminA%40kakao.com&userB=adminB%40kakao.com&_csrf=fIOymOp5ugSsOEcz8c7nKx-kDcGXUC5DvxUXGqRGLLPwLmwpGOCDoYwdj2eBWnBWkOPTSC-cIKCnZRtuiiAnLMUgGdfFHwoR
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 admin-friend-clear-relationship:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
   /api/user/terms:
     get:
       tags:
-      - 약관
+        - 약관
       summary: 약관 목록 조회
       description: 등록된 약관 종류(Definition) 목록을 페이징하여 반환합니다.
       operationId: terms-list
@@ -45,7 +45,7 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 terms-list:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"content\":[{\"\
@@ -61,7 +61,7 @@ paths:
   /api/admin/friends/requests:
     delete:
       tags:
-      - 관리자 - 친구
+        - 관리자 - 친구
       summary: 친구 요청 강제 삭제
       description: requester → receiver 방향의 친구 요청을 강제 삭제합니다. CS 대응 목적으로 사용합니다.
       operationId: admin-friend-clear-request
@@ -69,24 +69,24 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-terms-consent-33084672"
             examples:
               admin-friend-clear-request:
-                value: requester=req%40kakao.com&receiver=rcv%40kakao.com&_csrf=cDVgRUbjq3NePsnP1rTDB6Uo83y1W7TxMdlDiylSqU-OlQmbSQRUfX7bykNzCvGs4Jn3ZJxL3h2EbobcBut1sh03mHvtojuv
+                value: requester=req%40kakao.com&receiver=rcv%40kakao.com&_csrf=BRkNxCuku9MgAU6TMUfBmSHTg-Z6UNT9eHTwjq566tdCh9T9NX88oUnB2uQNY3agB2r1r0K2roQYMbbQSkSV6ssb3-Rx4uXK
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 admin-friend-clear-request:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
   /api/admin/terms/definition:
     post:
       tags:
-      - 관리자 - 약관
+        - 관리자 - 약관
       summary: 약관 종류(Definition) 생성
       description: 새로운 약관 종류를 등록합니다. required=true이면 필수 동의 약관입니다.
       operationId: admin-terms-create-definition
@@ -94,7 +94,7 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-terms-consent-33084672"
             examples:
               admin-terms-create-definition:
                 value: "{\"termsName\":\"위치 정보 이용 약관\",\"termsType\":\"LOCATION\"\
@@ -105,14 +105,14 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 admin-terms-create-definition:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
   /api/admin/terms/version:
     post:
       tags:
-      - 관리자 - 약관
+        - 관리자 - 약관
       summary: 약관 버전 등록
       description: |-
         새로운 약관 버전을 등록합니다.
@@ -122,25 +122,25 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-terms-consent-33084672"
             examples:
               admin-terms-create-version:
                 value: "{\"termDefinitionId\":2,\"version\":\"v1.0\",\"content\":\"\
-                  테스트 내용\",\"effectiveDate\":\"2026-04-12T18:56:20.6794419\"}"
+                  테스트 내용\",\"effectiveDate\":\"2026-04-13T00:56:00.3316336\"}"
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 admin-terms-create-version:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
   /api/user/auth/login:
     post:
       tags:
-      - 인증
+        - 인증
       summary: 카카오 OAuth 로그인 / 기존 유저
       description: 기존 ACTIVE 유저 로그인. 200 OK와 함께 accessToken/refreshToken이 재발급됩니다.
       operationId: auth-login-
@@ -148,13 +148,13 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-terms-consent-33084672"
             examples:
               auth-login-existing:
-                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc1OTAxMzg1LCJleHAiOjE3NzU5MDQ5ODUsImF1dGhfdGltZSI6MTc3NTkwMTM4NTIxNywibm9uY2UiOiIwNWNhNDY5Yi03ZjIzLTQ5MzQtOGRhYy1iMDEzNmJiYmZkNzMiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSJ9.DaWbF0L4pZUPv8b3XRG7OH9GuAtNwDhrCjz9OruHle2W0QMMdlQScmZk6L36yOEZvquVXO7NNS4Q3l_-B8w-Ju0U2VHgVxKvYlWnxyNynGBvRb9I0Sv-njqnN0yxh3F4xroP1Xac4uQXRgRd-NdMKfb64N-Uf28veq7tV-Io-pl91n9kVpTTKupVB-WHtOP4DtUEKB2qOdK3sQDUuQyzA2zMpCNuE5ccXnqZftLH76Jfrex3i_3fXi3wZO-FSLhNtI6-YyO5ZSgJ3gm4aqcDjgTf1M5y6LFR8jU2hhxM-ckAc3usKZOdAkA2IGFe6tWzEzDM6X00H2ZcCq4t-4i8Ng\"\
+                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc1OTIyOTYzLCJleHAiOjE3NzU5MjY1NjMsImF1dGhfdGltZSI6MTc3NTkyMjk2MzIwMSwibm9uY2UiOiIxMDJiYTNiMC01NDY3LTRmZTAtYTM4Mi0xMmEyMWI1YjU3ZjgiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSJ9.QUQSPOoAx0oF6lYCD3_8YhIxnZCnextIQPy8nu5upbEIahpASBd_gQVX3kH80nkJRmpYakEr0UDUJzUwLkU2pg0qo6zJeBFF-G15c0SU_IgGH_DEZ4TFyUYphFr00rJOv597tjl6PQUBG7iyc2AI50HWDMUK2RcPB8uxmxtN9g-tTDOy7VKSplCKQ1exFr5nbEOx_3yS1Q0Jbrqf-FOHvA-sOymk9pNiFzcqOpLqKVG_46lzG-UK_n2u8SRoDdZIlvHZofs6Z6Xx5ixMdZOTFdqWr4-2qbHAs9v9DEb6MbGxv3FK7YwzuTU7UpznWyYZb1F3Sz3GqyUudAyNhsUlbg\"\
                   }"
               auth-login-new:
-                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc1OTAxMzg1LCJleHAiOjE3NzU5MDQ5ODUsImF1dGhfdGltZSI6MTc3NTkwMTM4NTM3Mywibm9uY2UiOiI0NzI0MTNjYi1mZGU1LTRmMmItYmU0MS03YmY2ZmQ0NWE1NTkiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSJ9.R8IcUvt9uHNwZYS5X5jLXYyN4DgabfPHe4moZs6Ie1_SSp9yF81lJfB5uXfibDq-7J7wxSwz9Hbz90U7QNL6o-9upgH658H0LjFJx_nj2JKTcLGqgwHzs7PPPt_ymKMKEiQX_iTq36tzxDRxLSH40e_Z8IUfchyFiVTYSrEmibnuLCmKt6XvCyUVEWoR6obRHFMn3SHGGf5WoybIWAZIM67QIRWni5BFBbULsQCiQMQnTRCPTr4mdpFcmM1yPQKsG39zWmwkTSxr5xw2mA1jPMow-srpz0kknK2QmCtEhvjsuVijATYz_b4isVxvjlr_9ItjdlQ1axK9ti-L3TF3gQ\"\
+                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc1OTIyOTYzLCJleHAiOjE3NzU5MjY1NjMsImF1dGhfdGltZSI6MTc3NTkyMjk2MzI2NSwibm9uY2UiOiI1YzBkNTMzZC0yZGUxLTQyMWItYWUwYy00MDU5NmY1MjQwMDYiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSJ9.OGzlwZMlQzR3FxdiLj6S2BQ1vyACe4LPwjA1y5PwjSWmBYm-TxSjqkHDOI5eelldvsxZqqdqBu0Sv4y4KTUQIZeaDPEJOoyiu2c0CKUJyaoNIw_sDjXajVmJHMVYyc-4sr8HpBycgotAG1Xk_0ZOTEwIDAHUA7X1Zoeeh3hmp5NqnxXscXYj2MMEQgsLxY6ukKb9koU9CMvpqhwhi63lu08R0hJkwDt0HVoZ2TQqb-ayTx5P736U5CgD49IvAyPgAxw9Zrgff9tgdOazV0ZkxcPqd_QX7DIdiwOnUu4tebCKsi1gEszXTFjk9C3sK0p0pTv_lXHLIPKKxye7XYsjKg\"\
                   }"
       responses:
         "200":
@@ -162,29 +162,29 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 auth-login-existing:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIwNDg2NWY1My1mM2RmLTQyOTEtOTc3Zi0xNGMyYjUzY2M1ZTQiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6Ijk2YWRjM2ZjLWM2OTEtNDE2NC05N2I3LTNmNDBjODMxZWUyOSIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiLthYzsiqTthLAiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJBQ1RJVkUiLCJpYXQiOjE3NzU5MDEzODUsImV4cCI6MTc3NTkwMzE4NX0.PVdsH-8Y3k-_181WI1KmqlRv1j1AQgntDmtGd_h-JVFmhBsiDth_pHFWtBHUYwvA\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJlYTI3ZTJhZi00Y2UzLTRhZjUtYTFmOC0zMDVjNjgwNzdiMzUiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI5NmFkYzNmYy1jNjkxLTQxNjQtOTdiNy0zZjQwYzgzMWVlMjkiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoi7YWM7Iqk7YSwIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiQUNUSVZFIiwiaWF0IjoxNzc1OTAxMzg1LCJleHAiOjE3NzY1MDYxODV9.hyQHRjicvYbuaGZER3-XMIGmcy7LsFqyFvIIp1c5r3ULL93vKfx-c-DFSKKNciDt\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIzZjMwZWRlNC0wZGJjLTQyMTQtODY0Yi1jMTAxNmVlYjE4MTgiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjliOTIwZDBhLTUwZjUtNDhiZi1hMzIwLTM2MTU0MTYxM2QyOCIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiLthYzsiqTthLAiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJBQ1RJVkUiLCJpYXQiOjE3NzU5MjI5NjMsImV4cCI6MTc3NTkyNDc2M30.pNwDUEOkzO1jPdaOlnhWWYydAy0_ADV-0QBaaUUADyh78Jci674ID4_9aYB99-FE\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJkOTg3OGQ0YS0yZWQ3LTQ3ZGQtYTc2MS0xYTA4ZmJkMWE5MTUiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI5YjkyMGQwYS01MGY1LTQ4YmYtYTMyMC0zNjE1NDE2MTNkMjgiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoi7YWM7Iqk7YSwIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiQUNUSVZFIiwiaWF0IjoxNzc1OTIyOTYzLCJleHAiOjE3NzY1Mjc3NjN9.qmh4SEwE7vdOmb7EStcRsthzd8NK3HeaR2JC7j8SZz2CY8IEOhcfDhQ2Xze519N-\"\
                     }}"
         "201":
           description: "201"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 auth-login-new:
                   value: "{\"code\":201,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI4M2Q0OGM0Ni02MjI2LTQyZTUtYmJlZi1hNGQ4YTZjMDhjYWUiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImMyYTk4OWVmLWE5MGYtNGQ1Ny1iYzA0LWZmYmExMzM3M2JmNCIsImVtYWlsIjoibmV3LXVzZXJAa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc1OTAxMzg1LCJleHAiOjE3NzU5MDMxODV9.chmqEqsIbRz0O9fRJ36jNarT3cubWJvkTC2jaGewJ5at5vpa9VUDIhUNWcXcbDS-\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIzOWExMTYyNi0yM2ZlLTRkYTktYjM1MC03ZjM1ZmExMWIyNmIiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJjMmE5ODllZi1hOTBmLTRkNTctYmMwNC1mZmJhMTMzNzNiZjQiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTkwMTM4NSwiZXhwIjoxNzc2NTA2MTg1fQ._zM_bChYh0n8moXLsc3yZOgRubl7RnEnCdN6dfXwBbn9rRhaeEjs1yWeC3_skuPA\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI2YjQ0MTg1ZS1hMTliLTQxZDMtYjEzMC0wMmVjZjczNjg2NzciLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImE5NjNhMTA3LTk1MTYtNDI0MS04NTJhLTZiMzIyYWM0OTBlMiIsImVtYWlsIjoibmV3LXVzZXJAa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc1OTIyOTYzLCJleHAiOjE3NzU5MjQ3NjN9.7qoKrEENHKrp5P7C6ki1tcheEMBoC0TqeR-ZUKzEbvW0STtxExfPBZVfkH86o0tm\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI3YTBiYThiNC1iNjZmLTQ4YTktOGU2NC1hN2E0YmE0ZjkzYzAiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJhOTYzYTEwNy05NTE2LTQyNDEtODUyYS02YjMyMmFjNDkwZTIiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTkyMjk2MywiZXhwIjoxNzc2NTI3NzYzfQ.vrlX6Uc335AQnGneNNWtLmVJhe-YfaR6aMl1c4tspXNFZ0PaNWBX55RivK8ZalJy\"\
                     }}"
   /api/user/auth/reissue:
     post:
       tags:
-      - 인증
+        - 인증
       summary: JWT 토큰 재발급
       description: 유효한 refreshToken으로 accessToken/refreshToken을 재발급합니다.
       operationId: auth-reissue
@@ -192,10 +192,10 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-terms-consent-33084672"
             examples:
               auth-reissue:
-                value: "{\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJjMmJiOTUyNi0zMDJhLTQ1YTgtYTM1My1jMjY3MGQ1NzJmOWQiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJkNDNjMTg2Yi1lYzMwLTQ1ZTAtYjIzMi0yYWM0Y2YzZDUyNjciLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTkwMTM4NCwiZXhwIjoxNzc2NTA2MTg0fQ.EMwKNeV92Odysi_wdHZJzX8yQ0Rb4OOeQStONSE5nNlieHlV4qUlMwARj3ZIYfMT\"\
+                value: "{\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIxOTM2YjQ5Yy1iNjEwLTRjN2UtOTNmOC0wM2ViYTEyMjU4YzMiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJjOWIxNGU5NC0wOTgxLTRkMGUtYWVlNi0xMGU4NzkzMmEzMzMiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTkyMjk2MywiZXhwIjoxNzc2NTI3NzYzfQ.43j1v9F6ofI1avy4M7pZDyefWubqft0-I3lJUXkbTEKED4OHJvs1AxPVLBux5_Im\"\
                   }"
       responses:
         "200":
@@ -203,17 +203,17 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 auth-reissue:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIxYTBmZmEwZC1iZGY3LTQ0MWYtOWE4NC1hMmNhYWZmNmVhNDMiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImQ0M2MxODZiLWVjMzAtNDVlMC1iMjMyLTJhYzRjZjNkNTI2NyIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc1OTAxMzg1LCJleHAiOjE3NzU5MDMxODV9.baSu_x7wAQau7xv5gPDprChAh5QmCJsaSKZ6Lx0jwKv8d1vBq02boO-OZEqvlMeL\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIzZTlmNjNhYS03NTc5LTQ4MmUtOGE5Ny1kZTEwMDYzNDBiMzkiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJkNDNjMTg2Yi1lYzMwLTQ1ZTAtYjIzMi0yYWM0Y2YzZDUyNjciLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTkwMTM4NSwiZXhwIjoxNzc2NTA2MTg1fQ.yY5zS3layvlYMAjAw2mOyIQux-f9gg9ZJdRmXvLBh0K8KK0isGG2hucyHR280YzD\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIzZmU1M2MxMS02ZWM5LTQyM2UtOTkyZS0wNTQwOWM4MzFmZGIiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImM5YjE0ZTk0LTA5ODEtNGQwZS1hZWU2LTEwZTg3OTMyYTMzMyIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc1OTIyOTYzLCJleHAiOjE3NzU5MjQ3NjN9.V7-YSt2r4S2X-2_REh3zE76h-Dz389bt_9mnN1jSE6chxinJGnR2mydU0zY6CptB\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJkNmVhNGYwMi0xYWNiLTRmNzctYjA3Zi0xZTZhYTdmYWZkYTYiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJjOWIxNGU5NC0wOTgxLTRkMGUtYWVlNi0xMGU4NzkzMmEzMzMiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTkyMjk2MywiZXhwIjoxNzc2NTI3NzYzfQ.QywgGEqzDjFcROXMC1OoKtCoXuQSWYJm5dVCVbHRVvcVjXPauRlnBmqMkm2ZsOTU\"\
                     }}"
   /api/user/info/me:
     get:
       tags:
-      - 사용자
+        - 사용자
       summary: 내 정보 조회
       description: "로그인한 사용자의 이메일, 닉네임 정보를 반환합니다."
       operationId: user-get-me
@@ -223,7 +223,7 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 user-get-me:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"userEmail\"\
@@ -231,7 +231,7 @@ paths:
   /api/user/info/nickname:
     post:
       tags:
-      - 사용자
+        - 사용자
       summary: 닉네임 변경
       description: 로그인한 사용자의 닉네임을 변경합니다.
       operationId: user-change-nickname
@@ -239,7 +239,7 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-terms-consent-33084672"
             examples:
               user-change-nickname:
                 value: "{\"newNickname\":\"고동수\"}"
@@ -249,7 +249,7 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 user-change-nickname:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"userEmail\"\
@@ -257,7 +257,7 @@ paths:
   /api/user/info/tester:
     get:
       tags:
-      - 사용자
+        - 사용자
       summary: 닉네임으로 유저 검색
       description: 닉네임 키워드로 유저를 검색합니다. 동일 닉네임의 복수 결과가 반환될 수 있습니다.
       operationId: user-search-by-nickname
@@ -267,16 +267,16 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 user-search-by-nickname:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":[{\"userId\":\"\
-                    95dca02f-f752-45fb-93ea-ea2c487041ef\",\"userEmail\":\"exist@test.com\"\
+                    b2ddfded-da55-49ad-8c0b-bd6d91f95120\",\"userEmail\":\"exist@test.com\"\
                     ,\"userNickname\":\"tester\"}]}"
   /api/user/terms/consent:
     post:
       tags:
-      - 약관 동의
+        - 약관 동의
       summary: 전체 약관 일괄 동의
       description: |-
         PENDING 상태의 사용자가 약관에 동의합니다.
@@ -287,7 +287,7 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-terms-consent-33084672"
             examples:
               terms-consent-all:
                 value: "{\"consents\":[{\"termDefinitionId\":1,\"agreed\":true},{\"\
@@ -299,139 +299,139 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 terms-consent-all:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI3MDQ5YzMyMS01Yjk1LTRkNjAtYjRmYy01Mjc4ZWIxOWVmOTMiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjQwZmRiY2QzLWQxN2EtNGUyZS04ZDNkLTAyZTg3ZmE3YjdlMiIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiJyYXRpIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTkwMTM4NiwiZXhwIjoxNzc1OTAzMTg2fQ.NsbJYpQ8_rW6kOi9PFcmqKKVrA8il3LsGOo04FXPD9PA3_7NMVKpwL5t0mLQpf1n\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI4NmUzNGQ2My1hYzlmLTRjMTgtYmNlZi0zYzEyYmMzMmUxYWQiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI0MGZkYmNkMy1kMTdhLTRlMmUtOGQzZC0wMmU4N2ZhN2I3ZTIiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoicmF0aSIsInJvbGUiOiJST0xFX05PUk1BTCIsInN0YXR1cyI6IlBFTkRJTkciLCJpYXQiOjE3NzU5MDEzODYsImV4cCI6MTc3NjUwNjE4Nn0.n2OhPHn0_G4mkjhMUsQr6-9PMtAgmVuxYq0zCIErWJEdDqEMBFl_QzXJGGhB0hZ6\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI0YjlkZDFjYy1jNzNhLTRiY2MtYTVmNi0zNWM0ZGU4MTY2NTkiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjRkZjdmYTEzLWNkOWUtNDM4My1hNWM3LTUzNTE3MzI3NmU1MiIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiJyYXRpIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTkyMjk2NSwiZXhwIjoxNzc1OTI0NzY1fQ.CgLr1iAndoscjD4aSvQPmgbM4-AMlBbidFhXdwyvDh-4YFfzM2rmG2YFzEjzepEE\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJmNjU4ZGM3Yy03ZWI0LTQzOTItODNmYy0xN2E3YjRhMDc4YWMiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI0ZGY3ZmExMy1jZDllLTQzODMtYTVjNy01MzUxNzMyNzZlNTIiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoicmF0aSIsInJvbGUiOiJST0xFX05PUk1BTCIsInN0YXR1cyI6IlBFTkRJTkciLCJpYXQiOjE3NzU5MjI5NjUsImV4cCI6MTc3NjUyNzc2NX0.vd4Fi76xAwqG_Le9lOlB4ShhFbgvFxJqNwIFrkGQUOMXUUOcrGvuR8KY_dZLHy0i\"\
                     }}"
       security:
-      - bearerAuthJWT: []
+        - bearerAuthJWT: [ ]
   /api/admin/users/{email}/block:
     post:
       tags:
-      - 관리자 - 사용자
+        - 관리자 - 사용자
       summary: 유저 서비스 차단
       description: 특정 유저의 상태를 BLOCKED로 변경하여 서비스 이용을 차단합니다.
       operationId: admin-user-block
       parameters:
-      - name: email
-        in: path
-        description: ""
-        required: true
-        schema:
-          type: string
+        - name: email
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-terms-consent-33084672"
             examples:
               admin-user-block:
-                value: _csrf=5dkFOso6Q4YeoxIvYLLGt0TC_Os_zfbLGuRSv-dYu9MWdfK2hL01A_sIJuIzxyNNA5_y0SX20dNcqMfmLII029E9juUiQsOP
+                value: _csrf=RkonPMv0o6_w381eM16v-Vc_eOXwxKM6InjrOeKoGvNBD3-3fy4VDvjDls3d6alqV3ObmDZaVYeSosUXFUraC9CffMR5bUnS
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 admin-user-block:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
     delete:
       tags:
-      - 관리자 - 사용자
+        - 관리자 - 사용자
       summary: 유저 차단 해제
       description: BLOCKED 상태의 유저를 ACTIVE로 복구합니다.
       operationId: admin-user-unblock
       parameters:
-      - name: email
-        in: path
-        description: ""
-        required: true
-        schema:
-          type: string
+        - name: email
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-terms-consent-33084672"
             examples:
               admin-user-unblock:
-                value: _csrf=jxObN9r9Nasieg1Ymk_PZjugF9qoAaz9Hl9rxK0nYKYi19Y-viT5AOiZVJgPQj45-2L7UlmYOuLKYpXQKGgIoJQXUJ4a4bUL
+                value: _csrf=6-VGowoRQGWulWXDTiclBX8vvwBvSi3GJ-yLnky6rr442kEU3NF-lmt1JVGDplOifAoRNRxJkmJcfB3rEduzpi6Dz49Z6yQi
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 admin-user-unblock:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
   /api/admin/users/{email}/token:
     delete:
       tags:
-      - 관리자 - 사용자
+        - 관리자 - 사용자
       summary: 유저 강제 로그아웃
       description: Redis에서 해당 유저의 refreshToken을 삭제하여 강제 로그아웃시킵니다.
       operationId: admin-user-force-logout
       parameters:
-      - name: email
-        in: path
-        description: ""
-        required: true
-        schema:
-          type: string
+        - name: email
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-terms-consent-33084672"
             examples:
               admin-user-force-logout:
-                value: _csrf=H-0YBOyMAveNB5rayHphv7kwBoBBmsVxHND2pwczBBnufI6UKo8sM9q6NZGgNau4_1dViYgIK-Fy_vxcLeWXnjICYH3eGrvy
+                value: _csrf=mvcJAixsqoT6F85OiBn-KuWAQSaRlz-68YxuMKup67UrmgntqJM9YRxbmebXcvp57jTKGN21bB-holyXx71aU86d2YcarjHU
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 admin-user-force-logout:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
   /api/user/terms/version/{termsDefinitionId}:
     get:
       tags:
-      - 약관
+        - 약관
       summary: 약관 버전 상세 조회
       description: 특정 약관(termDefinitionId)의 현재 활성화된 버전 내용을 반환합니다.
       operationId: terms-version-detail
       parameters:
-      - name: termsDefinitionId
-        in: path
-        description: ""
-        required: true
-        schema:
-          type: string
+        - name: termsDefinitionId
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-terms-consent-33084672"
               examples:
                 terms-version-detail:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"version\":\"\
-                    v1.0\",\"content\":\"약관 내용\",\"effectiveDate\":\"2026-04-11T18:56:20.7870531\"\
+                    v1.0\",\"content\":\"약관 내용\",\"effectiveDate\":\"2026-04-12T00:56:00.4158669\"\
                     }}"
 components:
   schemas:
-    api-user-terms-33084672:
+    api-user-terms-consent-33084672:
       type: object
   securitySchemes:
     bearerAuthJWT:
