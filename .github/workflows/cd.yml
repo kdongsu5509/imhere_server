@@ -85,17 +85,21 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and push Docker image to ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ env.ECR_REPOSITORY }}
+          TAG: ${{ steps.tag.outputs.tag }}
         run: |
-          TAG=${{ steps.tag.outputs.tag }}
           docker build -f Dockerfile.release \
-            -t $ECR_REGISTRY/$ECR_REPOSITORY:$TAG \
-            -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
+            -t $REGISTRY/$REPOSITORY:$TAG \
+            -t $REGISTRY/$REPOSITORY:latest \
             .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $REGISTRY/$REPOSITORY:$TAG
+          docker push $REGISTRY/$REPOSITORY:latest
 
       - name: Get GitHub Actions runner public IP
         id: ip
@@ -117,14 +121,18 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          envs: ECR_REGISTRY,ECR_REPOSITORY,AWS_REGION
           script: |
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} \
-              | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_REGISTRY }}
+            aws ecr get-login-password --region $AWS_REGION \
+              | docker login --username AWS --password-stdin $ECR_REGISTRY
 
             cd ${{ secrets.EC2_DEPLOY_PATH }}
 
-            docker compose -f docker-compose.prod.yml pull dsko
-            docker compose -f docker-compose.prod.yml up -d --no-deps dsko
+            ECR_REGISTRY=$ECR_REGISTRY ECR_REPOSITORY=$ECR_REPOSITORY \
+              docker compose -f docker-compose.prod.yml pull dsko
+
+            ECR_REGISTRY=$ECR_REGISTRY ECR_REPOSITORY=$ECR_REPOSITORY \
+              docker compose -f docker-compose.prod.yml up -d --no-deps dsko
 
             docker image prune -f
 
