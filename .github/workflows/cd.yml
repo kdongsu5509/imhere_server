@@ -1,0 +1,134 @@
+name: IMHERE_GITHUB_ACTION_CD
+
+on:
+  workflow_run:
+    workflows: [ "IMHERE_GITHUB_ACTION_CI" ]
+    branches:
+      - main
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
+      ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Generate Image Tag based on date and time
+        id: tag
+        run: |
+          DATE=$(TZ='Asia/Seoul' date +'%Y%m%d-%H%M')
+          SHORT_SHA=$(echo "${{ github.event.workflow_run.head_sha }}" | cut -c1-7)
+          echo "tag=${DATE}-${SHORT_SHA}" >> $GITHUB_OUTPUT
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "corretto"
+
+      - name: Cache Gradle dependencies and wrapper
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: Cache Gradle build outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            .gradle
+            build/classes
+            build/generated
+            build/kotlin
+            build/tmp
+          key: gradle-build-${{ runner.os }}-${{ github.event.workflow_run.head_sha }}
+          restore-keys: |
+            gradle-build-${{ runner.os }}-
+
+      - name: Inject secret config files
+        run: |
+          echo "${{ secrets.APP_DATASOURCE_YAML }}" > src/main/resources/application-datasource.yaml
+          echo "${{ secrets.APP_MONITORING_YAML }}"  > src/main/resources/application-monitoring.yaml
+          echo "${{ secrets.APP_SECRET_YAML }}"      > src/main/resources/application-secret.yaml
+          echo "${{ secrets.FIREBASE_KEY_JSON }}"    > src/main/resources/imhereFirebaseKey.json
+
+      - name: Build JAR
+        run: |
+          chmod +x ./gradlew
+          ./gradlew bootJar -x test
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker image to ECR
+        run: |
+          TAG=${{ steps.tag.outputs.tag }}
+          docker build -f Dockerfile.release \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$TAG \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
+            .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Get GitHub Actions runner public IP
+        id: ip
+        run: |
+          RUNNER_IP=$(curl -sf https://api.ipify.org)
+          echo "runner_ip=${RUNNER_IP}" >> $GITHUB_OUTPUT
+
+      - name: Add runner IP to EC2 security group (SSH port)
+        run: |
+          aws ec2 authorize-security-group-ingress \
+            --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.runner_ip }}/32
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} \
+              | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_REGISTRY }}
+
+            cd ${{ secrets.EC2_DEPLOY_PATH }}
+
+            docker compose -f docker-compose.prod.yml pull dsko
+            docker compose -f docker-compose.prod.yml up -d --no-deps dsko
+
+            docker image prune -f
+
+      - name: Remove runner IP from EC2 security group
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress \
+            --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.runner_ip }}/32
