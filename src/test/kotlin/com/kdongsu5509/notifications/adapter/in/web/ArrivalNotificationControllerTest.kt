@@ -3,6 +3,7 @@ package com.kdongsu5509.notifications.adapter.`in`.web
 import com.kdongsu5509.notifications.adapter.`in`.web.dto.FcmNotificationRequest
 import com.kdongsu5509.notifications.application.port.`in`.NotificationToUserCasePort
 import com.kdongsu5509.support.config.SecurityConstants
+import com.kdongsu5509.support.external.DiscordUserErrorNotifier
 import com.kdongsu5509.support.logger.AccessLogPrinter
 import com.kdongsu5509.user.application.service.user.JwtTokenUtil
 import com.kdongsu5509.user.application.service.user.SimpleTokenUserDetails
@@ -32,6 +33,9 @@ class ArrivalNotificationControllerTest {
 
     @MockitoBean
     private lateinit var accessLogPrinter: AccessLogPrinter
+
+    @MockitoBean
+    private lateinit var discordUserErrorNotifier: DiscordUserErrorNotifier
 
     @MockitoBean
     private lateinit var jwtTokenUtil: JwtTokenUtil

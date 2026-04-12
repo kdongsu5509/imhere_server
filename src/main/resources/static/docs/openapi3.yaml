@@ -18,17 +18,17 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-auth-reissue-33084672"
             examples:
               admin-friend-clear-relationship:
-                value: userA=adminA%40kakao.com&userB=adminB%40kakao.com&_csrf=xxnP5om82TfxPT1o6DJ8USE3ohr5u7Sbt8XxTUDq-hg6fOrv9Xz53rGN71PcDA1e2B9IMkNVj3ici9K2gaDGeXDcyi1YGYvf
+                value: userA=adminA%40kakao.com&userB=adminB%40kakao.com&_csrf=5PGIhUpbio7DjxIzjFXfgPxjzFpk7-ThjfRGOV6uBHx3mBB7gsbu5nNiurnu7ncKv3jr489a4TgBjofMvM0gD2jLMR5ArSRJ
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 admin-friend-clear-relationship:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -45,7 +45,7 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 terms-list:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"content\":[{\"\
@@ -69,17 +69,17 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-auth-reissue-33084672"
             examples:
               admin-friend-clear-request:
-                value: requester=req%40kakao.com&receiver=rcv%40kakao.com&_csrf=4b8StE2rEMaO46xdTkxuGrE-OwHFSyQxwFqNLKLtt-yRC9rjg4wh132SIqCj1ZhpfGFaf4EGFjmnehIc-Ti4TceJ09vyPu3Q
+                value: requester=req%40kakao.com&receiver=rcv%40kakao.com&_csrf=_z3l7hLb7UXlXwbvh8006RKa1217WN7pwekl6Jh36aTDYlnHzArSiiTq2yHIbTCMvuAA33es-g8daunE94oR0axP2JHzBmjx
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 admin-friend-clear-request:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -94,7 +94,7 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-auth-reissue-33084672"
             examples:
               admin-terms-create-definition:
                 value: "{\"termsName\":\"위치 정보 이용 약관\",\"termsType\":\"LOCATION\"\
@@ -105,7 +105,7 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 admin-terms-create-definition:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -122,18 +122,18 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-auth-reissue-33084672"
             examples:
               admin-terms-create-version:
                 value: "{\"termDefinitionId\":2,\"version\":\"v1.0\",\"content\":\"\
-                  테스트 내용\",\"effectiveDate\":\"2026-04-13T19:15:36.7107118\"}"
+                  테스트 내용\",\"effectiveDate\":\"2026-04-13T19:44:20.4515633\"}"
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 admin-terms-create-version:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -148,13 +148,13 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-auth-reissue-33084672"
             examples:
               auth-login-existing:
-                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc1OTg4OTQwLCJleHAiOjE3NzU5OTI1NDAsImF1dGhfdGltZSI6MTc3NTk4ODk0MDI5NCwibm9uY2UiOiI4ZGI3ZjIzYi0yNGQ4LTQyMTUtYTdiOC1jZWZjNTUzMjc1ZjUiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSJ9.JjfvVECi8FL07YSEUNaF9ayzbSLJPtRxx3GabPK4wiV4P0Q3hVPK9P6kpFSlyTsDMMXHaTALr2bIYvTQfOQXf4RuLNVir00JxTn6XaTb9MLrYYKF8MR4ASZSWGxRRCCEJog7hg5BEHdJ6so05qfiH9-PwSkdHBjQMVsqaNSQYAm5MSCF4q0tH-xbOJd5kIQwCcHdB4CoD_ht5lan9OaOmPkb13SCjb6L4VGFTJ7IcO54ReB7M4jjxLHVmDZctECn2mDMc_NuE2O5s7czTrRFN6-swCBN-WbsJ1Dibz2nJ5tmwvKeFVkDQ_2QwXYs5WnU1F_6ATR_W3_BqSScZeaWsA\"\
+                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc1OTkwNjY0LCJleHAiOjE3NzU5OTQyNjQsImF1dGhfdGltZSI6MTc3NTk5MDY2NDE2Niwibm9uY2UiOiJkMzZhMzQwYy0wYTE1LTRhODctYTU5YS01NjE0MmVmZGIyZTMiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSJ9.j8G7uEeUhOf7GYWdRoE47KbmJAsdTpHHoeg3z4T62OjaRJ81uhwsaKgnkwn5RMbAzQ0vUnkNKGgnDQC2O9JzBL-dnH1sJHZl3Jbc2XYQ6sfioqCf1GXCa9aj4L23b-fLo49RQTRPcBnq71mEZ2b0XL8sBpGzzArgT8EkHLku6quuQD7bU1Sv8Z8FpGupIvWi1JurK4_bIjR30pc0Xb3e6nz-Hs1himB2KKImhOUmEPrfJerZKPg7a58TCU1dZqSpKbjRk-uycNPhUHadMT0WOze8BtzsXg71eB56Ii8LjQt-oW4if1TXY4YR5thd16izwF82YHib6IVnjm5fSxZWpA\"\
                   }"
               auth-login-new:
-                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc1OTg4OTQwLCJleHAiOjE3NzU5OTI1NDAsImF1dGhfdGltZSI6MTc3NTk4ODk0MDM3Mywibm9uY2UiOiJmMmMxNjZhMS1hMjRlLTRlMjEtOGRmZC1iYjc4OGI5Yjg2ODAiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSJ9.OblLKq93_OYOVoaKsrDvKI-Tn6SoCa2-dj9xk3UmjWPdjYOv1b2tg1vszgCWrfqBBH0X3ZPgkXCxiBtEBJveO3HHS6UP7ktrCsmuSEyvTaZa1mxr6v-tcPSy3jg343KXsuMtegeuYjSfUHP-F8G9G2EQkp92eZnGVmlJP7d7cd1ymCQGXrD2i4ifx-F2gboPs28crMZRcQP9Wq7dMkcYxF_udBVfwrRuwCYPzc-tZUHHvOylaVDeB42s-5GsiH5rzHdvM3ypMs56GDPSVsQcQluKVXrtLJGovJChShUd1JfcO_LcFz_xHR4DJCqbxUaWWYunfbnvAa1T-mBPh-vZZg\"\
+                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc1OTkwNjY0LCJleHAiOjE3NzU5OTQyNjQsImF1dGhfdGltZSI6MTc3NTk5MDY2NDI1Nywibm9uY2UiOiIyNjU3OGYyMC1kNzM4LTQzOTMtOTc5Yy1lZTU3ZWM0Y2JlZjAiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSJ9.nv1HEQmgWSyrMzcVDjwICC5F6-_lskxOXhF6ptQBFjfu4llF4se9fr8oRtoEils1csfFO-VZM4LMtaYhBq627tzLWPyLfWecSmC0axIMaMLowMPFqX9x05us42R5oZPbmiWlw0xySGd8cSeR7PLafIfZbqFKSK5T7RRzuHHH6oiYWYC6Ye2mkpoND3YXawmC5UrzkLEBKcsS0PyTrTyLd0x9ev7Cr9ZztCk92K-pb1_W8fe75KiUgR-4ljZyH-uHXEJ3GCbn441yryohyfZJcKg4IiuqhGbhwSrq7Ued0cMcHGN02xryPxR7whg_HkpHw0oylMk42oCYr21zu_PQ8w\"\
                   }"
       responses:
         "200":
@@ -162,24 +162,24 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 auth-login-existing:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI0YTM3NjUzZC0xNzI2LTQyY2YtOTJmMi01YjgwZTZkYzQ5MzEiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImU0OWFkOTNhLTgwZjctNDhlZi1hZDBlLWMzOTViNzMyYTI5OSIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiLthYzsiqTthLAiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJBQ1RJVkUiLCJpYXQiOjE3NzU5ODg5NDAsImV4cCI6MTc3NTk5MDc0MH0.TK_5fzxBufGV-uN4TQQzKOIo3geX1cVN3lSt0l3VPr91GUVmvY2PkT7pQFbgAjjy\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIyZDJiZjJlYS03OTEwLTRlZmMtYmJjYy05MWY3NzExZWUyODIiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJlNDlhZDkzYS04MGY3LTQ4ZWYtYWQwZS1jMzk1YjczMmEyOTkiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoi7YWM7Iqk7YSwIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiQUNUSVZFIiwiaWF0IjoxNzc1OTg4OTQwLCJleHAiOjE3NzY1OTM3NDB9.D4V0Hsg7PpIEslgIpUo1TmplSGqFquCltqwJtEqr2S9inCuCMRoxIA2HA-UYJCtW\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJiZDQ0YTA5ZC1iYzhlLTQ4ZmUtYTE5NC00N2I1YzUxNTNmMjUiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjYzOTljNDk2LTU2OTgtNDM0NC1hOGVlLTFlNTVjOThhZjk3YSIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiLthYzsiqTthLAiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJBQ1RJVkUiLCJpYXQiOjE3NzU5OTA2NjQsImV4cCI6MTc3NTk5MjQ2NH0.AziTFlRMrB7dRUB3XmYN6xinblVEDBQKBEMvDzvjxB_uY7Cbg7CjPlyLSf9s2xYL\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI4MmExMTIzMS0xZjAwLTRiOWQtYmFlMy05MzU3NTNhZTU5YzAiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI2Mzk5YzQ5Ni01Njk4LTQzNDQtYThlZS0xZTU1Yzk4YWY5N2EiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoi7YWM7Iqk7YSwIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiQUNUSVZFIiwiaWF0IjoxNzc1OTkwNjY0LCJleHAiOjE3NzY1OTU0NjR9.dVA2ikiKGwYXaTNzXKl5AxVEMSnvLoty8jzLGLR13MqoJu5CCvnPqYpZisLHnAGH\"\
                     }}"
         "201":
           description: "201"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 auth-login-new:
                   value: "{\"code\":201,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI0MDgxY2QxMC03ODg1LTRjMDYtYWJiNS05NjA3ZDEzNDE2MDgiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjYxM2JhZGQ1LTg2ZmMtNDk1Zi04Y2NjLTU5NzE2ZDkzYjUxMyIsImVtYWlsIjoibmV3LXVzZXJAa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc1OTg4OTQwLCJleHAiOjE3NzU5OTA3NDB9._NX3lRNA_zaVw3EafYZrjcAXlR5_NIeyVMbWwaF4pi13aMNWvbs5XBfQvF2kxfIh\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI1OGNlM2E3Ny1jYTNkLTRiNzMtYTZiYy0zMWFjYzQwMDQ1MmUiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI2MTNiYWRkNS04NmZjLTQ5NWYtOGNjYy01OTcxNmQ5M2I1MTMiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk4ODk0MCwiZXhwIjoxNzc2NTkzNzQwfQ.i-yb8K0LkYrthKSiuoqXczcT_rGpuS88TvuIuNXUAyVkd2M9dGSpxtJBBKQ2V1AF\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJhZGZmZmY5OC0wYTc5LTQyODYtOTQ0Ny1hMTcyODNhNDUwNWIiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjY2ZWJiNjFhLTYzNjItNDhlOC1iMzIxLTJiNTExY2IzMjQ1NyIsImVtYWlsIjoibmV3LXVzZXJAa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc1OTkwNjY0LCJleHAiOjE3NzU5OTI0NjR9.XjIJG-L1cnk29JLInKSHiISBOX9gAeVfqou_r80m5YpDITzcBSxzH5kLndEzoMdV\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI2ZDhlMzg5Ny1jMjhhLTQzOWQtOWE4NS1jYjQ2NzkyOTgyNGEiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI2NmViYjYxYS02MzYyLTQ4ZTgtYjMyMS0yYjUxMWNiMzI0NTciLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk5MDY2NCwiZXhwIjoxNzc2NTk1NDY0fQ.iD6VJdmlNBRf0vAMew4AvDlwfVjktIWTTPOTVVHXjzerLL8EKBCF5L8sLQswpSUt\"\
                     }}"
   /api/user/auth/reissue:
     post:
@@ -192,10 +192,10 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-auth-reissue-33084672"
             examples:
               auth-reissue:
-                value: "{\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI4NjBiNjhjMC0yNTQ4LTRmNzAtYTY5Yi0zNzQ2YTkzMGMwYmMiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI1MTZhOWYwMi03MTg5LTRkNmEtYmY2Yi0wMzEyNWU5OWIxYTAiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk4ODk0MCwiZXhwIjoxNzc2NTkzNzQwfQ.cfejYlDYutMOeY0GCql8ptTGfPO0H2mrdbUDiSe2V1Sa6aQ6ScT8Dq3tVo9iY5d4\"\
+                value: "{\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI1OTMxZDU0Mi04NzYwLTQ1Y2YtOWVjNy1mOTc5ZmQzNmQyOTEiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJkM2U0YmU4NS05MTAwLTQ5ODgtODdlZi1kZWUxYmNiZDZlZWYiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk5MDY2NCwiZXhwIjoxNzc2NTk1NDY0fQ.jqY2qg0dtSQOC0vEQOVFIeJleFaMf8rpwjVGLS8cTZZOGfy3iOisNA6imUkDX9fv\"\
                   }"
       responses:
         "200":
@@ -203,12 +203,12 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 auth-reissue:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI3YjYwY2I5ZC1mZWZkLTQ2MjQtODcxYi04MGVkMWIxZjczOWMiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjUxNmE5ZjAyLTcxODktNGQ2YS1iZjZiLTAzMTI1ZTk5YjFhMCIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc1OTg4OTQwLCJleHAiOjE3NzU5OTA3NDB9.IEU2bmRcAm-QExbqLI3F3AkftogcP6EqxjArhRjxCumzrum9jKw8h_E8loDWx5QT\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJlM2IzZDgzZi0zMTZmLTRmODctYTAwYy0yMzkwODhhNmQ3M2EiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI1MTZhOWYwMi03MTg5LTRkNmEtYmY2Yi0wMzEyNWU5OWIxYTAiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk4ODk0MCwiZXhwIjoxNzc2NTkzNzQwfQ.yps6GodSC8C8f2IW4c3cnzYk5qBH6No2vFUhCXVn0ZbYJl8UjhrMGP2vG6VGUShG\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJkMTA4MWI1MS1lODY3LTQwMGQtYmQ5YS0zMzY2NTY4ZjgyZjkiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImQzZTRiZTg1LTkxMDAtNDk4OC04N2VmLWRlZTFiY2JkNmVlZiIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc1OTkwNjY0LCJleHAiOjE3NzU5OTI0NjR9.wkNWjxOaUx_9kbc4qeMpCYU_cOkVTNo-yH11PTKqkaUmUa3WU1Pz0by76kiBFQQO\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJjMTMxMGI4NS1kOWVhLTRlMmQtOTJlYy1kZTZjYmZkODJmNjYiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJkM2U0YmU4NS05MTAwLTQ5ODgtODdlZi1kZWUxYmNiZDZlZWYiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk5MDY2NCwiZXhwIjoxNzc2NTk1NDY0fQ.4RAqckIuTT-H0-2trogQtk9WLHdhTyEKa8jT4lD93JyzXt5pHpxv6ruP2CeYOrz2\"\
                     }}"
   /api/user/info/me:
     get:
@@ -223,7 +223,7 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 user-get-me:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"userEmail\"\
@@ -239,7 +239,7 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-auth-reissue-33084672"
             examples:
               user-change-nickname:
                 value: "{\"newNickname\":\"고동수\"}"
@@ -249,7 +249,7 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 user-change-nickname:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"userEmail\"\
@@ -267,11 +267,11 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 user-search-by-nickname:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":[{\"userId\":\"\
-                    d9b6b199-cebf-48b5-bbcc-06bd0f2429a7\",\"userEmail\":\"exist@test.com\"\
+                    79be2003-d22a-460d-88f1-0fa8d9e0e85b\",\"userEmail\":\"exist@test.com\"\
                     ,\"userNickname\":\"tester\"}]}"
   /api/user/terms/consent:
     post:
@@ -287,7 +287,7 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-auth-reissue-33084672"
             examples:
               terms-consent-all:
                 value: "{\"consents\":[{\"termDefinitionId\":1,\"agreed\":true},{\"\
@@ -299,12 +299,12 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 terms-consent-all:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI2NTVmZmI5ZC1jMDE4LTQ3YzctYmE3ZS1jMjQxMjRkYmU5YzMiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjQ1NjlmOWM0LTQ0ZDgtNGQzMy1iNGE3LWMxYzRhZTNkZGY5NyIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiJyYXRpIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk4ODk0MSwiZXhwIjoxNzc1OTkwNzQxfQ.O-qtz9W8yhmLeUnlyh_pKrGAiBGdV0P6rfBxoJ9eCXB5RWMO4Q3KFkqUmx4h5L7D\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIxYWI5ODhiYy1iZDg4LTQ0MDktYmQzMi02MWExZGVlNjAwOWUiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI0NTY5ZjljNC00NGQ4LTRkMzMtYjRhNy1jMWM0YWUzZGRmOTciLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoicmF0aSIsInJvbGUiOiJST0xFX05PUk1BTCIsInN0YXR1cyI6IlBFTkRJTkciLCJpYXQiOjE3NzU5ODg5NDEsImV4cCI6MTc3NjU5Mzc0MX0.yPh-5gDu0YFjSp9JVYMGYIJ4Fi3Jy2m3uMo7CrXyAhkYKwQttVeb98QsFn_mKk71\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJkMzFlZGNlZC02N2Y5LTRlMWMtOWE1Yy1lYmMzMWNmNTk5ZDkiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImFlM2Q0YjdjLTliN2ItNDhmNy1hM2YwLTNhNDczMGYwY2JmZSIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiJyYXRpIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk5MDY2NSwiZXhwIjoxNzc1OTkyNDY1fQ.lJ8RlvzuKpuMa6yxITQ5HwxdcoPlKjBtE5WpCzOhJGdYI9p49pBth29eIy_UXGk9\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI3YjRkNzkyMi0yOTVjLTRjMDYtYjViZS0wODdmN2VlNTZmODciLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJhZTNkNGI3Yy05YjdiLTQ4ZjctYTNmMC0zYTQ3MzBmMGNiZmUiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoicmF0aSIsInJvbGUiOiJST0xFX05PUk1BTCIsInN0YXR1cyI6IlBFTkRJTkciLCJpYXQiOjE3NzU5OTA2NjUsImV4cCI6MTc3NjU5NTQ2NX0.CEup6F_HUpaEc0y-m6TxeS_9vAIi5SdYaCyMvfJIk0IjEK4cC8kfIrEt9-ZsXkGE\"\
                     }}"
       security:
       - bearerAuthJWT: []
@@ -326,17 +326,17 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-auth-reissue-33084672"
             examples:
               admin-user-block:
-                value: _csrf=LWal3HE0qtUXr-DxpKmPim7uUtIyeWfVsq1QOee5L0Jo9dg-HlGUuElQkrE6ydXJlIS7uVvaf7BTTQX40ZVnWNKJGiNezOoJ
+                value: _csrf=xf8Z9xqn4aZfCsLFLOzLbxSHB5Ridiv7Ey1fRy8bk5bsIgyX9cl8zi-Q2ZdyO_ekSsH_CyHkKvUGQ0jWJRpscksj8fXbQTSu
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 admin-user-block:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -357,17 +357,17 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-auth-reissue-33084672"
             examples:
               admin-user-unblock:
-                value: _csrf=qfQEfd4MhEJBqTPe1reQcIzWItA6GjOj4ursCODZoS0U20Y-kZE2Gbg7tHdszADr7pqkQ7y0D7ENLlKOh4veOoS9l0l16CcN
+                value: _csrf=wddfah2_uWn1eevFWl4XIv0oYUJygVl8HgQVl-ZOXYSuPlAy9-87WCzbiV_YS92gbXMjE8kZTCNAtmlRezd2r4J6auWYXzFQ
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 admin-user-unblock:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -389,17 +389,17 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-user-auth-reissue-33084672"
             examples:
               admin-user-force-logout:
-                value: _csrf=cr00cojXh_K3f5aLRvTiMDzgruAmZLO2NPbOlaesXnfmvu9SFIlVEevj4cGaGfDqcdnWVQ_Rg4EeAdGbUZD98MHIbE6C3N8z
+                value: _csrf=gtkaXGUSIMZF_AmlXn9na7yOgvo0Fbs3_6L1kCIboZ6IhzDq47gqPwNzQqVozTmcZlJTU9m2r8IDLIIazJfGpBAvmK28sgCI
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 admin-user-force-logout:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -423,15 +423,15 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-user-auth-reissue-33084672"
               examples:
                 terms-version-detail:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"version\":\"\
-                    v1.0\",\"content\":\"약관 내용\",\"effectiveDate\":\"2026-04-12T19:15:36.8490165\"\
+                    v1.0\",\"content\":\"약관 내용\",\"effectiveDate\":\"2026-04-12T19:44:20.5461545\"\
                     }}"
 components:
   schemas:
-    api-user-terms-33084672:
+    api-user-auth-reissue-33084672:
       type: object
   securitySchemes:
     bearerAuthJWT:
