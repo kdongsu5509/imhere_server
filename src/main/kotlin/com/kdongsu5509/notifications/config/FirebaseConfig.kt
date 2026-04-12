@@ -20,8 +20,6 @@ class FirebaseConfig(
 ) {
     @Bean
     fun firebaseApp(): FirebaseApp {
-        // file:/path 또는 classpath:name 형식 모두 지원
-        // 환경 변수 FIREBASE_PATH 로 런타임 주입 가능 (docker-compose.prod.yml 참고)
         val path = fcmProperties.path
         val resource = if (path.contains(":")) {
             resourceLoader.getResource(path)
