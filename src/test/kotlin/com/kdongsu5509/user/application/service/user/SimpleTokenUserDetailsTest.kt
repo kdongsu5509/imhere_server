@@ -10,8 +10,10 @@ class SimpleTokenUserDetailsTest {
 
     companion object {
         const val TEST_EMAIL = "test@kakao.com"
-        const val ROLE_ADMIN = "ROLE_ADMIN"
-        const val ROLE_NORMAL = "ROLE_NORMAL"
+        const val ROLE_ADMIN = "ADMIN"
+        const val ROLE_NORMAL = "NORMAL"
+        const val EXPECTED_ROLE_ADMIN = "ROLE_ADMIN"
+        const val EXPECTED_ROLE_NORMAL = "ROLE_NORMAL"
         const val TEST_NICKNAME = "라티"
         const val ACTIVE_STATUS = "ACTIVE"
         const val PENDING_STATUS = "PENDING"
@@ -27,7 +29,7 @@ class SimpleTokenUserDetailsTest {
         assertThat(userDetails.username).isEqualTo(TEST_EMAIL)
         assertThat(userDetails.password).isNull()
         assertThat(userDetails.authorities).hasSize(1)
-        assertThat(userDetails.authorities.first()).isEqualTo(SimpleGrantedAuthority(ROLE_NORMAL))
+        assertThat(userDetails.authorities.first()).isEqualTo(SimpleGrantedAuthority(EXPECTED_ROLE_NORMAL))
     }
 
     @Nested
@@ -119,10 +121,10 @@ class SimpleTokenUserDetailsTest {
     fun createUserDetailsWithDifferentRoles() {
         // given & when & then
         val adminDetails = SimpleTokenUserDetails(TEST_EMAIL, TEST_NICKNAME, ROLE_ADMIN, ACTIVE_STATUS)
-        assertThat(adminDetails.authorities.first().authority).isEqualTo(ROLE_ADMIN)
+        assertThat(adminDetails.authorities.first().authority).isEqualTo(EXPECTED_ROLE_ADMIN)
 
         val userDetails = SimpleTokenUserDetails(TEST_EMAIL, TEST_NICKNAME, ROLE_NORMAL, ACTIVE_STATUS)
-        assertThat(userDetails.authorities.first().authority).isEqualTo(ROLE_NORMAL)
+        assertThat(userDetails.authorities.first().authority).isEqualTo(EXPECTED_ROLE_NORMAL)
     }
 }
 
