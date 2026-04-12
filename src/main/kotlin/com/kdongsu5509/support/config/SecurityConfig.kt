@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpStatus
 import org.springframework.jdbc.core.JdbcOperations
 import org.springframework.security.authentication.ott.JdbcOneTimeTokenService
 import org.springframework.security.authentication.ott.OneTimeTokenService
@@ -22,7 +23,7 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint
+import org.springframework.security.web.authentication.HttpStatusEntryPoint
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.authentication.ott.GenerateOneTimeTokenFilter
 
@@ -87,8 +88,7 @@ class SecurityConfig(
             }
 
             exceptionHandling {
-                authenticationEntryPoint =
-                    LoginUrlAuthenticationEntryPoint("/$adminLoginUrl")
+                authenticationEntryPoint = HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
             }
 
             oneTimeTokenLogin {
