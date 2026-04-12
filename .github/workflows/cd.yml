@@ -18,6 +18,7 @@ jobs:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
       ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}
+      EC2_DEPLOY_PATH: ${{ secrets.EC2_DEPLOY_PATH }}
 
     steps:
       - name: Checkout
@@ -61,25 +62,7 @@ jobs:
           restore-keys: |
             gradle-build-${{ runner.os }}-
 
-      - name: Inject secret config files
-        run: |
-          cat << 'EOF' > src/main/resources/application-datasource.yaml
-          ${{ secrets.APP_DATASOURCE_YAML }}
-          EOF
-          cat << 'EOF' > src/main/resources/application-monitoring.yaml
-          ${{ secrets.APP_MONITORING_YAML }}
-          EOF
-          cat << 'EOF' > src/main/resources/application-secret.yaml
-          ${{ secrets.APP_SECRET_YAML }}
-          EOF
-
-      - name: Create Firebase Key File
-        run: |
-          cat << 'EOF' > src/main/resources/imhereFirebaseKey.json
-          ${{ secrets.FIREBASE_JSON_KEY }}
-          EOF
-          ls -l src/main/resources/imhereFirebaseKey.json
-
+      # secrets 파일 없이 JAR 빌드 → 이미지에 민감 정보 미포함
       - name: Build JAR
         run: |
           chmod +x ./gradlew
@@ -126,18 +109,55 @@ jobs:
             --port 22 \
             --cidr ${{ steps.ip.outputs.runner_ip }}/32
 
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "StrictHostKeyChecking no" >> ~/.ssh/config
+
+      - name: Write secret config files to runner temp dir
+        run: |
+          mkdir -p /tmp/imhere-secrets/config /tmp/imhere-secrets/secrets
+          cat << 'EOF' > /tmp/imhere-secrets/config/application-datasource.yaml
+          ${{ secrets.APP_DATASOURCE_YAML }}
+          EOF
+          cat << 'EOF' > /tmp/imhere-secrets/config/application-monitoring.yaml
+          ${{ secrets.APP_MONITORING_YAML }}
+          EOF
+          cat << 'EOF' > /tmp/imhere-secrets/config/application-secret.yaml
+          ${{ secrets.APP_SECRET_YAML }}
+          EOF
+          cat << 'EOF' > /tmp/imhere-secrets/secrets/imhereFirebaseKey.json
+          ${{ secrets.FIREBASE_JSON_KEY }}
+          EOF
+
+      # 이미지가 아닌 EC2 파일시스템에 secrets 전달 → 볼륨 마운트로 런타임 주입
+      - name: Copy secret config files to EC2
+        run: |
+          ssh -i ~/.ssh/deploy_key "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
+            "mkdir -p ${EC2_DEPLOY_PATH}/config ${EC2_DEPLOY_PATH}/secrets"
+          scp -i ~/.ssh/deploy_key \
+            /tmp/imhere-secrets/config/application-datasource.yaml \
+            /tmp/imhere-secrets/config/application-monitoring.yaml \
+            /tmp/imhere-secrets/config/application-secret.yaml \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${EC2_DEPLOY_PATH}/config/"
+          scp -i ~/.ssh/deploy_key \
+            /tmp/imhere-secrets/secrets/imhereFirebaseKey.json \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${EC2_DEPLOY_PATH}/secrets/"
+
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          envs: ECR_REGISTRY,ECR_REPOSITORY,AWS_REGION
+          envs: ECR_REGISTRY,ECR_REPOSITORY,AWS_REGION,EC2_DEPLOY_PATH
           script: |
             aws ecr get-login-password --region $AWS_REGION \
               | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-            cd ${{ secrets.EC2_DEPLOY_PATH }}
+            cd $EC2_DEPLOY_PATH
 
             ECR_REGISTRY=$ECR_REGISTRY ECR_REPOSITORY=$ECR_REPOSITORY \
               docker compose -f docker-compose.prod.yml pull dsko
@@ -155,3 +175,9 @@ jobs:
             --protocol tcp \
             --port 22 \
             --cidr ${{ steps.ip.outputs.runner_ip }}/32
+
+      - name: Cleanup runner temp files
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key
+          rm -rf /tmp/imhere-secrets
