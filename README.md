@@ -9,25 +9,25 @@
 
 ## 기술 스택
 
-| 분류 | 기술 |
-|---|---|
-| Language | Kotlin 2.x |
-| Runtime | Java 21 |
-| Framework | Spring Boot 4.0.x |
-| Architecture | Hexagonal (Ports & Adapters) |
-| DB | PostgreSQL + Spring Data JPA + QueryDSL (KSP) |
-| Cache | Redis |
-| Message Queue | RabbitMQ |
-| Auth | Kakao OIDC + JJWT + Spring Security |
-| Admin Auth | Spring Security OTT (One-Time Token) |
-| Push | Firebase Admin SDK (FCM) |
-| SMS | Solapi SDK |
-| Alerting | Discord Webhook |
-| API Docs | Spring REST Docs + OpenAPI 3 (Swagger UI) |
-| Monitoring | Micrometer + Prometheus |
-| Test | JUnit 5, Mockito-Kotlin, Testcontainers |
-| Coverage | JaCoCo |
-| Infra | AWS EC2 + ECR, Docker |
+| 분류            | 기술                                            |
+|---------------|-----------------------------------------------|
+| Language      | Kotlin 2.x                                    |
+| Runtime       | Java 21                                       |
+| Framework     | Spring Boot 4.0.x                             |
+| Architecture  | Hexagonal (Ports & Adapters)                  |
+| DB            | PostgreSQL + Spring Data JPA + QueryDSL (KSP) |
+| Cache         | Redis                                         |
+| Message Queue | RabbitMQ                                      |
+| Auth          | Kakao OIDC + JJWT + Spring Security           |
+| Admin Auth    | Spring Security OTT (One-Time Token)          |
+| Push          | Firebase Admin SDK (FCM)                      |
+| SMS           | Solapi SDK                                    |
+| Alerting      | Discord Webhook                               |
+| API Docs      | Spring REST Docs + OpenAPI 3 (Swagger UI)     |
+| Monitoring    | Micrometer + Prometheus                       |
+| Test          | JUnit 5, Mockito-Kotlin, Testcontainers       |
+| Coverage      | JaCoCo                                        |
+| Infra         | AWS EC2 + ECR, Docker                         |
 
 ---
 
@@ -78,23 +78,27 @@ src/main/kotlin/com/kdongsu5509/
 ## 주요 기능
 
 ### 인증
+
 - **Kakao OIDC 로그인** — 카카오 공개키 검증 후 자체 JWT 발급
 - **JWT 재발급** — Redis 기반 Refresh Token 관리
 - **어드민 OTT 로그인** — Spring Security One-Time Token + Discord 알림
 - 카카오 공개키 7일 주기 자동 갱신 (스케쥴러 + Redis 캐시)
 
 ### 사용자 / 친구
+
 - 사용자 닉네임 조회/수정
 - 친구 요청 · 수락 · 거절
 - 친구 차단/해제
 - 이용 약관 동의
 
 ### 알림
+
 - **FCM 푸시 알림** — 위치 도착/출발 알림 (Retryable 재시도 포함)
 - **SMS 알림** — Solapi 단일/다중 발송
 - RabbitMQ를 통한 비동기 알림 전달
 
 ### 운영
+
 - **HTTP 접근 로그** — MDC(traceId/method/uri/status/durationMs) + ECS JSON 구조화 로그
 - **에러 로그 분리** — WARN 이상 전용 롤링 파일 (90일 보존)
 - **Discord 알림** — 5xx 서버 에러 즉시 알림 (비동기 발송)
@@ -202,10 +206,10 @@ docker-compose up -d
 
 ## 개발 컨벤션
 
-| 항목 | 규칙 |
-|---|---|
-| 커밋 | AngularJS Git Commit Convention |
-| 로깅 | `.claude/convention/loggingSystem.md` |
-| AOS 로깅 | `.claude/convention/aos-logging.md` |
-| API 문서 | Spring REST Docs 기반, Swagger UI 제공 |
-| 아키텍처 | Hexagonal — 도메인은 프레임워크 의존 금지 |
+| 항목     | 규칙                                    |
+|--------|---------------------------------------|
+| 커밋     | AngularJS Git Commit Convention       |
+| 로깅     | `.claude/convention/loggingSystem.md` |
+| AOS 로깅 | `.claude/convention/aos-logging.md`   |
+| API 문서 | Spring REST Docs 기반, Swagger UI 제공    |
+| 아키텍처   | Hexagonal — 도메인은 프레임워크 의존 금지          |
