@@ -30,6 +30,7 @@ logging:
       max-history: 30
       total-size-cap: 3GB
   level:
+    org.springframework.security: TRACE
     root: INFO
     com.kdongsu5509: INFO
     # silence noisy frameworks

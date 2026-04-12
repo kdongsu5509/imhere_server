@@ -41,7 +41,6 @@ class SecurityConfig(
     private val ottLoginSuccessHandler: OttLoginSuccessHandler,
     @param:Value("\${admin.secret}") private val adminSecret: String,
     @param:Value("\${admin.id}") private val adminId: String,
-    @param:Value("\${admin.login.url}") private val adminLoginUrl: String
 ) {
 
     @Bean

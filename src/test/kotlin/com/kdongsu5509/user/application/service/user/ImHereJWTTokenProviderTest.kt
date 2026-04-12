@@ -167,16 +167,6 @@ class ImHereJWTTokenProviderTest {
         `when`(cachePort.find(REDIS_KEY, String::class.java)).thenReturn(differentTokenInRedis)
         `when`(jwtTokenUtil.getUserEmailFromToken(REFRESH_TOKEN)).thenReturn(USER_EMAIL)
 
-//        `when`(jwtTokenUtil.getUIDFromToken(REFRESH_TOKEN)).thenReturn(TEST_UUID)
-//        `when`(jwtTokenUtil.getUserNicknameFromToken(REFRESH_TOKEN)).thenReturn(USER_NICKNAME)
-//        `when`(jwtTokenUtil.getRoleFromToken(REFRESH_TOKEN)).thenReturn(ROLE)
-//        `when`(jwtTokenUtil.getStatusFromToken(REFRESH_TOKEN)).thenReturn(ACTIVE_STATUS)
-
-//        //jwtIssuer : 새로운 토큰 잘 만들어 준다.
-//        `when`(jwtTokenIssuer.createAccessToken(imHereJwtTokenElements)).thenReturn(NEW_ACCESS_TOKEN)
-//        `when`(jwtTokenIssuer.createRefreshToken(imHereJwtTokenElements)).thenReturn(NEW_REFRESH_TOKEN)
-//        `when`(jwtTokenUtil.getExpirationDateFromToken(NEW_REFRESH_TOKEN)).thenReturn(EXP_DATE)
-
         // when & then
         assertThrows<BusinessException> {
             imHereJWTTokenProvider.reissueJwtTokenByRefreshToken(REFRESH_TOKEN)

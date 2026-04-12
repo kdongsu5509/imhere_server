@@ -12,7 +12,7 @@ class SimpleTokenUserDetails(
     val status: String
 ) : UserDetails {
 
-    private val authoritiesList: Collection<GrantedAuthority> = listOf(SimpleGrantedAuthority(role))
+    private val authoritiesList: Collection<GrantedAuthority> = listOf(SimpleGrantedAuthority("ROLE_$role"))
 
     override fun getAuthorities(): Collection<GrantedAuthority> = authoritiesList
 
