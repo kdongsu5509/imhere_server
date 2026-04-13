@@ -72,4 +72,20 @@ class FriendNotificationConsumerTest : TestRabbitMQContainer() {
         )
     }
 
+    @Test
+    fun send_alert_null_sender_email_throws_exception() {
+        val dto = NotificationMessageDto(
+            type = NotificationType.FRIEND_REQUEST,
+            receiverEmail = "test@example.com",
+            senderEmail = null,
+            message = "친구 요청이 왔습니다!",
+            data = null,
+            timestamp = LocalDateTime.now()
+        )
+
+        org.junit.jupiter.api.assertThrows<IllegalStateException> {
+            consumer.receiveMessage(dto)
+        }
+    }
+
 }
