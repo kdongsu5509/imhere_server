@@ -73,4 +73,38 @@ class TermNotificationConsumerTest : TestRabbitMQContainer() {
         )
     }
 
+    @Test
+    fun send_alert_with_non_null_sender_email_uses_it_as_senderEmail() {
+        val receiverEmail = "test@example.com"
+        val senderEmail = "admin@example.com"
+        val body = "약관이 업데이트 되었습니다."
+
+        val notificationMessageDto = NotificationMessageDto(
+            type = NotificationType.TERMS_UPDATE,
+            receiverEmail = receiverEmail,
+            senderEmail = senderEmail,
+            message = body,
+            data = null,
+            timestamp = LocalDateTime.now()
+        )
+
+        willDoNothing().given(notificationToUserCasePort).send(
+            senderNickname = "System",
+            senderEmail = senderEmail,
+            receiverEmail = receiverEmail,
+            type = NotificationType.TERMS_UPDATE.name,
+            body = body
+        )
+
+        consumer.receiveMessage(notificationMessageDto)
+
+        then(notificationToUserCasePort).should(times(1)).send(
+            senderNickname = "System",
+            senderEmail = senderEmail,
+            receiverEmail = receiverEmail,
+            type = NotificationType.TERMS_UPDATE.name,
+            body = body
+        )
+    }
+
 }

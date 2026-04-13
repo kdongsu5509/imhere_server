@@ -72,4 +72,51 @@ class LocationNotificationControllerTest {
             eq("위치 알림 대상자로 등록되었습니다.")
         )
     }
+
+    @Test
+    @DisplayName("receiverEmail 형식이 잘못되면 400 반환")
+    fun send_with_invalid_receiver_email_returns_400() {
+        val body = """{"receiverEmail":"not-an-email","type":"ANY_TYPE","body":"등록되었습니다."}"""
+        val userDetails = SimpleTokenUserDetails("sender@example.com", "sender-nick", "ROLE_USER", "ACTIVE")
+
+        mockMvc.perform(
+            post("/api/notification/fcm/location")
+                .with(csrf())
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body)
+        ).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    @DisplayName("body가 공백이면 400 반환")
+    fun send_with_blank_body_returns_400() {
+        val body = """{"receiverEmail":"receiver@example.com","type":"ANY_TYPE","body":""}"""
+        val userDetails = SimpleTokenUserDetails("sender@example.com", "sender-nick", "ROLE_USER", "ACTIVE")
+
+        mockMvc.perform(
+            post("/api/notification/fcm/location")
+                .with(csrf())
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body)
+        ).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    @DisplayName("인증 없이 요청 시 401")
+    fun send_without_auth_returns_401() {
+        val request = FcmNotificationRequest(
+            receiverEmail = "receiver@example.com",
+            type = "ANY_TYPE",
+            body = "등록되었습니다."
+        )
+
+        mockMvc.perform(
+            post("/api/notification/fcm/location")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+        ).andExpect(status().isUnauthorized)
+    }
 }

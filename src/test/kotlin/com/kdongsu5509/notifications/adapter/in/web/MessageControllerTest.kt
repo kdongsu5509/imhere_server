@@ -1,7 +1,6 @@
 package com.kdongsu5509.notifications.adapter.`in`.web
 
-import com.kdongsu5509.notifications.adapter.`in`.web.dto.FcmNotificationRequest
-import com.kdongsu5509.notifications.application.port.`in`.NotificationToUserCasePort
+import com.kdongsu5509.notifications.application.port.`in`.MessageSendUseCasePort
 import com.kdongsu5509.support.config.SecurityConstants
 import com.kdongsu5509.support.external.DiscordUserErrorNotifier
 import com.kdongsu5509.support.logger.AccessLogPrinter
@@ -20,16 +19,15 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import tools.jackson.databind.json.JsonMapper
 
-@WebMvcTest(DeliveryResultNotificationController::class)
-class DeliveryResultNotificationControllerTest {
+@WebMvcTest(MessageController::class)
+class MessageControllerTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
 
     @MockitoBean
-    private lateinit var notificationToUserCasePort: NotificationToUserCasePort
+    private lateinit var messageSendUseCasePort: MessageSendUseCasePort
 
     @MockitoBean
     private lateinit var accessLogPrinter: AccessLogPrinter
@@ -43,65 +41,71 @@ class DeliveryResultNotificationControllerTest {
     @MockitoBean
     private lateinit var securityConstants: SecurityConstants
 
-    @Autowired
-    private lateinit var objectMapper: JsonMapper
-
     @Test
-    @DisplayName("전송 결과 안내 FCM 알림 전송 (NOTI-007) - 본인에게 전송")
-    fun send_delivery_result_notification() {
-        val request = FcmNotificationRequest(
-            receiverEmail = "any-receiver@example.com", // This should be ignored
-            type = "ANY_TYPE",
-            body = "요청하신 알림이 성공적으로 전송되었습니다."
-        )
-        val userDetails = SimpleTokenUserDetails("sender@example.com", "sender-nick", "ROLE_USER", "ACTIVE")
+    @DisplayName("단일 SMS 전송 성공")
+    fun send_sms_success() {
+        val body = """{"receiverNumber":"01012345678","location":"판교역"}"""
+        val userDetails = SimpleTokenUserDetails("user@example.com", "라티", "ROLE_USER", "ACTIVE")
 
         mockMvc.perform(
-            post("/api/notification/fcm/delivery-result")
-                .with(csrf())
-                .with(user(userDetails))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
-        ).andExpect(status().isOk)
-
-        verify(notificationToUserCasePort).send(
-            eq("sender-nick"),
-            eq("sender@example.com"),
-            eq("sender@example.com"), // Verified that it's sent to oneself
-            eq("DELIVERY_RESULT_NOTICE"),
-            eq("요청하신 알림이 성공적으로 전송되었습니다.")
-        )
-    }
-
-    @Test
-    @DisplayName("body가 공백이면 400 반환")
-    fun send_with_blank_body_returns_400() {
-        val body = """{"receiverEmail":"receiver@example.com","type":"ANY_TYPE","body":""}"""
-        val userDetails = SimpleTokenUserDetails("sender@example.com", "sender-nick", "ROLE_USER", "ACTIVE")
-
-        mockMvc.perform(
-            post("/api/notification/fcm/delivery-result")
+            post("/api/notification/sms/send")
                 .with(csrf())
                 .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body)
-        ).andExpect(status().isBadRequest)
+        ).andExpect(status().isOk)
+
+        verify(messageSendUseCasePort).send(
+            eq("라티"),
+            eq("01012345678"),
+            eq("판교역")
+        )
     }
 
     @Test
-    @DisplayName("인증 없이 요청 시 401")
-    fun send_without_auth_returns_401() {
-        val request = FcmNotificationRequest(
-            receiverEmail = "any@example.com",
-            type = "ANY_TYPE",
-            body = "test"
-        )
+    @DisplayName("다중 SMS 전송 성공")
+    fun send_multiple_sms_success() {
+        val body = """{"receiversNumbers":["01011112222","01033334444"],"location":"강남역"}"""
+        val userDetails = SimpleTokenUserDetails("user@example.com", "라티", "ROLE_USER", "ACTIVE")
 
         mockMvc.perform(
-            post("/api/notification/fcm/delivery-result")
+            post("/api/notification/sms/send/multi")
+                .with(csrf())
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body)
+        ).andExpect(status().isOk)
+
+        verify(messageSendUseCasePort).sendMultiple(
+            eq("라티"),
+            eq(listOf("01011112222", "01033334444")),
+            eq("강남역")
+        )
+    }
+
+    @Test
+    @DisplayName("인증 없이 단일 SMS 요청 시 401")
+    fun send_without_auth_returns_401() {
+        val body = """{"receiverNumber":"01012345678","location":"판교역"}"""
+
+        mockMvc.perform(
+            post("/api/notification/sms/send")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
+                .content(body)
+        ).andExpect(status().isUnauthorized)
+    }
+
+    @Test
+    @DisplayName("인증 없이 다중 SMS 요청 시 401")
+    fun send_multiple_without_auth_returns_401() {
+        val body = """{"receiversNumbers":["01011112222"],"location":"강남역"}"""
+
+        mockMvc.perform(
+            post("/api/notification/sms/send/multi")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body)
         ).andExpect(status().isUnauthorized)
     }
 }

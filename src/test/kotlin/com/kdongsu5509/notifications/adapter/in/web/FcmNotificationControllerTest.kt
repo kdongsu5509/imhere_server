@@ -22,8 +22,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import tools.jackson.databind.json.JsonMapper
 
-@WebMvcTest(ArrivalNotificationController::class)
-class ArrivalNotificationControllerTest {
+@WebMvcTest(FcmNotificationController::class)
+class FcmNotificationControllerTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -47,17 +47,17 @@ class ArrivalNotificationControllerTest {
     private lateinit var objectMapper: JsonMapper
 
     @Test
-    @DisplayName("도착 알림 FCM 알림 전송 (NOTI-006)")
-    fun send_arrival_notification() {
+    @DisplayName("FCM 알림 전송 성공")
+    fun send_fcm_notification_success() {
         val request = FcmNotificationRequest(
             receiverEmail = "receiver@example.com",
-            type = "ANY_TYPE",
-            body = "목적지에 도착했습니다."
+            type = "FRIEND_REQUEST",
+            body = "친구 요청이 왔습니다."
         )
         val userDetails = SimpleTokenUserDetails("sender@example.com", "sender-nick", "ROLE_USER", "ACTIVE")
 
         mockMvc.perform(
-            post("/api/notification/fcm/arrival")
+            post("/api/notification/fcm/send")
                 .with(csrf())
                 .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -68,19 +68,34 @@ class ArrivalNotificationControllerTest {
             eq("sender-nick"),
             eq("sender@example.com"),
             eq("receiver@example.com"),
-            eq("ARRIVAL_CONFIRMATION"),
-            eq("목적지에 도착했습니다.")
+            eq("FRIEND_REQUEST"),
+            eq("친구 요청이 왔습니다.")
         )
     }
 
     @Test
-    @DisplayName("receiverEmail 형식이 잘못되면 400 반환")
-    fun send_with_invalid_receiver_email_returns_400() {
-        val body = """{"receiverEmail":"not-an-email","type":"ANY_TYPE","body":"도착했습니다."}"""
+    @DisplayName("receiverEmail이 공백이면 400 반환")
+    fun send_with_blank_receiver_email_returns_400() {
+        val body = """{"receiverEmail":"","type":"FRIEND_REQUEST","body":"test"}"""
         val userDetails = SimpleTokenUserDetails("sender@example.com", "sender-nick", "ROLE_USER", "ACTIVE")
 
         mockMvc.perform(
-            post("/api/notification/fcm/arrival")
+            post("/api/notification/fcm/send")
+                .with(csrf())
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body)
+        ).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    @DisplayName("receiverEmail 형식이 잘못되면 400 반환")
+    fun send_with_invalid_email_format_returns_400() {
+        val body = """{"receiverEmail":"not-an-email","type":"FRIEND_REQUEST","body":"test"}"""
+        val userDetails = SimpleTokenUserDetails("sender@example.com", "sender-nick", "ROLE_USER", "ACTIVE")
+
+        mockMvc.perform(
+            post("/api/notification/fcm/send")
                 .with(csrf())
                 .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -91,11 +106,11 @@ class ArrivalNotificationControllerTest {
     @Test
     @DisplayName("body가 공백이면 400 반환")
     fun send_with_blank_body_returns_400() {
-        val body = """{"receiverEmail":"receiver@example.com","type":"ANY_TYPE","body":""}"""
+        val body = """{"receiverEmail":"receiver@example.com","type":"FRIEND_REQUEST","body":""}"""
         val userDetails = SimpleTokenUserDetails("sender@example.com", "sender-nick", "ROLE_USER", "ACTIVE")
 
         mockMvc.perform(
-            post("/api/notification/fcm/arrival")
+            post("/api/notification/fcm/send")
                 .with(csrf())
                 .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -108,12 +123,12 @@ class ArrivalNotificationControllerTest {
     fun send_without_auth_returns_401() {
         val request = FcmNotificationRequest(
             receiverEmail = "receiver@example.com",
-            type = "ANY_TYPE",
-            body = "도착했습니다."
+            type = "FRIEND_REQUEST",
+            body = "test"
         )
 
         mockMvc.perform(
-            post("/api/notification/fcm/arrival")
+            post("/api/notification/fcm/send")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
