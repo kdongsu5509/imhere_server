@@ -18,17 +18,17 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-admin-users-email-block-33084672"
             examples:
               admin-friend-clear-relationship:
-                value: userA=adminA%40kakao.com&userB=adminB%40kakao.com&_csrf=tcZrOSIYgVZT15AktwPt08LZ_B5JX2jNVZbgNxTtqJnyZSC-0fcPDkcgs2J-4qUXgC7Z6vq_0X8tOgngZfeBByCIma_EBxbY
+                value: userA=adminA%40kakao.com&userB=adminB%40kakao.com&_csrf=d-O_RxOe9lMxBVn1LPmcdR1HuNSm1KzDkFCKsqM-jEi_szUyFdaJIiH7xjIcMmqXFdSoQCVxleyQ4pXuqDHui5YNtHmKgAcK
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 admin-friend-clear-relationship:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -45,7 +45,7 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 terms-list:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"content\":[{\"\
@@ -69,17 +69,17 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-admin-users-email-block-33084672"
             examples:
               admin-friend-clear-request:
-                value: requester=req%40kakao.com&receiver=rcv%40kakao.com&_csrf=6ARLO5Y9N9CWRbWEEalT5ARrBqY6UW_MP9pUe1ENaRfpWblq2mZ6Cq4OD-a7JozhJIRn3DZfK8RYY1_hB79sHzI4WHOKb4tY
+                value: requester=req%40kakao.com&receiver=rcv%40kakao.com&_csrf=dBJawD5DL1ZoDb1aOG8amQqvhVF_wbZ5MbulOhzXCozHTjGMRyVsoQd3FjRFOIVjCkIu-26aqDMeooFUB4LDCC2ybrSidwC5
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 admin-friend-clear-request:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -94,7 +94,7 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-admin-users-email-block-33084672"
             examples:
               admin-terms-create-definition:
                 value: "{\"termsName\":\"위치 정보 이용 약관\",\"termsType\":\"LOCATION\"\
@@ -105,7 +105,7 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 admin-terms-create-definition:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -122,18 +122,18 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-admin-users-email-block-33084672"
             examples:
               admin-terms-create-version:
                 value: "{\"termDefinitionId\":2,\"version\":\"v1.0\",\"content\":\"\
-                  테스트 내용\",\"effectiveDate\":\"2026-04-13T20:24:20.0529067\"}"
+                  테스트 내용\",\"effectiveDate\":\"2026-04-14T22:02:29.279535\"}"
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 admin-terms-create-version:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -148,13 +148,13 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-admin-users-email-block-33084672"
             examples:
               auth-login-existing:
-                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc1OTkzMDY1LCJleHAiOjE3NzU5OTY2NjUsImF1dGhfdGltZSI6MTc3NTk5MzA2NTAwNywibm9uY2UiOiI5NzA0NWU0Ni0yZjMzLTQ0YjgtOWUzNy1lZmM2N2M5OGY4ZjkiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSJ9.SD2gMAVnF-R1SURIOZULsj8GRXX4CVCnUsfh01STLxQ4YaSqM26SUyCCkXnhRWE8QczUm0D-3lAsYE78RKeYzxsnKOK0nTvXprLb8AWTBFjCNfIjKInkNmMkemz_lMqVWyhj_2DUa9xk4MMhs_dm5bPpgWonWOh7CfIk4TUY_dOzIqeZ5ITIlU2xfFrjL632IvPJTKZDbP0cA7qyUb0czgpOw0MEUg-0yMB0ARM1sHmZnQoAbI309HD7--YSPvh1qX33mTtxfKrPsTSTn6FN0pv5VPG5wu8-nsxO3egUPx89094SksiwlsxlWQtlZKYAQ3fF9hyTGpbSb-1XBzwI5g\"\
+                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc2MDg1MzUyLCJleHAiOjE3NzYwODg5NTIsImF1dGhfdGltZSI6MTc3NjA4NTM1MjIzNSwibm9uY2UiOiIxMDBmODdkNy1iZGVhLTRjYWEtOTU5Mi00MDdiNzk3ZWUzNDkiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSJ9.EQEQuShTU8GS87XRIrQoQ8o7RSldL2t0b52_6UkoEUQR0Bgi6uTg2J021VgSqzLOCwxqiXWVhn2yAbgBr3IJ6tLzhiP1Dpb3tOM7Gyi2SUFZNrO3s1VUpdao2neVOgvbITLC9JIkh0UoVSKgkAmvTDdu4g7detTzI9BjUKw-9oNV68ENTJGQzBjUHn7DrU1cwh9dXx5mjXrSdLIsMuW80Kk4EG2zLPHlgoA2eDaCfG-WblRhOvxbnIwJKYQuHtIbt-T4xe43iIE-8c40IJFgRsEYx6i8cTUUTxz82qPTALqijO6xVF04RK-dpZ9LWyQ_9H_kfSiRqaRu6td-jtPLSg\"\
                   }"
               auth-login-new:
-                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc1OTkzMDY1LCJleHAiOjE3NzU5OTY2NjUsImF1dGhfdGltZSI6MTc3NTk5MzA2NTEyMCwibm9uY2UiOiI0ZmI3Y2MxYy0yOTUxLTQ0YmMtOTcwZi05ZDg3ZWVkNmU4NGEiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSJ9.dlUyT1G4wt63B-mxQWX9SGb_EZlexcNViyvuMuQc65bOhSnKY7K0mB_t-N45CYzDYVTvYCcsfPKseeGj5_KBK304hul-wRF8PuwK0wIyY4IkbRC6Pz8p5kV7xlBWxVAv-EHksFykSeMwH5rDeM70AfWBXCJ1uyAT9bBNM-decgMi4pks0mJ3TarKBo53DrepsuF9JC5da352sxeOrO2N_f6zJi3b9yQV_LTUAWaBLwvKw7QK6a0WAHdpNXjF4sMhqJVLgbpA0HAYXSx4dC8j2Xq8Yfj_jUVrhcxWGvtuVeIu7CbKcWyi2LWNf-NA4MR3FitJ_s6npDnOGCb1-GQEJQ\"\
+                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc2MDg1MzUyLCJleHAiOjE3NzYwODg5NTIsImF1dGhfdGltZSI6MTc3NjA4NTM1MjMwOSwibm9uY2UiOiIxNTNjMDZjYy1mYjI0LTRmZDgtYjAzOS05MTVhOTg2YmJhYmEiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSJ9.sVIK6_Sc_3ewgaBcwGL7P4bXN1vmFCzalsIP_V0h31o-aWRmLAiU54p0yDYTe0b0pq5jmADz6Cpn4rt_FNgFgL4b8tsy1ipqOBwI5RfbH3yEMo8tZG1WU3HMuTfiXlvPjQ3Q740eMmcA1LhYfds8epJ3U9opK3OdpOsMMWXD9aoyFHer2bmXiZ9a45lJvKEB7ZMA05vVhlbuDLTdb5pg2EX2ZFbeqic7So9oKmj_AMnuVvbg_2nSaOMm_MPtuVA5VkMseNcvy6XMkVBeNcCxeL4PAZFk8ABHNjAD624vOy1fKMoA3hQRJuJmZJolVSErwp-QJ8zhJSWFiZkNhygfLw\"\
                   }"
       responses:
         "200":
@@ -162,24 +162,24 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 auth-login-existing:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI2NmI3MzM4NS1iOTg2LTQxNjEtOTJlNS1lYzdjNzFkZDNhYmYiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImJjYjFjYzA4LTM0YWEtNDIxZi1iYjI5LTA3NzQ5ZjczNmJjMyIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiLthYzsiqTthLAiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJBQ1RJVkUiLCJpYXQiOjE3NzU5OTMwNjUsImV4cCI6MTc3NTk5NDg2NX0.QKnf0Qtl9TDNop5BxNfEyRO2-nDU-xdTV5pOSqzVFNxVtnK2NpE_SaZiIghS32MQ\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJmMjU0YmI0OS1kMDFiLTQ0NmMtYTZkYy01ODlkNDIxMzJmMmEiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJiY2IxY2MwOC0zNGFhLTQyMWYtYmIyOS0wNzc0OWY3MzZiYzMiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoi7YWM7Iqk7YSwIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiQUNUSVZFIiwiaWF0IjoxNzc1OTkzMDY1LCJleHAiOjE3NzY1OTc4NjV9.9mZRo1-G0M0w12xZUipgW7q7hDU0aQyMekg6cSgAuWVHbZFOBnEwAcKqX42X3trc\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIwNDA3ZGMyMi04MmMzLTQ5ZGYtYWUwYi0wYTc5MGYzMjY5ZTciLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImJmZmY2ZTg0LTYyNzUtNGQ5Ni05Y2I4LWQzOGVkM2Q5Yzk5YyIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiLthYzsiqTthLAiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJBQ1RJVkUiLCJpYXQiOjE3NzYwODUzNTIsImV4cCI6MTc3NjA4NzE1Mn0.-z1FDi_yE9cvWtqiNeHJehKRHsmmN2dbffqe1UGEmikAuUXX_RaOShr69oW_2MQv\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJhZDYxZjBjZC04NTU1LTRkZmItYTU5MC01ZThjY2RlYzRkMzYiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJiZmZmNmU4NC02Mjc1LTRkOTYtOWNiOC1kMzhlZDNkOWM5OWMiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoi7YWM7Iqk7YSwIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiQUNUSVZFIiwiaWF0IjoxNzc2MDg1MzUyLCJleHAiOjE3NzY2OTAxNTJ9.MFLXkf-ll4VBEeLQbaQuYMfzmh8MDJb8dc_zZVhqtFgR3H0K2B49n20suKDmYiF8\"\
                     }}"
         "201":
           description: "201"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 auth-login-new:
                   value: "{\"code\":201,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJlZWQ3Y2QyNS1jMDM0LTQ1ZWItOTAxYy0zZThjMzRjODc1MjkiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImMyMDU4MDYzLTAzMjMtNGEwYy1hN2IzLWMwZThiM2Y1YzFlMyIsImVtYWlsIjoibmV3LXVzZXJAa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc1OTkzMDY1LCJleHAiOjE3NzU5OTQ4NjV9.MOVhg0GRkaE7tonL-ILtY84ecIegK8sRkFzfI88W7Ab3JPBUd_ueGA1Kap2bKsJp\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIzMzVkNGI1OC1iZjA0LTRhNmUtOWFmZi0wNDIxOTMwMjUzYWQiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJjMjA1ODA2My0wMzIzLTRhMGMtYTdiMy1jMGU4YjNmNWMxZTMiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk5MzA2NSwiZXhwIjoxNzc2NTk3ODY1fQ.mLcSagqjbxN8CTJIafS4zm6THhEsUqAbvc1ajOt4e72g0sTqhxvT0mVevemH1mXz\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIwY2MwMmI0NC0wNGQ4LTRjMjgtYTc2ZC01OWYxZDEwODdjMTMiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImY4YjVhYWZiLTk1N2UtNDFjNS04MjNiLTE4MjFmOTQ2ZDVjZSIsImVtYWlsIjoibmV3LXVzZXJAa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc2MDg1MzUyLCJleHAiOjE3NzYwODcxNTJ9.3ps2-eeeyli86nIdcN7gdIlTYxbteV_fH5WYfQ-qWKig4wo_bGUyG8OpPKZkozXY\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJkMzMyYjBiNi00ZWNjLTQwZmUtOWIyNy03ODk1MWUwNTI3YmMiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJmOGI1YWFmYi05NTdlLTQxYzUtODIzYi0xODIxZjk0NmQ1Y2UiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NjA4NTM1MiwiZXhwIjoxNzc2NjkwMTUyfQ.oxld_s9jU-xQQ5Hc14eWXPOVp7cO71f9PmXQbHzFOphmArwwD_2HEqkb78eQ2oU7\"\
                     }}"
   /api/user/auth/reissue:
     post:
@@ -192,10 +192,10 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-admin-users-email-block-33084672"
             examples:
               auth-reissue:
-                value: "{\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJmOGY2ZDEzYi0yODNlLTQ2NzUtYTk2Zi1mNmFiNDcwMTI3M2EiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJiMzA4MTBlOS1iZWU1LTQwOWMtODdlYi1jYzkyZjA2YWUyNDYiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk5MzA2NCwiZXhwIjoxNzc2NTk3ODY0fQ.Fp4Eyc-e-bjJQiBiuwUsnB9SrMVBmc3VJ5ZeIBMVyMi7HgyaNBNXQAoFywmrlQGD\"\
+                value: "{\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI5OGRlYThlNy05MWE0LTRhMmUtOTY4Yy0yZjBiNDIzZmE3YTciLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJjYzgzNDdjYi1hMDc1LTRkMWItODc1Yi1jOGRmMWViYmZiNmUiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NjA4NTM1MiwiZXhwIjoxNzc2NjkwMTUyfQ.0coyAlfncAf_-EovmwzRQ8ioywNPvtHXgnq5M6gaG3Q9HKEjcztb6EJ-AidzMLUS\"\
                   }"
       responses:
         "200":
@@ -203,12 +203,12 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 auth-reissue:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJkZDk4MTMxNy1lYWM3LTQzNGItODQ4YS04ZjQ3ZTNmMGZmNDciLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImIzMDgxMGU5LWJlZTUtNDA5Yy04N2ViLWNjOTJmMDZhZTI0NiIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc1OTkzMDY0LCJleHAiOjE3NzU5OTQ4NjR9.NlGlqLqb6q_9YSCIcBDabWHYqNdkxaDQhCjABSUGdveTlKjoH0Jg-pSmi6I9JHjW\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIzOGE2MjU0ZC03ZjMxLTRlZjgtYmY3NS1kMGI4NGNiMzRhNjMiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJiMzA4MTBlOS1iZWU1LTQwOWMtODdlYi1jYzkyZjA2YWUyNDYiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk5MzA2NCwiZXhwIjoxNzc2NTk3ODY0fQ.aRSJJiF76SaxFCOgJdjpGGg7a88CxBViYm2ov1N0KXt5FM8meyhXWTpKQaBUA8Fw\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI3YjM3NTE4Yi1hZDI0LTQ1NDgtOTk3OS03NjUxMGJjZDMyMzMiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImNjODM0N2NiLWEwNzUtNGQxYi04NzViLWM4ZGYxZWJiZmI2ZSIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc2MDg1MzUyLCJleHAiOjE3NzYwODcxNTJ9.GpEx0Zywp4G0K_gtSKlSTR2iXx6QPijnpXkyZprmRfDLH56YC-UTO9pqBihxKM0Q\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJiZTFiODJmYy1hMDJkLTQ1NWEtYmFlYS0zZWQ4MmEyODJmN2UiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJjYzgzNDdjYi1hMDc1LTRkMWItODc1Yi1jOGRmMWViYmZiNmUiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NjA4NTM1MiwiZXhwIjoxNzc2NjkwMTUyfQ.HCMe5zt5yXkvtObVEBWNCBEE8tPj-vnAGw-eW_6h7b152RWoP8kW6h4HrVzGrCAM\"\
                     }}"
   /api/user/info/me:
     get:
@@ -223,7 +223,7 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 user-get-me:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"userEmail\"\
@@ -239,7 +239,7 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-admin-users-email-block-33084672"
             examples:
               user-change-nickname:
                 value: "{\"newNickname\":\"고동수\"}"
@@ -249,7 +249,7 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 user-change-nickname:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"userEmail\"\
@@ -267,11 +267,11 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 user-search-by-nickname:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":[{\"userId\":\"\
-                    c482c7d6-9117-456e-865d-ab9b528cee33\",\"userEmail\":\"exist@test.com\"\
+                    171597fd-d04f-4142-98d8-06c7c2ef3d68\",\"userEmail\":\"exist@test.com\"\
                     ,\"userNickname\":\"tester\"}]}"
   /api/user/terms/consent:
     post:
@@ -287,7 +287,7 @@ paths:
         content:
           application/json;charset=UTF-8:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-admin-users-email-block-33084672"
             examples:
               terms-consent-all:
                 value: "{\"consents\":[{\"termDefinitionId\":1,\"agreed\":true},{\"\
@@ -299,12 +299,12 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 terms-consent-all:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIzZDk0NmRkOS1jOGMwLTQ5ZWEtYTMyYy1mYTc5NjA1MmNhYzgiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjE4YzE2MTYxLTYwNDgtNGI2Ni05NTkwLTZlMWM2NzEwNzVjOCIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiJyYXRpIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NTk5MzA2NywiZXhwIjoxNzc1OTk0ODY3fQ.GeIOS3S6AOC8-5wxktyxmXcmlGbpf-X8NvLUA5e5ADSmTqvxvvSXqFdUbSvrzHY-\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIxNDNiMWUxZi1hNjIyLTQyYWUtYjE2ZS1hNjJmN2U4MzMyZWMiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiIxOGMxNjE2MS02MDQ4LTRiNjYtOTU5MC02ZTFjNjcxMDc1YzgiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoicmF0aSIsInJvbGUiOiJST0xFX05PUk1BTCIsInN0YXR1cyI6IlBFTkRJTkciLCJpYXQiOjE3NzU5OTMwNjcsImV4cCI6MTc3NjU5Nzg2N30.pMglukDR1czaGUmcWRFJpL9IIiH0UbExFtF59wlMA55FvY7bw4lFZ9awY-wzoLvm\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJmNDM4YjQ0MC01N2U1LTRhOTYtOWQ2Yi03ZDMyZDFhNWJjNjEiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImIwNzI1ZTdjLWFjMjItNGZmNy1iYWQ1LWQwMDM5ZDc5MjA0OSIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiJyYXRpIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NjA4NTM1MywiZXhwIjoxNzc2MDg3MTUzfQ.XKRZTE2g1-xKqAkVYTnxf5apancyEKQWg3nqYqymjDnxzBs336qm_uCWxtemn-mC\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIwZDhmZjFiNC0yNmRlLTQ5N2EtYmJkYi04ZjBjYTk3OGJmZTkiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJiMDcyNWU3Yy1hYzIyLTRmZjctYmFkNS1kMDAzOWQ3OTIwNDkiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoicmF0aSIsInJvbGUiOiJST0xFX05PUk1BTCIsInN0YXR1cyI6IlBFTkRJTkciLCJpYXQiOjE3NzYwODUzNTMsImV4cCI6MTc3NjY5MDE1M30.ph7faea3aA2xRZgfD6nf6p5jUw9DWrUmZVI7yUnmDgtWpWHExSpeIm0GTxuiMhqY\"\
                     }}"
       security:
       - bearerAuthJWT: []
@@ -326,17 +326,17 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-admin-users-email-block-33084672"
             examples:
               admin-user-block:
-                value: _csrf=AFluge9jF__OG0sYQEAN_SoBzV-vrvzjPqYTYlfc2NsuCjJoMT9Z5NxTJcbjLS16JW05yU4w4D2Xm87ODsIjADXpu-sXPABQ
+                value: _csrf=VBPyyUepkOyBYRyc_gF8H04IGDR0CyVWAeThQ1xHre0t-TJfYnaR_XOZ9d2sUSyrnyxIfHxpNQwRaBR7MtPWdW53zNxPyQZs
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 admin-user-block:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -357,17 +357,17 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-admin-users-email-block-33084672"
             examples:
               admin-user-unblock:
-                value: _csrf=p8QqtdoPh7-ZXSr57oJxskgZiFInfpowKJ9Mqm8F8guTdL7NlvQbhu1ptt20bB-aj69F1yx9pWsTGKgdTK0tk10wwmqqEdv8
+                value: _csrf=EXCNV-8px0kRwU4WC_GJY4DhtGVfwwrFfHQs98gGHaDUbS1TIkXpZotM8n08p38nady9W7KHmV088WvoRU1Ixv01fMHtXU81
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 admin-user-unblock:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -389,17 +389,17 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/api-user-terms-33084672"
+              $ref: "#/components/schemas/api-admin-users-email-block-33084672"
             examples:
               admin-user-force-logout:
-                value: _csrf=ZTliKs62yE9rmL1YIAzRRr6hWMXGzEfKdOE6JWZZUF0CehuNAAxbHPeFq3hGqYo9FyHlJIvFdaSi9SPnRYdZQVM7Y2lkQy65
+                value: _csrf=J1Y6NpzQJTIaTEpJ9oJR1drkZ-jSIwX3Nlo9fEhTCkxcR2HWE28DVPjgQwU3L38qwq9l4eOCSomxEDfaBmtcSXBra34-d1fn
       responses:
         "200":
           description: "200"
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 admin-user-force-logout:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
@@ -423,15 +423,15 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-user-terms-33084672"
+                $ref: "#/components/schemas/api-admin-users-email-block-33084672"
               examples:
                 terms-version-detail:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"version\":\"\
-                    v1.0\",\"content\":\"약관 내용\",\"effectiveDate\":\"2026-04-12T20:24:20.2520999\"\
+                    v1.0\",\"content\":\"약관 내용\",\"effectiveDate\":\"2026-04-13T22:02:29.3647145\"\
                     }}"
 components:
   schemas:
-    api-user-terms-33084672:
+    api-admin-users-email-block-33084672:
       type: object
   securitySchemes:
     bearerAuthJWT:
