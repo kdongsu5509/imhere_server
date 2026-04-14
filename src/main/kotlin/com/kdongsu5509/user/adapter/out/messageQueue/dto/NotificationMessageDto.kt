@@ -2,6 +2,7 @@ package com.kdongsu5509.user.adapter.out.messageQueue.dto
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime
+import java.util.UUID
 
 data class NotificationMessageDto(
     val type: NotificationType,
@@ -11,5 +12,7 @@ data class NotificationMessageDto(
     val data: Map<String, String>? = null,
 
     @param:JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    val timestamp: LocalDateTime = LocalDateTime.now()
+    val timestamp: LocalDateTime = LocalDateTime.now(),
+
+    val messageId: UUID = UUID.randomUUID()
 )
