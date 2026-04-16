@@ -25,13 +25,7 @@ class SolapiAdapter(
     private val log = LoggerFactory.getLogger(this::class.java)
 
     companion object {
-        private const val MSG_FORMAT = """
-            %s에 안전하게 도착하였습니다.
-            
-            보낸 분 : %s
-            시간: %s
-            
-            Service by ImHere"""
+        private const val MSG_FORMAT = "%s에 안전하게 도착하였습니다.\n\n보낸 분 : %s\n시간: %s\n\nService by ImHere"
         private val DATE_FORMATTER = DateTimeFormatter.ofPattern("a h시 m분").withLocale(Locale.KOREAN)
     }
 
