@@ -26,9 +26,6 @@ class UserAgreementController(
         @Validated @RequestBody userTermsConsentRequest: UserTermsConsentRequest
     ): APIResponse<AuthenticationResponse?> {
         val userEmail = userDetail.username
-
-        print("----userEmail---- : $userEmail")
-
         agreementTermUseCase.consentAll(userEmail, userTermsConsentRequest)
         val jwt = reissueJWTUseCase.reissueByUserEmail(userEmail)
         return APIResponse.success(
