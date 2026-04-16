@@ -8,5 +8,3 @@ data class MessageSendRequest(
     @param:NotNull
     val location: String
 )
-
-//TODO : FCM -> 100자 제한
