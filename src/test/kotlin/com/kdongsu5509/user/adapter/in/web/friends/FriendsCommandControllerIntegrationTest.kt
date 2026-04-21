@@ -1,6 +1,8 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
 import com.common.testUtil.ControllerTestSupport
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.kdongsu5509.user.adapter.`in`.web.friends.FriendsCommandControllerIntegrationTest.Companion.USER_A_EMAIL
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRelationshipsJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRelationshipsRepository
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
@@ -69,6 +72,18 @@ class FriendsCommandControllerIntegrationTest : ControllerTestSupport() {
                 .with(csrf())
         )
             .andExpect(status().isOk)
+            .andDo(
+                document(
+                    "friends-delete",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구")
+                            .summary("친구 관계 삭제")
+                            .description("요청자의 `friendRelationshipId`를 기준으로 양방향 친구 관계를 모두 삭제합니다.")
+                            .build()
+                    )
+                )
+            )
 
         assertThat(friendRelationshipsRepository.findById(relationshipAtoB.id!!)).isEmpty
         assertThat(friendRelationshipsRepository.findById(relationshipBtoA.id!!)).isEmpty
@@ -83,6 +98,23 @@ class FriendsCommandControllerIntegrationTest : ControllerTestSupport() {
                 .with(csrf())
         )
             .andExpect(status().isOk)
+            .andDo(
+                document(
+                    "friends-block",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구")
+                            .summary("친구 차단")
+                            .description(
+                                """
+                                `friendRelationshipId`로 지정된 친구 관계를 양방향 삭제하고,
+                                해당 대상에 대해 BLOCK 타입의 Restriction을 생성합니다.
+                                """.trimIndent()
+                            )
+                            .build()
+                    )
+                )
+            )
 
         assertThat(friendRelationshipsRepository.findById(relationshipAtoB.id!!)).isEmpty
         assertThat(friendRelationshipsRepository.findById(relationshipBtoA.id!!)).isEmpty
@@ -110,6 +142,18 @@ class FriendsCommandControllerIntegrationTest : ControllerTestSupport() {
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.friendAlias").value("Bestie"))
+            .andDo(
+                document(
+                    "friends-alias-update",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구")
+                            .summary("친구 별명 변경")
+                            .description("요청자의 지정 `friendRelationshipId`에 대한 친구 별명(`friendAlias`)을 업데이트합니다.")
+                            .build()
+                    )
+                )
+            )
 
         val updated = friendRelationshipsRepository.findById(relationshipAtoB.id!!).get()
         assertThat(updated.friendAlias).isEqualTo("Bestie")

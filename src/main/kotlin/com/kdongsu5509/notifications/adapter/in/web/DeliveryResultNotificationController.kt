@@ -1,6 +1,5 @@
 package com.kdongsu5509.notifications.adapter.`in`.web
 
-import com.kdongsu5509.notifications.adapter.`in`.messageQueue.dto.NotificationType
 import com.kdongsu5509.notifications.adapter.`in`.web.dto.FcmNotificationRequest
 import com.kdongsu5509.notifications.application.port.`in`.NotificationToUserCasePort
 import com.kdongsu5509.user.application.service.user.SimpleTokenUserDetails
@@ -29,7 +28,7 @@ class DeliveryResultNotificationController(
             senderNickname = user.nickname,
             senderEmail = user.username,
             receiverEmail = user.username,
-            type = NotificationType.DELIVERY_RESULT_NOTICE.name,
+            type = request.type,
             body = request.body
         )
     }

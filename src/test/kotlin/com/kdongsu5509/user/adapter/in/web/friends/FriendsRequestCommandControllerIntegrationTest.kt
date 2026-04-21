@@ -1,6 +1,8 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
 import com.common.testUtil.ControllerTestSupport
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRequestJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRequestRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
@@ -74,6 +77,18 @@ class FriendsRequestCommandControllerIntegrationTest : ControllerTestSupport() {
         ).andExpect(status().isOk)
             .andExpect(jsonPath("$.code").value(200))
             .andExpect(jsonPath("$.data.friendRequestId").exists())
+            .andDo(
+                document(
+                    "friend-request-create",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구 요청")
+                            .summary("친구 요청 생성")
+                            .description("요청자(로그인 사용자)가 수신자(`receiverId`/`receiverEmail`)에게 메시지를 포함한 친구 요청을 생성합니다.")
+                            .build()
+                    )
+                )
+            )
 
         val savedRequests = friendRequestRepository.findAll()
         assertThat(savedRequests).hasSize(1)
@@ -91,6 +106,18 @@ class FriendsRequestCommandControllerIntegrationTest : ControllerTestSupport() {
         performPost("$FRIENDS_REQ_BASE_URL/accept/$requestId", receiver.email)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.friendEmail").value(requester1.email))
+            .andDo(
+                document(
+                    "friend-request-accept",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구 요청")
+                            .summary("친구 요청 수락")
+                            .description("수신자가 `requestId`의 친구 요청을 수락합니다. 친구 요청은 삭제되고 친구 관계(양방향)가 생성됩니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
     @Test
@@ -102,6 +129,18 @@ class FriendsRequestCommandControllerIntegrationTest : ControllerTestSupport() {
         performPost("$FRIENDS_REQ_BASE_URL/reject/$requestId", receiver.email)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.targetEmail").value(requester1.email))
+            .andDo(
+                document(
+                    "friend-request-reject",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구 요청")
+                            .summary("친구 요청 거절")
+                            .description("수신자가 `requestId`의 친구 요청을 거절합니다. 친구 요청은 삭제되고 REJECT 타입의 Restriction이 생성됩니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
     private fun createUser(email: String, nickname: String) = userRepository.save(

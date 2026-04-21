@@ -1,6 +1,8 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
 import com.common.testUtil.ControllerTestSupport
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.kdongsu5509.user.adapter.`in`.web.friends.FriendsRequestReadControllerIntegrationTest.Companion.REC_EMAIL
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRequestJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRequestRepository
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
@@ -87,6 +90,18 @@ class FriendsRequestReadControllerIntegrationTest : ControllerTestSupport() {
             .andExpect(jsonPath("$.data[1].friendRequestId").value(savedFriendRequest2.id.toString()))
             .andExpect(jsonPath("$.data[1].requesterEmail").value(savedFriendRequest2.requester.email))
             .andExpect(jsonPath("$.data[1].requesterNickname").value(savedFriendRequest2.requester.nickname))
+            .andDo(
+                document(
+                    "friend-request-received-list",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구 요청")
+                            .summary("받은 친구 요청 전체 조회")
+                            .description("로그인한 사용자(수신자)가 받은 모든 친구 요청을 요약 형태로 반환합니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
     @Test
@@ -114,5 +129,17 @@ class FriendsRequestReadControllerIntegrationTest : ControllerTestSupport() {
             .andExpect(jsonPath("$.data.requesterEmail").value(savedFriendRequest1.requester.email))
             .andExpect(jsonPath("$.data.requesterNickname").value(savedFriendRequest1.requester.nickname))
             .andExpect(jsonPath("$.data.message").exists())
+            .andDo(
+                document(
+                    "friend-request-received-detail",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구 요청")
+                            .summary("받은 친구 요청 상세 조회")
+                            .description("`requestId`로 받은 단일 친구 요청의 상세 내용(메시지 포함)을 반환합니다.")
+                            .build()
+                    )
+                )
+            )
     }
 }

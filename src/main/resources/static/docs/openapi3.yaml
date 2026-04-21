@@ -21,7 +21,7 @@ paths:
               $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
             examples:
               admin-friend-clear-relationship:
-                value: userA=adminA%40kakao.com&userB=adminB%40kakao.com&_csrf=OSWUAe0IIIFXL7UzzG9d6cL7-J1yIolpRHZ-R1rMBgKqpYPZABOlYo9rQrl6Ho0HqkJpiPee1fxDELhEcBQfcm75YDWTnLC7
+                value: userA=adminA%40kakao.com&userB=adminB%40kakao.com&_csrf=_ST9zA82EVlOaQ63Wk-7IVtrcHQlr95pMB2a_aCIBP4Y9PDaykeZ-D1XJmtjXj-BbGKPEz9aXUwSzLxECH_7xZe8Z8ghxce8
       responses:
         "200":
           description: "200"
@@ -53,6 +53,25 @@ paths:
       responses:
         "200":
           description: "200"
+  /api/user/friends:
+    get:
+      tags:
+      - 친구
+      summary: 내 친구 목록 조회
+      description: 로그인한 사용자의 친구 관계(친구 별명 포함) 목록을 반환합니다.
+      operationId: friends-list
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                friends-list:
+                  value: "{\"code\":200,\"message\":\"OK\",\"data\":[{\"friendRelationshipId\"\
+                    :\"5a3246a8-4d1e-43cd-82e5-5ab8672cef70\",\"friendEmail\":\"friend@test.com\"\
+                    ,\"friendAlias\":\"베프\"}]}"
   /api/user/terms:
     get:
       tags:
@@ -93,7 +112,7 @@ paths:
               $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
             examples:
               admin-friend-clear-request:
-                value: requester=req%40kakao.com&receiver=rcv%40kakao.com&_csrf=8JwejRkldp5_UhDOfwcGbXnHoQZ5vUvqkYViiKS-PxZ8PuJ4w68uuHscF65SYnP2GSoyXUz3jD8f3C7Hp-AGsZWHCyBLD4Eb
+                value: requester=req%40kakao.com&receiver=rcv%40kakao.com&_csrf=EZIAUUJFeh81-1YpypJ4WvQdi3QtKb0RcZ2Jr7lFaLMI9d1ccKJhaXZ9TysYz2YerL9MPM0qphUVT9s8Fam8zIAhUNBpweU-
       responses:
         "200":
           description: "200"
@@ -167,7 +186,7 @@ paths:
             examples:
               admin-terms-create-version:
                 value: "{\"termDefinitionId\":2,\"version\":\"v1.0\",\"content\":\"\
-                  테스트 내용\",\"effectiveDate\":\"2026-04-17T11:08:41.3989934\"}"
+                  테스트 내용\",\"effectiveDate\":\"2026-04-22T15:56:56.9383965\"}"
       responses:
         "200":
           description: "200"
@@ -370,10 +389,10 @@ paths:
               $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
             examples:
               auth-login-existing:
-                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc2MzA1MzIzLCJleHAiOjE3NzYzMDg5MjMsImF1dGhfdGltZSI6MTc3NjMwNTMyMzY5Niwibm9uY2UiOiJhMTk1NjhiMy0zNjg2LTRhZGEtYWY3YS00NTk3MGVjYjQwNWUiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSJ9.7uNb1f8F6pRvXVQDYY87O1lCa-85LmUgSV1CQmQ8qKoMGFuqzlrlVTRAxWMhrFeLZvx-x-5Rj7HAODed2bC0bXi7ynOw3KTBxcR8Wz7gMptRgqMOfyf0HOajTG4sNL_ovb4geJuO7YYw4WmR6zoqbQrF2dA4C3sX0Dw4J1B2lVnNQ4MbGiKBe9PQkOvAZCGxOlSPPE7OaMcuuFiToFFrZXcBwoh5wDCwwUhjesMh2HqqregY_j-CK1vc8vjDmJTOd3AWVGVsU1B1s0FHjKpKz9D8Dmcp43PxHWqtl3SugLRRLotiuUO0q0dzMZzvLfzI-YrH49NT_JFnBpImC-ONBg\"\
+                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc2NzU0NjIxLCJleHAiOjE3NzY3NTgyMjEsImF1dGhfdGltZSI6MTc3Njc1NDYyMTI1Niwibm9uY2UiOiI1Mjg3MjBjOS0xMDRjLTQ5NDgtOWViZC1kNDIwMDc5NThmMmMiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSJ9.Hhup02Io1Tls4pujzpgMlxHoDIsj7kI94r6aZ5ncmVULZrV_FURZa_ymeOIUnZcgpdcdmuamD5T1MWYrVZCk9--r8w1ze1lly9iELIgpiCP-7Mq9M2G2WjRO1YJP_qyAKJjSl4lh8aPfdhXgBax-4dIiZlc06qAucn87QjCcAt7TSoitKV7Rwqd41AVXrBBlUP2PRz92ZB_dNj0UoTatl7zMo0mXV8WKRKT184icXxm9YpUVIjevbKrtVjK3SPCSYYcV4TBp_Z_tmeh2uil0rAEo7tOQCHrA-_3bhg1CuHtl0_LiAc6mdrKN7cfZ_J1vVJqg8kVte1Wj-hUdVvW7VQ\"\
                   }"
               auth-login-new:
-                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc2MzA1MzIzLCJleHAiOjE3NzYzMDg5MjMsImF1dGhfdGltZSI6MTc3NjMwNTMyMzc1Miwibm9uY2UiOiJmNWMwZjVlMi0yNjBhLTQ1ODUtOWZlNy1kZWI2MzJiNzUyYTMiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSJ9.2ehXWSdd86FrlCPeoHQaBiksDu4slefMugno0aNGdSaoZhyTOIJVSUi_VKA5i_JwNumOMVDb2Ni7Q5XzXqDnNt8jmPAxM0h4UIQ94NWqii9-IdYqM7UDTAWMrm9e3GFndWgm6XcIQzhvp9LanFRr09lXW6DM4yyJbLOWWzU0slK4c7ILrOweFSlzpHmEeE4oVUfqVY2TKmkV6W1xhrLnbV6g1RRY4OxVUlcb3BFwMKgOy6MCBvIM5G9iYuru7hFf8zrXnHP_HwQUm7P5-t3fawOzzRkLdUNMnHE0tPExYNvBKuzIRIhKX122kzK7CzgTkPb5Q0WRsnG-3rv2trFM8g\"\
+                value: "{\"provider\":\"KAKAO\",\"idToken\":\"eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2thdXRoLmtha2FvLmNvbSIsImF1ZCI6ImJmMjg0ZjMzYmZlYmE5YmM1OTU3NTcwNmQwZWIwZTljIiwic3ViIjoi7IKs7Jqp7J6Q7ZqM7JuQ67KI7Zi4IiwiaWF0IjoxNzc2NzU0NjIxLCJleHAiOjE3NzY3NTgyMjEsImF1dGhfdGltZSI6MTc3Njc1NDYyMTM1OCwibm9uY2UiOiIzZWViNWFhNi0xNzQyLTRlOGItYTJmMS04MjcxYjRjNTA2MDkiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSJ9.Yd4jNlKVJyt4M6IztHwiQ3YFZ5fW9BNiDZokosvBpkn6RwOK9cin_XvKe-0m24pmpofLHI4zQtYlabvKBQ7erFbd83gWV0NknaMkNcRk_SgGRutUUO5VtBFZmExHp3GIWyaxFJf1i79CBfQEJPWmgmzPyiqKL9JMfdyzCSm4CDGboo_YPfzjQ045ZPb3o3-xGybT4_v2xvQArXhIXMd7xaU-ZheP4rmRRoVrvVRpuKiyaImwdAtGs6lwSWlEvAkIk7zFPxLBTlRgkSlIBTL8RR62F11S0BTPrR1quDXe1z-iIVIesE-dyebAQP-NEU0uzBnmfEkrlNUWKKA_nH2iGA\"\
                   }"
       responses:
         "200":
@@ -385,8 +404,8 @@ paths:
               examples:
                 auth-login-existing:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJkOGY2NTU4OC1hODlmLTRjZDgtYWE5OS1jYzkwNGE1MmJjNjUiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjkxNTZhY2U1LTkwZDEtNGNkMi1hZmVhLTU5MTlhOGQ5NjVkZiIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiLthYzsiqTthLAiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJBQ1RJVkUiLCJpYXQiOjE3NzYzMDUzMjMsImV4cCI6MTc3NjMwNzEyM30.awsLz9zLhZAp-kjxNsDuOajRBCpXAQtgLdwSdh8720U1BRuEdV8E2W5hEnk_6Fvj\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJlNjI4ODExMC1mMjI2LTQwNDktOWJhMi0xNzI3NzU5ZjMxNzciLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI5MTU2YWNlNS05MGQxLTRjZDItYWZlYS01OTE5YThkOTY1ZGYiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoi7YWM7Iqk7YSwIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiQUNUSVZFIiwiaWF0IjoxNzc2MzA1MzIzLCJleHAiOjE3NzY5MTAxMjN9.uvVIBEtgz5pnjYwDSmOwEE4hpL_eNqpeuOAz3slu7OI6W7WaObqsh5lWZv4PKHla\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIxOTJiYjgzYy0xNmNiLTQzMDEtYWRhNC03YjZmZjNlMDcxNDIiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjZkOTlmNzIwLWFhZjktNGRiZC04ZjZjLWI5Nzg3ZTVmODU2NiIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiLthYzsiqTthLAiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJBQ1RJVkUiLCJpYXQiOjE3NzY3NTQ2MjEsImV4cCI6MTc3Njc1NjQyMX0.1_Su0VsI8X5IBMiKjPpjn_dqBQ-gVNxetL3AbSLEv-Adkfa-zNHRUViMwHwzV2es\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJhM2JlZWFlMi02MGViLTQ4NDMtOWE0NC05YzMwNDQyY2I5YzkiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI2ZDk5ZjcyMC1hYWY5LTRkYmQtOGY2Yy1iOTc4N2U1Zjg1NjYiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoi7YWM7Iqk7YSwIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiQUNUSVZFIiwiaWF0IjoxNzc2NzU0NjIxLCJleHAiOjE3NzczNTk0MjF9.1GTHHFOXOpgeqkaYS7PW16vqyT8yMDftdR3M9tlFv-PQsrXQo_IR9SINyBH3GRnr\"\
                     }}"
         "201":
           description: "201"
@@ -397,8 +416,8 @@ paths:
               examples:
                 auth-login-new:
                   value: "{\"code\":201,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIzOGYyYTcwOS0wODJkLTQ0OTAtOWIxMy1iNTU3YTc4Mjk3M2QiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImY3ZTUwNjdkLTNhYTUtNDdmYS1hMGVlLTBlOGY0ZTE0NjgyYyIsImVtYWlsIjoibmV3LXVzZXJAa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc2MzA1MzIzLCJleHAiOjE3NzYzMDcxMjN9.4Zg5UBRZZDuKUoLuGuS_am4aO1_N3maAjIBCwmVTOSgl2TnKcosgPC_DBKaIj3Y1\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIzMzZmMjIxOS1iMzc2LTQ2OTgtYmRlNC0xYTEyODZhNWI2NzciLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJmN2U1MDY3ZC0zYWE1LTQ3ZmEtYTBlZS0wZThmNGUxNDY4MmMiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NjMwNTMyMywiZXhwIjoxNzc2OTEwMTIzfQ.Jn0eO-9QGzQkMfm7YuvgJqmpzXlhX64xl5W8zDFGvA8h5SIRv2hI-A5Wl5GglOWW\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIxNGM0MmE4Ny1iNDhjLTRjOGUtOThiMy0zMDhlNWM0YWY0NjciLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6Ijc1YWNmYmM1LTE5YTEtNGMxMC04Yzg0LWRhZDUyNmNiMmI0NSIsImVtYWlsIjoibmV3LXVzZXJAa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc2NzU0NjIxLCJleHAiOjE3NzY3NTY0MjF9.JT7tjMra5Pob2njUQRsWXKQtC0EZLtuGgME_dYt9mpZDotE0wU2C67rpuOy2I44v\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJhNTY4M2NkYi0xNjYyLTQ2NjctYWY1YS1jZjMyN2FkYjdmNTMiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI3NWFjZmJjNS0xOWExLTRjMTAtOGM4NC1kYWQ1MjZjYjJiNDUiLCJlbWFpbCI6Im5ldy11c2VyQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3Njc1NDYyMSwiZXhwIjoxNzc3MzU5NDIxfQ.95hj0JLANYMogifhraH_G_LBXSCTjGGt-2UWgAVM9hVAcoCRbGywiU_TqNm3Ta15\"\
                     }}"
   /api/user/auth/reissue:
     post:
@@ -414,7 +433,7 @@ paths:
               $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
             examples:
               auth-reissue:
-                value: "{\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI3MjY4MWI5Mi1mNzczLTQ2ZWQtYTI3My0xZWUzOTVkMTllMDgiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJhMTM0NWJlYi1lOWFkLTQwMDAtODFhNC01MmEyM2Y4MWUzYzciLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NjMwNTMyMywiZXhwIjoxNzc2OTEwMTIzfQ.rfrNekfBiQXUP7lQr3N67-o9NUPNTZOOi8LbpO0s1fsddfiQs2DhMOEU4P3bSMt3\"\
+                value: "{\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI0ZTY5ODUwMy03ZTRkLTQ5NjEtYjVlOS1jZmRjM2M1ZjY2MGEiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI1MTA5MjNlOC1iYmVmLTQ1M2ItYTFjNS1lMWQ2N2RkM2Y5NWQiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3Njc1NDYyMSwiZXhwIjoxNzc3MzU5NDIxfQ.kqgNlxNd_SC2DDC_gsiURWFos3CNegsiLHnwKbxyOCu5Ii8YXoP4Yk0VdZyM7gie\"\
                   }"
       responses:
         "200":
@@ -426,9 +445,140 @@ paths:
               examples:
                 auth-reissue:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI5Yjk4YWM4NC0yOTU2LTQwM2MtOWI1Yi05YzBiNmI2MTkxOGMiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImExMzQ1YmViLWU5YWQtNDAwMC04MWE0LTUyYTIzZjgxZTNjNyIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc2MzA1MzIzLCJleHAiOjE3NzYzMDcxMjN9.Dj7dVR6Xt4GOE6M4VfDCwMG0eXo0SMspdJoF7g84H88YecxnLvPe8o1ZctpZDb0f\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJkMjU4MzhlNS1mMWQ3LTRmOTktODE4Yi1mNjYwNTI3YTdlNzUiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJhMTM0NWJlYi1lOWFkLTQwMDAtODFhNC01MmEyM2Y4MWUzYzciLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NjMwNTMyMywiZXhwIjoxNzc2OTEwMTIzfQ.phiK0U3RKJpu5oj_OWRR1my-EHD1XBvPutYd90xr7-6bMOyCZGFR-BUiBaus6Yvu\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJmYzI3NDg0Zi1kNTdiLTRjMzMtYWE2Mi03ZDg3MzRhZjFjNWMiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6IjUxMDkyM2U4LWJiZWYtNDUzYi1hMWM1LWUxZDY3ZGQzZjk1ZCIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiIiLCJyb2xlIjoiUk9MRV9OT1JNQUwiLCJzdGF0dXMiOiJQRU5ESU5HIiwiaWF0IjoxNzc2NzU0NjIxLCJleHAiOjE3NzY3NTY0MjF9.sL217SxCCULhO5KFEiXuMkz1EE8fgyE0tlzRXPK82kvP3DNmQAAgglgGqvIfj8xR\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIxODQ4ZDU4Yy0yMjU0LTQxYWQtYTBjYi03MDc4YjY0OTQxZjUiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiI1MTA5MjNlOC1iYmVmLTQ1M2ItYTFjNS1lMWQ2N2RkM2Y5NWQiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoiIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3Njc1NDYyMSwiZXhwIjoxNzc3MzU5NDIxfQ.Q0uXYmjOKnR6Z7B-Fy005k-ZlsvW0jOyMTrmYZ5tD36mMSRHV9gDo36hdG617NI8\"\
                     }}"
+  /api/user/friends/alias:
+    post:
+      tags:
+      - 친구
+      summary: 친구 별명 변경
+      description: 요청자의 지정 `friendRelationshipId`에 대한 친구 별명(`friendAlias`)을 업데이트합니다.
+      operationId: friends-alias-update
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+            examples:
+              friends-alias-update:
+                value: "{\"friendRelationshipId\":\"bbb89851-de13-4b78-b60b-3522ea8c3292\"\
+                  ,\"newFriendAlias\":\"Bestie\"}"
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                friends-alias-update:
+                  value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"friendRelationshipId\"\
+                    :\"bbb89851-de13-4b78-b60b-3522ea8c3292\",\"friendEmail\":\"user@test.com\"\
+                    ,\"friendAlias\":\"Bestie\"}}"
+  /api/user/friends/request:
+    get:
+      tags:
+      - 친구 요청
+      summary: 받은 친구 요청 전체 조회
+      description: 로그인한 사용자(수신자)가 받은 모든 친구 요청을 요약 형태로 반환합니다.
+      operationId: friend-request-received-list
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                friend-request-received-list:
+                  value: "{\"code\":200,\"message\":\"OK\",\"data\":[{\"friendRequestId\"\
+                    :6,\"requesterEmail\":\"requester1@kakao.com\",\"requesterNickname\"\
+                    :\"요청자\"},{\"friendRequestId\":7,\"requesterEmail\":\"requester2@kakao.com\"\
+                    ,\"requesterNickname\":\"요청자\"}]}"
+    post:
+      tags:
+      - 친구 요청
+      summary: 친구 요청 생성
+      description: 요청자(로그인 사용자)가 수신자(`receiverId`/`receiverEmail`)에게 메시지를 포함한 친구 요청을
+        생성합니다.
+      operationId: friend-request-create
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+            examples:
+              friend-request-create:
+                value: "{\"receiverId\":\"83458fac-db03-48f2-8158-700d781fa29f\",\"\
+                  receiverEmail\":\"receiver@kakao.com\",\"message\":\"안녕하세요 저는 라티\
+                  입니다! 친하게 지내요!\"}"
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                friend-request-create:
+                  value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"friendRequestId\"\
+                    :3}}"
+  /api/user/friends/restriction:
+    get:
+      tags:
+      - 친구 제한
+      summary: 내 제한(BLOCK/REJECT) 목록 조회
+      description: 로그인한 사용자가 차단하거나 거절한 대상 전체 목록을 타입(BLOCK/REJECT)과 함께 반환합니다.
+      operationId: friends-restriction-list
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                friends-restriction-list:
+                  value: "{\"code\":200,\"message\":\"OK\",\"data\":[{\"friendRestrictionId\"\
+                    :8,\"targetEmail\":\"friend1@test.com\",\"targetNickname\":\"친\
+                    구1\",\"restrictionType\":\"BLOCK\",\"createdAt\":\"2026-04-21T15:56:56.541813\"\
+                    },{\"friendRestrictionId\":9,\"targetEmail\":\"friend2@test.com\"\
+                    ,\"targetNickname\":\"친구2\",\"restrictionType\":\"REJECT\",\"\
+                    createdAt\":\"2026-04-21T15:56:56.5445172\"},{\"friendRestrictionId\"\
+                    :10,\"targetEmail\":\"friend3@test.com\",\"targetNickname\":\"\
+                    친구3\",\"restrictionType\":\"BLOCK\",\"createdAt\":\"2026-04-21T15:56:56.5466351\"\
+                    },{\"friendRestrictionId\":11,\"targetEmail\":\"friend4@test.com\"\
+                    ,\"targetNickname\":\"친구4\",\"restrictionType\":\"REJECT\",\"\
+                    createdAt\":\"2026-04-21T15:56:56.550525\"},{\"friendRestrictionId\"\
+                    :12,\"targetEmail\":\"friend5@test.com\",\"targetNickname\":\"\
+                    친구5\",\"restrictionType\":\"BLOCK\",\"createdAt\":\"2026-04-21T15:56:56.5525326\"\
+                    }]}"
+  /api/user/friends/{friendRelationshipId}:
+    delete:
+      tags:
+      - 친구
+      summary: 친구 관계 삭제
+      description: 요청자의 `friendRelationshipId`를 기준으로 양방향 친구 관계를 모두 삭제합니다.
+      operationId: friends-delete
+      parameters:
+      - name: friendRelationshipId
+        in: path
+        description: ""
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+            examples:
+              friends-delete:
+                value: _csrf=vECWiE1oyKtv7cJFAHiHeeev7w96XLAXwQ0n-96zA_vPkXYg2nTw6XhY_c1C1PBxM1WzGNbKwm1Db9M6-DoUn73VYZ-sqUUS
+      responses:
+        "200":
+          description: "200"
   /api/user/info/me:
     get:
       tags:
@@ -490,7 +640,7 @@ paths:
               examples:
                 user-search-by-nickname:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":[{\"userId\":\"\
-                    436158ad-4e19-4be1-ad7f-b3eb41797c51\",\"userEmail\":\"exist@test.com\"\
+                    8b0b4a57-97d7-4e57-8fa8-d69c585d5403\",\"userEmail\":\"exist@test.com\"\
                     ,\"userNickname\":\"tester\"}]}"
   /api/user/terms/consent:
     post:
@@ -522,8 +672,8 @@ paths:
               examples:
                 terms-consent-all:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"accessToken\"\
-                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIwNzdkMGU3OC04ZDEzLTQwMTAtYjUzYS1iN2FmYTk4NThhMTUiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImVmZDUyMjhkLTVkMzYtNGJlZi1hMzg1LWM2N2Y0MjdmZDBhYyIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiJyYXRpIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3NjMwNTMyNiwiZXhwIjoxNzc2MzA3MTI2fQ.LXQ8FG0d_JaT1GHUwZjBX48FQC_c2_V24KcztpXamuvPnuH5ZNKFp1ThacM-_RP7\"\
-                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIwZmU0MjNkOS1iYjU1LTRkZjctYmNkYS03YmZjZTI5MmQzOGIiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJlZmQ1MjI4ZC01ZDM2LTRiZWYtYTM4NS1jNjdmNDI3ZmQwYWMiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoicmF0aSIsInJvbGUiOiJST0xFX05PUk1BTCIsInN0YXR1cyI6IlBFTkRJTkciLCJpYXQiOjE3NzYzMDUzMjYsImV4cCI6MTc3NjkxMDEyNn0.ld1nN6T5Jbgw1IdlhUROCaLTlArkguOIAMS9OULKRSxJjVULQts606TdqGRC6n-E\"\
+                    :\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI1NjE4MjI1Yy01NGVmLTQyM2ItYWJkZi1lMThiN2NiMGM3NGYiLCJjYXRlZ29yeSI6ImFjY2VzcyIsInVpZCI6ImY2NTEyZjMyLTI4ZjgtNDUyNS05NzRiLWM1ZWUwMDdmMDc2NCIsImVtYWlsIjoiZHMua29Aa2FrYW8uY29tIiwibmlja25hbWUiOiJyYXRpIiwicm9sZSI6IlJPTEVfTk9STUFMIiwic3RhdHVzIjoiUEVORElORyIsImlhdCI6MTc3Njc1NDYyMiwiZXhwIjoxNzc2NzU2NDIyfQ.MIJFCAUaTCVGveYG0AmdkCFyj9QUXBtrPz-GtGPylMuHchnbFJea5te6SlVS_phS\"\
+                    ,\"refreshToken\":\"eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIwOTBkY2VmNS02ODE1LTQ5MzEtOTNhNy1iYWE1NTgzYTU5ZDYiLCJjYXRlZ29yeSI6InJlZnJlc2giLCJ1aWQiOiJmNjUxMmYzMi0yOGY4LTQ1MjUtOTc0Yi1jNWVlMDA3ZjA3NjQiLCJlbWFpbCI6ImRzLmtvQGtha2FvLmNvbSIsIm5pY2tuYW1lIjoicmF0aSIsInJvbGUiOiJST0xFX05PUk1BTCIsInN0YXR1cyI6IlBFTkRJTkciLCJpYXQiOjE3NzY3NTQ2MjIsImV4cCI6MTc3NzM1OTQyMn0.8SxrtcWdXPILDJUr5ItZQ9QpnKKDG74KTob3M52k0CienRaj9gilkpIjGLeb-Kdf\"\
                     }}"
       security:
       - bearerAuthJWT: []
@@ -591,7 +741,7 @@ paths:
               $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
             examples:
               admin-user-block:
-                value: _csrf=btOcJfiYveP-bPIt6MecJ2Tie7YVZZmoF3cnEtBqTLhPF-cjDOr_F8uqidvTCpEU0OqoFAfTVtRwB_-FdkJCdrNbeNl4c98W
+                value: _csrf=0nMv3b-OKrkgPAjNLki9R_CS-5Lexv383PNqsoo6AuvVhKi2tEUf5NrrSI8NCT2rTGWJdpGr1vPuo8jR68EI0-4JOtjit8mH
       responses:
         "200":
           description: "200"
@@ -622,7 +772,7 @@ paths:
               $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
             examples:
               admin-user-unblock:
-                value: _csrf=1KscSNh7cwHptGv-8yWsHwt-DJzL5pAu3L8CkEIm-gyNo7i3spItLLodRzTEgg6YlgiYJjtOIaX53vYD5Ic083ZEyjm1x9vV
+                value: _csrf=guwXZlpqNS7qXsssVpMMKyQXgosg37rguix08DWnLh0wyeW5soonBDhYDEjHa69KYL44Hh10r-pEu4LNjk5CwAzBGXsC-NOK
       responses:
         "200":
           description: "200"
@@ -654,7 +804,7 @@ paths:
               $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
             examples:
               admin-user-force-logout:
-                value: _csrf=K4bHcSAQCl2QNx6EKW_bMvUdImKvhT0uI5faIfvTjmSTkFl-SLPxQ0EjbGm9Uia2T0LvU8F_D1vL4woDQPLuQ8jk7VP29j9H
+                value: _csrf=85mvL7kLNfHwT4rSCQQ8AndtWr2xQqcZQ8P8tNHZ_AGOhHnXlfiYSow7U5LdKbLiOSkINUIMd9-EJ8Y0e6bMg-e7mje_s0jg
       responses:
         "200":
           description: "200"
@@ -684,6 +834,127 @@ paths:
       responses:
         "200":
           description: "200"
+  /api/user/friends/block/{friendRelationshipId}:
+    post:
+      tags:
+      - 친구
+      summary: 친구 차단
+      description: |-
+        `friendRelationshipId`로 지정된 친구 관계를 양방향 삭제하고,
+        해당 대상에 대해 BLOCK 타입의 Restriction을 생성합니다.
+      operationId: friends-block
+      parameters:
+      - name: friendRelationshipId
+        in: path
+        description: ""
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+            examples:
+              friends-block:
+                value: _csrf=xO48IC3bhwW3eiojpmq--7YVr7DLwbaABM3hsjQpWdScYwWW941YE0jrsmOaS08UkEeKz9QngtGopIStYP3T01AebrCtUjOm
+      responses:
+        "200":
+          description: "200"
+  /api/user/friends/request/5:
+    get:
+      tags:
+      - 친구 요청
+      summary: 받은 친구 요청 상세 조회
+      description: '`requestId`로 받은 단일 친구 요청의 상세 내용(메시지 포함)을 반환합니다.'
+      operationId: friend-request-received-detail
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                friend-request-received-detail:
+                  value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"friendRequestId\"\
+                    :5,\"requesterEmail\":\"requester1@kakao.com\",\"requesterNickname\"\
+                    :\"요청자\",\"message\":\"친하게 지내요\"}}"
+  /api/user/friends/restriction/13:
+    delete:
+      tags:
+      - 친구 제한
+      summary: 친구 제한 해제
+      description: 본인 소유의 `friendRestrictionId`에 해당하는 제한을 삭제합니다. 성공 시 201과 함께 삭제된
+        대상 정보를 반환합니다.
+      operationId: friends-restriction-delete-success
+      responses:
+        "201":
+          description: "201"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                friends-restriction-delete-success:
+                  value: "{\"code\":201,\"message\":\"OK\",\"data\":{\"targetEmail\"\
+                    :\"friend1@test.com\"}}"
+  /api/user/friends/restriction/3:
+    delete:
+      tags:
+      - 친구 제한
+      summary: 친구 제한 해제 실패 - 본인 소유 아님
+      description: |-
+        로그인한 사용자의 소유가 아닌 `friendRestrictionId`에 대한 제한 해제 요청 시
+        400(BusinessException)이 반환되며, 어떤 데이터도 변경되지 않습니다.
+      operationId: friends-restriction-delete-fail-forbidden
+      responses:
+        "400":
+          description: "400"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                friends-restriction-delete-fail-forbidden:
+                  value: "{\"code\":400,\"message\":\"BAD_REQUEST\",\"data\":{\"code\"\
+                    :\"FRIEND_RESTRICTION_002\",\"message\":\"해당 거절/차단 관계의 처리 권한이\
+                    \ 없습니다.\"}}"
+  /api/user/terms/consent/{termDefinitionId}:
+    post:
+      tags:
+      - 약관 동의
+      summary: 개별 약관 동의 실패 - 존재하지 않는 약관
+      description: 존재하지 않거나 활성 버전이 없는 `termDefinitionId`로 단건 동의를 요청한 경우 404(TERM_002)가
+        반환됩니다.
+      operationId: terms-consent-single-
+      parameters:
+      - name: termDefinitionId
+        in: path
+        description: ""
+        required: true
+        schema:
+          type: string
+      responses:
+        "404":
+          description: "404"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                terms-consent-single-fail-not-found:
+                  value: "{\"code\":404,\"message\":\"NOT_FOUND\",\"data\":{\"code\"\
+                    :\"TERM_002\",\"message\":\"해당 약관 종류는 존재하지 않습니다\"}}"
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                terms-consent-single-success:
+                  value: "{\"code\":200,\"message\":\"OK\",\"data\":null}"
   /api/user/terms/version/{termsDefinitionId}:
     get:
       tags:
@@ -708,7 +979,7 @@ paths:
               examples:
                 terms-version-detail:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"version\":\"\
-                    v1.0\",\"content\":\"약관 내용\",\"effectiveDate\":\"2026-04-16T11:08:41.4702404\"\
+                    v1.0\",\"content\":\"약관 내용\",\"effectiveDate\":\"2026-04-21T15:56:57.0547906\"\
                     }}"
   /api/admin/rabbitmq/dlq/noti.queue.friend.dlq/replay:
     post:
@@ -741,6 +1012,46 @@ paths:
                 admin-dlq-replay-limited:
                   value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"queueName\"\
                     :\"noti.queue.friend.dlq\",\"replayedCount\":2}}"
+  /api/user/friends/request/accept/4:
+    post:
+      tags:
+      - 친구 요청
+      summary: 친구 요청 수락
+      description: 수신자가 `requestId`의 친구 요청을 수락합니다. 친구 요청은 삭제되고 친구 관계(양방향)가 생성됩니다.
+      operationId: friend-request-accept
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                friend-request-accept:
+                  value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"friendRelationshipId\"\
+                    :\"3a521a8d-d858-4409-8452-2d0754a6f49d\",\"friendEmail\":\"requester1@kakao.com\"\
+                    ,\"friendAlias\":\"요청자\"}}"
+  /api/user/friends/request/reject/2:
+    post:
+      tags:
+      - 친구 요청
+      summary: 친구 요청 거절
+      description: 수신자가 `requestId`의 친구 요청을 거절합니다. 친구 요청은 삭제되고 REJECT 타입의 Restriction이
+        생성됩니다.
+      operationId: friend-request-reject
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672"
+              examples:
+                friend-request-reject:
+                  value: "{\"code\":200,\"message\":\"OK\",\"data\":{\"friendRestrictionId\"\
+                    :2,\"targetEmail\":\"requester1@kakao.com\",\"targetNickname\"\
+                    :\"요청자\",\"restrictionType\":\"REJECT\",\"createdAt\":\"2026-04-21T15:56:56.0256219\"\
+                    }}"
 components:
   schemas:
     api-admin-rabbitmq-dlq-noti.queue.friend.dlq-33084672:

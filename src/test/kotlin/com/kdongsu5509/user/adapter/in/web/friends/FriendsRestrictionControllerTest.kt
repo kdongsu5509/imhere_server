@@ -1,6 +1,8 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
 import com.common.testUtil.ControllerTestSupport
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRestrictionJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRestrictionRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -67,6 +70,18 @@ class FriendsRestrictionControllerTest : ControllerTestSupport() {
             .andExpect(jsonPath("$.data.length()").value(END))
             .andExpect(jsonPath("$.data[0].targetEmail").exists())
             .andExpect(jsonPath("$.data[0].restrictionType").value("BLOCK"))
+            .andDo(
+                document(
+                    "friends-restriction-list",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구 제한")
+                            .summary("내 제한(BLOCK/REJECT) 목록 조회")
+                            .description("로그인한 사용자가 차단하거나 거절한 대상 전체 목록을 타입(BLOCK/REJECT)과 함께 반환합니다.")
+                            .build()
+                    )
+                )
+            )
     }
 
     private fun createTenFriendsAndRestrictions(owner: UserJpaEntity) {
@@ -100,6 +115,18 @@ class FriendsRestrictionControllerTest : ControllerTestSupport() {
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.code").value(201))
             .andExpect(jsonPath("$.data.targetEmail").value(targetEmail))
+            .andDo(
+                document(
+                    "friends-restriction-delete-success",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구 제한")
+                            .summary("친구 제한 해제")
+                            .description("본인 소유의 `friendRestrictionId`에 해당하는 제한을 삭제합니다. 성공 시 201과 함께 삭제된 대상 정보를 반환합니다.")
+                            .build()
+                    )
+                )
+            )
 
         val isExists = friendRestrictionRepository.findById(targetId).isPresent
         assertThat(isExists).isFalse()
@@ -122,6 +149,23 @@ class FriendsRestrictionControllerTest : ControllerTestSupport() {
         )
             .andExpect(status().isBadRequest) // BusinessException (ErrorCode 확인)
             .andExpect(jsonPath("$.message").exists())
+            .andDo(
+                document(
+                    "friends-restriction-delete-fail-forbidden",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구 제한")
+                            .summary("친구 제한 해제 실패 - 본인 소유 아님")
+                            .description(
+                                """
+                                로그인한 사용자의 소유가 아닌 `friendRestrictionId`에 대한 제한 해제 요청 시
+                                400(BusinessException)이 반환되며, 어떤 데이터도 변경되지 않습니다.
+                                """.trimIndent()
+                            )
+                            .build()
+                    )
+                )
+            )
     }
 
     private fun createTestFriend(idx: Int): UserJpaEntity = UserJpaEntity(

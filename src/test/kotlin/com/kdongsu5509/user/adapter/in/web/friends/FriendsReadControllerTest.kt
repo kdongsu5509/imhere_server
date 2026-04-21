@@ -1,6 +1,8 @@
 package com.kdongsu5509.user.adapter.`in`.web.friends
 
 import com.common.testUtil.ControllerTestSupport
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.FriendRelationshipsJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.friends.jpa.SpringDataFriendRelationshipsRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -73,5 +76,17 @@ class FriendsReadControllerTest @Autowired constructor(
             .andExpect(jsonPath("$.data").isArray)
             .andExpect(jsonPath("$.data[0].friendAlias").value("베프"))
             .andExpect(jsonPath("$.data[0].friendEmail").value("friend@test.com"))
+            .andDo(
+                document(
+                    "friends-list",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("친구")
+                            .summary("내 친구 목록 조회")
+                            .description("로그인한 사용자의 친구 관계(친구 별명 포함) 목록을 반환합니다.")
+                            .build()
+                    )
+                )
+            )
     }
 }

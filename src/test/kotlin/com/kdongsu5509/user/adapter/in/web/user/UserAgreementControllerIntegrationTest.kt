@@ -12,6 +12,7 @@ import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsDef
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.SpringDataTermsVersionRepository
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.TermsDefinitionJpaEntity
 import com.kdongsu5509.user.adapter.out.persistence.terms.jpa.TermsVersionJpaEntity
+import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserAgreementRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.SpringDataUserRepository
 import com.kdongsu5509.user.adapter.out.persistence.user.jpa.UserJpaEntity
 import com.kdongsu5509.user.application.port.out.user.CachePort
@@ -29,6 +30,8 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
+import org.assertj.core.api.Assertions.assertThat
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -51,6 +54,9 @@ class UserAgreementControllerIntegrationTest : ControllerTestSupport() {
 
     @Autowired
     lateinit var cachePort: CachePort
+
+    @Autowired
+    lateinit var userAgreementRepository: SpringDataUserAgreementRepository
 
     @MockitoBean
     lateinit var kakaoOauthClient: KakaoOauthClient
@@ -136,6 +142,70 @@ class UserAgreementControllerIntegrationTest : ControllerTestSupport() {
                     )
                 )
             )
+    }
+
+    @Test
+    @WithMockUser(username = TEST_USER)
+    @DisplayName("개별 약관 동의 API가 정상적으로 호출되면 해당 약관 동의가 DB에 저장된다")
+    fun consentSingle_success() {
+        mockMvc.perform(
+            post(BASE_URL + CONSENT_SINGLE_URL, TEST_DEF_ID1)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.code").value(200))
+            .andDo(
+                document(
+                    "terms-consent-single-success",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("약관 동의")
+                            .summary("개별 약관 동의")
+                            .description(
+                                """
+                                로그인한 사용자가 특정 약관(termDefinitionId)에 단건 동의합니다.
+                                해당 약관의 활성(active) 버전을 찾아 UserAgreement로 저장합니다.
+                                경로 변수 `termDefinitionId`는 양의 정수여야 합니다.
+                                """.trimIndent()
+                            )
+                            .build()
+                    )
+                )
+            )
+
+        assertThat(userAgreementRepository.findAll()).hasSize(1)
+    }
+
+    @Test
+    @WithMockUser(username = TEST_USER)
+    @DisplayName("존재하지 않는 약관 ID로 개별 동의 요청 시 404 응답을 반환한다")
+    fun consentSingle_fail_termNotFound() {
+        val nonExistentTermDefinitionId = 9_999_999L
+
+        mockMvc.perform(
+            post(BASE_URL + CONSENT_SINGLE_URL, nonExistentTermDefinitionId)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isNotFound)
+            .andExpect(jsonPath("$.code").value(404))
+            .andDo(
+                document(
+                    "terms-consent-single-fail-not-found",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .tag("약관 동의")
+                            .summary("개별 약관 동의 실패 - 존재하지 않는 약관")
+                            .description(
+                                """
+                                존재하지 않거나 활성 버전이 없는 `termDefinitionId`로 단건 동의를 요청한 경우 404(TERM_002)가 반환됩니다.
+                                """.trimIndent()
+                            )
+                            .build()
+                    )
+                )
+            )
+
+        assertThat(userAgreementRepository.findAll()).isEmpty()
     }
 
     private fun createTestTermVersionEntity(testTermDef: TermsDefinitionJpaEntity) {
